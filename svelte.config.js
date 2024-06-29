@@ -8,7 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
 	plugins: [
-		sass({ outputStyle: 'compressed' }),
+		sass({ outputStyle: 'compressed' })
 		// VitePWA({
 		// 	manifest: {
 		// 		// les options pour votre manifeste
@@ -58,9 +58,10 @@ export default defineConfig({
 			$language: 'src/language',
 			$three: 'src/lib/components/three',
 			$services: 'src/services',
-			$lib: "src/lib",
+			$lib: 'src/lib',
 			$api: 'src/api',
-			$routes: "src/routes"
+			$routes: 'src/routes',
+			'@/*': 'src/lib/UITools'
 		}
 	}
 });

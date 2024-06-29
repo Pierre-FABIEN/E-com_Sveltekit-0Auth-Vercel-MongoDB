@@ -37,3 +37,6 @@ This is the official SvelteKit Auth example for [Auth.js](https://sveltekit.auth
 You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=sveltekit-auth-example) by clicking the following button.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/nextauthjs/sveltekit-auth-example&project-name=sveltekit-auth-example&repository-name=sveltekit-auth-example)
+
+
+https://www.embla-carousel.com/examples/predefined/#auto-scroll

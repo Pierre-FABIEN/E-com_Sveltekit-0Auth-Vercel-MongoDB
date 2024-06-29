@@ -59,22 +59,7 @@
 		//registerServiceWorker();
 		// Détermine le premier chargement de l'application
 		setFirstOpen(true);
-		setRessourceToValide(true);
-
-		//console.log(data, 'oiuhesiuh');	
-		
-		function getTokenFromCookies() {
-			const cookieValue = document.cookie
-			.split('; ')
-			.find(row => row.startsWith('token='))
-			?.split('=')[1];
-			return cookieValue;
-		}
-
-		token = getTokenFromCookies();
-
-		console.log(token);
-		
+		setRessourceToValide(true);		
 	});
 
 
@@ -102,4 +87,5 @@
 
 <style lang="scss" global>
 	@import './src/styles/main';
+	@import './src/app.css';
 </style>

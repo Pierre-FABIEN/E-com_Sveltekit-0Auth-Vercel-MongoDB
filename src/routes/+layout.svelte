@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.css';
 	import { onMount } from 'svelte';
 	import { onNavigate } from '$app/navigation';
 
@@ -87,5 +88,4 @@
 
 <style lang="scss" global>
 	@import './src/styles/main';
-	@import './src/app.css';
 </style>

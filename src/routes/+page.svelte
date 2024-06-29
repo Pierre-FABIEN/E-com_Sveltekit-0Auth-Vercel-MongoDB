@@ -136,6 +136,5 @@
   .home {
     width: 100vw;
     position: absolute;
-    background-color: rgb(150, 150, 150);
   }
 </style>

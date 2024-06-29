@@ -72,7 +72,7 @@
 	* {
 		@apply border-border;
 	}
-	main {
+	body {
 		@apply bg-background text-foreground;
 	}
 }

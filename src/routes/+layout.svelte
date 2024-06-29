@@ -17,8 +17,8 @@
 	} from '$stores/UX/initialLoaderStore';
 
 	export let data
-	let token;
 
+	
 	onNavigate(async (navigation) => {
 		if (!document.startViewTransition) return;
 

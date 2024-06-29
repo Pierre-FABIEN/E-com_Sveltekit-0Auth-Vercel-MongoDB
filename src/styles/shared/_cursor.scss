@@ -1,0 +1,38 @@
+// .app {
+//     &:hover {
+//         #Cursor {
+//             opacity: 1;
+//         }
+//     }
+// }
+
+// #Cursor {
+//   height: 30px;
+//   width: 30px;
+//   background-color: red;
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   z-index: 10000;
+//   pointer-events: none;
+//   opacity: 0;
+// }
+
+// #Cursor::after {
+//   content: "";
+//   display: block;
+//   width: 30px;
+//   height: 30px;
+//   background-size: cover;
+//   background-position: center;
+//   background-image: var(--background-image);
+//   transform: scale(var(--icon-scale));
+//   transition: all 0.1s ease;
+// }
+
+// .box {
+//   height: 200px;
+//   width: 200px;
+//   background-color: black;
+//   position: absolute;
+// }

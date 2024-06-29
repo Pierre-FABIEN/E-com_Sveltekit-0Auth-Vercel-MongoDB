@@ -1,0 +1,76 @@
+{
+    "language": "Choose a language:",
+    "fr": "French",
+    "en": "English",
+    
+    "greetingsSuccessGet": "Greetings have been received successfully.",
+    "greetingsFailedGet": "Failed to receive greetings.",
+    "greetingsSuccessSent": "The greeting has been sent successfully.",
+    "greetingsSuccessUpdated": "The greeting has been updated successfully.",
+    "greetingsSuccessDeleted": "The greeting has been deleted successfully.",
+
+    "signupSuccess": "you received an email to validate your account",
+    "emailTokenVerifiedSuccess": "Your email is validate",
+    "emailTokenVerifiedFailed": "Your key is not valid",
+    "successSendEmailResetPassword": "Email sent to reset your forgot password",
+    "successSendResetPassword": "Your password has been successfully updated",
+
+    "about-title": "About",
+    "about-text": "This is the about page",
+    "about-link": "Link to the page home",
+
+    "forgot-password-title": "Password reset",
+    "forgot-password-subtitle": "Enter your e-mail address:",
+    "forgot-password-button": "Reset password",
+
+    "forgot-password-token-title": "Reset password",
+    "forgot-password-token-newPassword": "New password :",
+    "forgot-password-token-confirmPassword": "Confirm password :",
+    "forgot-password-token-link": "Reset password",
+
+    "home-title": "Home",
+    "home-text": "You have the link Github <a href=\"{{link}}\">lien</a>",
+    "home-link": "Example of polymorhism",
+
+    "login-button": "Login",
+    "login-link": "Forgot your password ?",
+
+    "logout-logout": "Logout",
+    "logout-successLogout": "Logout",
+
+    "signup-button": "Register",
+    "signup-verifytoken": "Check in progress...",
+
+    "user-title": "User dashboard",
+    "user-loader": "loading ...",
+    "user-button": "Link to about us page",
+
+    "EMAIL_EXIST": "This email already exists",
+    "USERNAME_REQUIRED": "Username is required",
+    "VALID_USERNAME": "Username must be between 3 and 20 characters",
+    "VALID_EMAIL": "The email is not valid",
+    "NUMBE_CARAC_PASSWORD": "The password must have at least 8 characters",
+    "MIN_PASSWORD": "The password must contain at least one lowercase letter",
+    "MAJ_PASSWORD": "The password must contain at least one uppercase letter",
+    "NUMBER_PASSWORD": "The password must contain at least one number",
+    "SPECIAL_CARAC_PASSWORD": "The password must contain at least one special character",
+    "INVALID_CREDENTIALS": "wrong identifiants",
+    "RATE_LIMIT": "Too many connection attempts, please try again later",
+    "EMAIL_NOT_VERIFIED": "Your Email has not been verified, please check your mailbox",
+    "EMAIL_VERIFIED": "Your Email has been verified",
+    "SUCCESS_INSCRIPTION": "you received an email to validate your account",
+    "SUCCESS_LOGIN": "Welcome !",
+    "USER_NOT_FOUND": "User not found",
+    "EMAIL_FORGOT_PASSWORD": "Email sent to reset your forgot password",
+    "FORGOT_PASSWORD_INVALID": "Passwords do not match",
+	"VALIDATION_FORGOT_PASSWORD": "Your password has been successfully updated",
+    "ACCESS_DENIED": "Access denied",    
+    "NAME_MIN_MAX_CARAC": "The name must be between 5 and 50 characters long.",
+    "NAME_REQUIRED": "The name field is required.",
+    "MESSAGE_MIN_MAX_CARAC": "The message must be between 10 and 500 characters long.",
+    "MESSAGE_REQUIRED": "The message field is required.",
+    "DELETE_ACCOUNT_EMAIL_SENT": "An email has been sent to delete your account.",
+
+    "UPDATE_SUCCESS":"Your informations have been successfully updated.",
+    "UPDATE_FAILURE":"Your informations have not been successfully updated."
+}

@@ -1,0 +1,136 @@
+/* Variables and mixins declared here will be available in all other SCSS files */
+//C:\wamp64\www\BoilerPlateSvelteKit\src\CSS\utils\_variables.scss
+@import './src/styles/utils/variables';
+@import './src/styles/utils/functions';
+@import './src/styles/utils/breackpoints';
+@import './src/styles/utils/flex';
+@import './src/styles/utils/mixins';
+@import './src/styles/utils/vendors';
+
+@import './src/styles/base/fonts';
+@import './src/styles/base/reset';
+@import './src/styles/base/normalize';
+
+@import './src/styles/shared/BorderAnimation';
+@import './src/styles/shared/BorderAnimation2';
+
+@import './base/darkMode';
+@import './components/items';
+
+// @import './shared/links';
+// @import './shared/sections';Nous allons intégrer
+// @import './shared/cursor';
+
+// @import './UITools/canvas';
+// @import './UITools/functionals';
+//@import './UITools/navigation';
+//@import './UITools/preloader';
+
+// @import './pages/home';
+// @import './pages/about';
+@import './src/styles/pages/page';
+
+.scroll-content {
+  min-height: 100vh;
+}
+
+.initalLoader {
+  @include rcc;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 200;
+  width: 100vw;
+  height: 100vh;
+}
+
+.app {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  //cursor: none;
+}
+
+#Cursor {
+  svg {
+    @include ccc;
+    position: absolute;
+    transform-origin: center;
+
+    path {
+      max-width: 50px;
+      max-height: 50px;
+      transform: translate(25%, 25%);
+    }
+  }
+}
+
+.notification-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 101;
+}
+
+#smoothScoller {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  .pageTransition {
+    main {
+      overflow: hidden;
+      width: 100%;
+      min-height: 100vh;
+    }
+  }
+}
+
+main {
+  min-height: 100vh;
+}
+
+header {
+  @include rcb;
+  padding: 20px;
+
+  width: 100%;
+  height: 70px;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  color: white;
+
+  ul {
+    width: 500px;
+    @include rcb;
+  }
+
+  .left-side {
+    @include rcc;
+
+    .nojs-show {
+      @include rcc;
+    }
+  }
+}
+
+.line {
+  overflow: hidden;
+  display: block;
+}
+
+.subline {
+  display: block;
+}
+
+:root {
+  view-transition-name: none;
+}
+
+.logo {
+  width: 200px;
+  height: 200px;
+  view-transition-name: var(--logo);
+}

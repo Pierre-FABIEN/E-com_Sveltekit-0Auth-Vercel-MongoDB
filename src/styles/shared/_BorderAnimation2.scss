@@ -1,0 +1,71 @@
+// Variables
+$thickness: 2px;
+$color: rgba(255, 255, 255, 0.2);
+$hover-color: rgba(255, 255, 255, 0.4);
+
+// Mixin for common styles
+@mixin span-styles($side1, $side2) {
+  position: absolute;
+  width: 20%;
+  height: 25%;
+  border: solid $thickness $color;
+  border-#{$side1}-width: 0;
+  border-#{$side2}-width: 0;
+  transition: all 0.3s ease-out;
+  &::before {
+    content: '';
+    display: block;
+    width: $thickness;
+    height: $thickness;
+    position: absolute;
+    #{$side1}: calc(0px - $thickness);
+    #{$side2}: calc(0px - $thickness);
+  }
+}
+
+.tech-button {
+  position: relative;
+  display: block;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 28px;
+  padding: 1em;
+  min-width: 8em;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.3s;
+
+  > span {
+    position: absolute;
+    width: 20%;
+    height: 25%;
+    border: solid $thickness $color;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+  }
+
+  & > .tl {
+    @include span-styles(top, left);
+  }
+  & > .tr {
+    @include span-styles(top, right);
+  }
+  & > .bl {
+    @include span-styles(bottom, left);
+  }
+  & > .br {
+    @include span-styles(bottom, right);
+  }
+
+  &:hover > span {
+    width: 50%;
+    height: 50%;
+    border-color: $hover-color;
+  }
+
+  &:active {
+    transform: translateY(3px);
+  }
+}

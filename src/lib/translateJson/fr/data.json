@@ -1,0 +1,76 @@
+{
+    "language": "Choisissez une langue :",
+    "fr": "Français",
+    "en": "Anglais",
+
+    "greetingsSuccessGet": "les greetings ont bien étés reçues.",
+    "greetingsFailedGet": "les greetings n'ont pas étés reçues.",
+    "greetingsSuccessSent": "La greeting à bien été envoyé.",
+    "greetingsSuccessUpdated": "La greeting à bien été mise à jour.",
+    "greetingsSuccessDeleted": "La greeting à bien été supprimée.",
+
+    "signupSuccess": "Vous avez reçu un email pour valider votre compte.",
+    "emailTokenVerifiedSuccess": "Votre adresse mail est bien validée.",
+    "emailTokenVerifiedFailed": "Votre clé n'est plus valide.",
+    "successSendEmailResetPassword": "Vous avez recu un email pour modifier votre mot de passe.",
+    "successSendResetPassword": "Votre mot de passe à bien été modifié.",
+
+    "about-title": "À propos",
+    "about-text": "Voici la page à propos On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour 'Lorem Ipsum' vous conduira vers de nombreux sites qui n'en sont encore qu'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d'y rajouter de petits clins d'oeil, voire des phrases embarassantes).",
+    "about-link": "Lien vers la page accueil",
+
+    "forgot-password-title": "Réinitialisation du mot de passe",
+    "forgot-password-subtitle": "Saisissez votre adresse e-mail :",
+    "forgot-password-button": "Réinitialiser le mot de passe",
+
+    "forgot-password-token-title": "Réinitialiser le mot de passe",
+    "forgot-password-token-newPassword": "Nouveau mot de passe :",
+    "forgot-password-token-confirmPassword": "Confirmer le mot de passe :",
+    "forgot-password-token-link": "Réinitialiser le mot de passe",
+
+    "home-title": "Accueil",
+    "home-text": "Voici le lien Github <a href=\"{{link}}\">lien</a>",
+    "home-link": "Exemple de polymorhisme",
+
+    "login-button": "Se connecter",
+    "login-link": "Mot de passe oublié ?",
+
+    "logout-logout": "Déconnexion",
+    "logout-successLogout": "Aurevoir !",
+
+    "signup-button": "S'inscrire",
+    "signup-verifytoken":"Vérification en cours...",
+
+    "user-title": "Tableau de bord utilisateur",
+    "user-loader": "chargement ...",
+    "user-button": "Lien vers la page d'accueil",
+
+    "EMAIL_EXIST": "Cet Email existe déjà",
+	"USERNAME_REQUIRED": "Le nom d'utilisateur est requis",
+	"VALID_EMAIL": "L'Email n'est pas valide",
+	"VALID_USERNAME": "Le nom d'utilisateur doit avoir entre 3 et 20 caractères",
+	"NUMBE_CARAC_PASSWORD": "Le mot de passe doit avoir au moins 8 caractères",
+	"MIN_PASSWORD": "Le mot de passe doit contenir au moins une minuscule",
+	"MAJ_PASSWORD": "Le mot de passe doit contenir au moins une majuscule",
+	"NUMBER_PASSWORD": "Le mot de passe doit contenir au moins un chiffre",
+	"SPECIAL_CARAC_PASSWORD": "Le mot de passe doit contenir au moins un caractère spécial",
+	"SUCCESS_INSCRIPTION": "Vous avez reçu un email pour valider votre compte.",
+	"SUCCESS_LOGIN": "Bienvenue !",
+	"INVALID_CREDENTIALS": "mauvais identifiants",
+	"RATE_LIMIT": "Trop de tentatives de connexion, veuillez réessayer plus tard",
+	"EMAIL_NOT_VERIFIED": "Votre Email n'a pas été vérifié, veuillez consulter votre boite mail",
+	"EMAIL_VERIFIED": "Votre adresse mail est bien validée",
+	"USER_NOT_FOUND": "L'utilisateur n'a pas été trouvé",
+	"EMAIL_FORGOT_PASSWORD": "Un email à été envoyé pour réinitialiser votre mot de passe",
+	"FORGOT_PASSWORD_INVALID": "Les mots de passe ne correspondent pas",
+	"VALIDATION_FORGOT_PASSWORD": "Votre mot de passe à bien été modifié",
+	"ACCESS_DENIED": "Accès refusé",
+	"NAME_MIN_MAX_CARAC": "Le nom doit être composé de 5 à 50 caractères.",
+	"NAME_REQUIRED": "Le champ du nom est obligatoire.",
+	"MESSAGE_MIN_MAX_CARAC": "Le message doit être composé de 10 à 500 caractères.",
+	"MESSAGE_REQUIRED": "Le champ du message est obligatoire.",
+    "DELETE_ACCOUNT_EMAIL_SENT": "Un email a été envoyé pour supprimer votre compte.",
+
+    "UPDATE_SUCCESS":"Vos informations ont bien été mis à jour.",
+    "UPDATE_FAILURE":"Vos informations n'ont pas été mis à jour."
+}

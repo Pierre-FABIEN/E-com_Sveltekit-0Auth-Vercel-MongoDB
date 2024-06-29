@@ -1,0 +1,46 @@
+$breakpoints: (
+  mobile_min: 320px,
+  mobile_mid: 375px,
+  mobile_max: 480px,
+  tablet_portrait_min: 600px,
+  tablet_portrait_max: 768px,
+  tablet_landscape_min: 769px,
+  tablet_landscape_max: 1024px,
+  laptop_min: 1025px,
+  laptop_max: 1366px,
+  desktop_min: 1367px,
+  desktop_mid: 1600px,
+  desktop_max: 1920px,
+  widescreen: 2560px,
+  retina_4k: 3840px,
+);
+
+@mixin breakpointMin($name) {
+  @if not map-has-key($breakpoints, $name) {
+    @warn "Invalid breakpoint `#{$name}`.";
+  } @else {
+    @media (min-width: map-get($breakpoints, $name)) {
+      @content;
+    }
+  }
+}
+
+.exemple {
+  @include breakpointMin(mobile_min) {
+    // Styles pour les petits mobiles
+  }
+
+  @include breakpointMin(mobile_mid) {
+    // Styles pour les mobiles de taille moyenne
+  }
+
+  @include breakpointMin(mobile_max) {
+    // Styles pour les grands mobiles
+  }
+  
+  @include breakpointMin(tablet_portrait_min) {
+    // Styles pour les tablettes en mode portrait (min)
+  }
+  
+  // ... et ainsi de suite pour chaque breakpoint
+}

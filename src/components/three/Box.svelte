@@ -13,17 +13,26 @@
 		localScene = threeStore.initialize();
 		unsubscribe = threeStore.subscribe(({ renderer, camera }) => {
 			if (renderer && container && !container.firstChild) {
+				// Définir la taille du renderer
+				renderer.setSize(500, 300);
 				container.appendChild(renderer.domElement);
+				renderer.setClearColor(0x000000, 0);
 
 				const geometry = new THREE.BoxGeometry(1, 1, 1); // Ou SphereGeometry pour la sphère
 				const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 				const mesh = new THREE.Mesh(geometry, material);
 				localScene.add(mesh);
 
-				camera.position.set(0, 0, 5);
+				camera.position.set(0, 0, 2);
 
 				function animate() {
 					animationFrameId = requestAnimationFrame(animate);
+					
+					// Rotation du mesh
+					mesh.rotation.x += 0.01;
+					mesh.rotation.y += 0.01;
+					mesh.rotation.z += 0.01;
+
 					renderer.render(localScene, camera);
 				}
 
@@ -53,8 +62,8 @@
 
 <style>
 	div {
-		width: 100%;
-		height: 100vh;
+		width: 500px;
+		height: 300px;
 		display: block;
 	}
 </style>

@@ -47,7 +47,7 @@
 </svelte:head>
 
 <div
-  class="home"
+  class="home page"
   in:enter="{{ duration: 1, title, text, link }}"
   out:exit="{{ duration: 1, title, text, link }}"
 >
@@ -136,5 +136,6 @@
   .home {
     width: 100vw;
     position: absolute;
+	padding-top: 70px;
   }
 </style>

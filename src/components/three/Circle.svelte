@@ -14,16 +14,32 @@
 		unsubscribe = threeStore.subscribe(({ renderer, camera }) => {
 			if (renderer && container && !container.firstChild) {
 				container.appendChild(renderer.domElement);
+				renderer.setClearColor(0x000000, 0);
+				renderer.setSize(500, 300);
+				
+				// Définir la géométrie du triangle
+				const geometry = new THREE.BufferGeometry();
+				const vertices = new Float32Array([
+					0.0,  1.0,  0.0, // sommet A
+				   -1.0, -1.0,  0.0, // sommet B
+					1.0, -1.0,  0.0  // sommet C
+				]);
+				geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-				const geometry = new THREE.SphereGeometry(1, 32, 32);
-				const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+				const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
 				const mesh = new THREE.Mesh(geometry, material);
 				localScene.add(mesh);
 
-				camera.position.set(0, 0, 5);
+				camera.position.set(0, 0, 2);
 
 				function animate() {
 					animationFrameId = requestAnimationFrame(animate);
+
+					// Rotation du triangle
+					mesh.rotation.x += 0.01;
+					mesh.rotation.y += 0.01;
+					mesh.rotation.z += 0.01;
+
 					renderer.render(localScene, camera);
 				}
 
@@ -53,8 +69,8 @@
 
 <style>
 	div {
-		width: 100%;
-		height: 100vh;
+		width: 500px;
+		height: 300px;
 		display: block;
 	}
 </style>

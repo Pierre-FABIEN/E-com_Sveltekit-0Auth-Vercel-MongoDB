@@ -35,7 +35,7 @@
 	};
 </script>
 
-<Splide options={splideOptions} extensions={{ AutoScroll }} aria-label="My Favorite Images">
+<Splide class="splideContainer" options={splideOptions} extensions={{ AutoScroll }} aria-label="My Favorite Images">
 	<SplideSlide role="tabpanel" aria-label="GitHub Logo 1" id="splide01">
 		<img src="/logo.svg" alt="Logo GitHub" class="imgcarousel" width="50" height="50" />
 	</SplideSlide>
@@ -58,3 +58,5 @@
 		<img src="/logo.svg" alt="Logo GitHub" class="imgcarousel" width="50" height="50" />
 	</SplideSlide>
 </Splide>
+
+

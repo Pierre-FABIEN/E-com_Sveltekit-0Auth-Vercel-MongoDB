@@ -44,7 +44,6 @@
       transform-origin: center;
     }
     .about {
-      background-color: rgb(80, 80, 80);
       position: absolute;
       width: 100vw;
     }

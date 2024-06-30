@@ -19,11 +19,13 @@
 	export let data;
 
 	onNavigate(async (navigation) => {
+		// @ts-ignore
 		if (!document.startViewTransition) return;
 
 		//console.log("1. Capture de l'état actuel du DOM");
 
 		await new Promise<void>((resolve) => {
+			// @ts-ignore
 			document.startViewTransition(async () => {
 				// console.log("2. Déclenchement de la transition - Préparation de l'animation");
 				// // Préparation des éléments pour l'animation de sortie

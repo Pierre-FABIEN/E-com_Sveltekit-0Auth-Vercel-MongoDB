@@ -1,17 +1,29 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import EmblaCarousel from 'embla-carousel';
 	import AutoScroll from 'embla-carousel-auto-scroll';
 
-	let embla;
-	let viewport;
+	let embla: any;
+	let viewport: any;
 
-	const options = { loop: true, speed: 5 };
+	const options = { loop: true };
 	const slides = Array.from({ length: 8 }, (_, i) => i + 1);
 
 	onMount(() => {
-		embla = EmblaCarousel(viewport, options, [AutoScroll({ playOnInit: true, speed: 3 })]);
+		embla = EmblaCarousel(viewport, options, [AutoScroll({ playOnInit: true, speed: 1 })]);
+
+		// Ajoute les écouteurs d'événements pour arrêter et reprendre le défilement
+		viewport.addEventListener('mouseenter', handleMouseEnter);
+		viewport.addEventListener('mouseleave', handleMouseLeave);
 	});
+
+	function handleMouseEnter() {
+		embla.plugins().autoScroll.stop();
+	}
+
+	function handleMouseLeave() {
+		embla.plugins().autoScroll.play();
+	}
 </script>
 
 <div class="embla">
@@ -30,26 +42,31 @@
 
 <style lang="scss">
 	.embla {
-		max-width: 100vw;
+		width: 100vw;
 		margin: auto;
 		--slide-height: 19rem;
 		--slide-spacing: 1rem;
 		--slide-size: 45%;
 	}
+
 	.embla__viewport {
 		overflow: hidden;
 	}
+
 	.embla__container {
 		backface-visibility: hidden;
 		display: flex;
 		touch-action: pan-y pinch-zoom;
 		margin-left: calc(var(--slide-spacing) * -1);
+		transition: transform 0.5s ease; /* Ajoute une transition pour l'effet de facilité */
 	}
+
 	.embla__slide {
 		flex: 0 0 var(--slide-size);
 		min-width: 0;
 		padding-left: var(--slide-spacing);
 	}
+
 	.embla__slide__number {
 		box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
 		border-radius: 1.8rem;
@@ -59,71 +76,5 @@
 		align-items: center;
 		justify-content: center;
 		height: var(--slide-height);
-	}
-	.embla__controls {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		justify-content: space-between;
-		gap: 1.2rem;
-		margin-top: 1.8rem;
-	}
-	.embla__buttons {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0.6rem;
-		align-items: center;
-	}
-	.embla__button {
-		-webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
-		-webkit-appearance: none;
-		appearance: none;
-		background-color: transparent;
-		touch-action: manipulation;
-		display: inline-flex;
-		text-decoration: none;
-		cursor: pointer;
-		border: 0;
-		padding: 0;
-		margin: 0;
-		box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
-		width: 3.6rem;
-		height: 3.6rem;
-		z-index: 1;
-		border-radius: 50%;
-		color: var(--text-body);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.embla__button:disabled {
-		color: var(--detail-high-contrast);
-	}
-	.embla__button__svg {
-		width: 35%;
-		height: 35%;
-	}
-	.embla__play {
-		-webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
-		-webkit-appearance: none;
-		appearance: none;
-		background-color: transparent;
-		touch-action: manipulation;
-		display: inline-flex;
-		text-decoration: none;
-		cursor: pointer;
-		border: 0;
-		padding: 0;
-		margin: 0;
-		box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
-		border-radius: 1.8rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		justify-self: flex-end;
-		color: var(--text-body);
-		font-weight: 700;
-		font-size: 1.4rem;
-		padding: 0 2.4rem;
-		min-width: 8.4rem;
 	}
 </style>

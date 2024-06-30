@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t, locale, locales } from '$UITools/Translations/index';
+	import { t, locale, locales, setLocale } from '$UITools/Translations/index';
 	import * as Select from '$UITools/shadcn/select';
 	import { onMount } from 'svelte';
 
@@ -9,14 +9,15 @@
 	function handleValueChange(event: Event) {
 		const target = event.target as HTMLInputElement;
 		selectedLangue = target.value;
-		console.log(`Selected fruit: ${selectedLangue}`);
+		console.log(`Selected lang: ${selectedLangue}`);
 		document.cookie = `lang=${selectedLangue};`;
-		location.reload();
+
+		setLocale(selectedLangue);
 	}
 
 	// Listen to the change event
 	onMount(() => {
-		const selectInput = document.querySelector('input[name="favoriteFruit"]') as HTMLInputElement;
+		const selectInput = document.querySelector('input[name="favoriteLang"]') as HTMLInputElement;
 		if (selectInput) {
 			selectInput.addEventListener('change', handleValueChange);
 		}
@@ -38,5 +39,5 @@
 			{/each}
 		</Select.Group>
 	</Select.Content>
-	<Select.Input name="favoriteFruit" />
+	<Select.Input name="favoriteLang" />
 </Select.Root>

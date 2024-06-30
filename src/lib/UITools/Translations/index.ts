@@ -17,13 +17,13 @@ export const config = {
 		{
 			locale: 'en',
 			key: 'general',
-			loader: async () => (await import('./en/general.json')).default
+			loader: async () => (await import('../../translateJson/en/general.json')).default
 		},
 
 		{
 			locale: 'fr',
 			key: 'general',
-			loader: async () => (await import('./fr/general.json')).default
+			loader: async () => (await import('../../translateJson/fr/general.json')).default
 		}
 	]
 };

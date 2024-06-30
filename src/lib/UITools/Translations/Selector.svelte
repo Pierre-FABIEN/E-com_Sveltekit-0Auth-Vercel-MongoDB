@@ -28,11 +28,11 @@
 
 <Select.Root portal={null}>
 	<Select.Trigger class="w-[180px]">
-		<Select.Value placeholder={$t('data.language')} />
+		<Select.Value placeholder={$t('general.language')} />
 	</Select.Trigger>
 	<Select.Content>
 		<Select.Group>
-			<Select.Label>{$t('data.language')}</Select.Label>
+			<Select.Label>{$t('general.language')}</Select.Label>
 			{#each $locales as value}
 				<Select.Item {value} label={value}>{value}</Select.Item>
 			{/each}

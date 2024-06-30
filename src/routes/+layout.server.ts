@@ -7,9 +7,7 @@ export const load: LayoutServerLoad = async (event) => {
 	const { pathname } = url;
 
 	const session = await locals.getSession();
-
 	const user = await checkAuth(session);
-
 	if (user && session) {
 		session.user.role = user.role;
 	}

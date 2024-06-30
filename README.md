@@ -39,6 +39,5 @@ You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/nextauthjs/sveltekit-auth-example&project-name=sveltekit-auth-example&repository-name=sveltekit-auth-example)
 
 
-changer le carousel : https://www.embla-carousel.com/examples/predefined/#auto-scroll
 installer ZOD et validform
 créer l"espace user et admin

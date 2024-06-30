@@ -17,7 +17,6 @@
 	} from '$stores/UX/initialLoaderStore';
 
 	export let data;
-
 	onNavigate(async (navigation) => {
 		// @ts-ignore
 		if (!document.startViewTransition) return;

@@ -5,7 +5,7 @@
 	import * as Table from '$UITools/shadcn/table';
 
 	import Box from './../components/three/Box.svelte';
-	import Slider from '$components/Slider.svelte';
+	import Slider from '$components/Slider/Slider.svelte';
 	import { setTransitionLoader } from '$stores/UX/transitionLoaderStore';
 	import { fetchMockData } from '$lib/utils/mockService';
 	import { enter, exit } from './transition';

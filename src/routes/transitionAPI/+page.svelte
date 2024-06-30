@@ -61,5 +61,4 @@
 		height: 200px;
 		view-transition-name: var(--logo);
 	}
-
 </style>

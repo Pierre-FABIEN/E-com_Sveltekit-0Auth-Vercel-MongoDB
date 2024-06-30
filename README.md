@@ -40,7 +40,6 @@ You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=
 
 
 changer le carousel : https://www.embla-carousel.com/examples/predefined/#auto-scroll
-Nettoyer le SCSS
 installer ZOD et validform
 créer l"espace user et admin
 remettre le indent

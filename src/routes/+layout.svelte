@@ -12,14 +12,12 @@
 	import NotificationWrapper from '$UITools/Notifications/NotificationWrapper.svelte';
 	import {
 		firstLoadComplete,
-		loadingStates,
 		setFirstOpen,
 		setRessourceToValide
 	} from '$stores/UX/initialLoaderStore';
 
-	export let data
+	export let data;
 
-	
 	onNavigate(async (navigation) => {
 		if (!document.startViewTransition) return;
 
@@ -60,10 +58,9 @@
 		//registerServiceWorker();
 		// Détermine le premier chargement de l'application
 		setFirstOpen(true);
-		setRessourceToValide(true);		
+		setRessourceToValide(true);
+		console.log(data, 'data fron layout');
 	});
-
-
 </script>
 
 <svelte:head>

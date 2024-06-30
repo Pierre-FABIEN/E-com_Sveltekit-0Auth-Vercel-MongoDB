@@ -2,11 +2,7 @@
 	import gsap from 'gsap';
 	import { onMount, onDestroy, tick } from 'svelte';
 	import { get } from 'svelte/store';
-	import {
-		setDomLoaded,
-		setFirstLoadComplete,
-		loadingStates
-	} from '$stores/UX/initialLoaderStore';
+	import { setDomLoaded, setFirstLoadComplete, loadingStates } from '$stores/UX/initialLoaderStore';
 
 	let initalLoader: HTMLElement;
 	let observer: IntersectionObserver;
@@ -22,11 +18,11 @@
 		}
 	});
 
-	async function setupObserver() {		
+	async function setupObserver() {
 		observer = new IntersectionObserver(
-			(entries) => {				
+			(entries) => {
 				entries.forEach((entry) => {
-					if (entry.isIntersecting) {						
+					if (entry.isIntersecting) {
 						setDomLoaded(true);
 						animateIn();
 						observer.unobserve(initalLoader);

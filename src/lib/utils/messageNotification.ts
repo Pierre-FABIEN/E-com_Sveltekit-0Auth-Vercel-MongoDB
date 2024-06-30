@@ -4,19 +4,18 @@ type TranslationFunction = (key: string, options?: any) => string;
 export const messageNotification = (error: any, $t: TS.TranslationFunction) => {
 	let errorMessages: any = [];
 
-    // Gérer le format de l'erreur ApolloError avec les erreurs structurées
-    if (error.networkError && error.networkError.result && error.networkError.result.errors) {
-        error.networkError.result.errors.forEach((err: { msg: string }) => {
-            errorMessages.push(err.msg);  // Collecter les messages d'erreur pour la notification
-        });
-    } else if (error.message) {
-        // Cas où l'erreur n'est pas structurée comme prévu
-        errorMessages = error.message.split(',');
-    } else {
-        // Cas de fallback si l'erreur est inattendue ou mal formée
-        errorMessages = ["Une erreur inconnue s'est produite."];
-    }
-
+	// Gérer le format de l'erreur ApolloError avec les erreurs structurées
+	if (error.networkError && error.networkError.result && error.networkError.result.errors) {
+		error.networkError.result.errors.forEach((err: { msg: string }) => {
+			errorMessages.push(err.msg); // Collecter les messages d'erreur pour la notification
+		});
+	} else if (error.message) {
+		// Cas où l'erreur n'est pas structurée comme prévu
+		errorMessages = error.message.split(',');
+	} else {
+		// Cas de fallback si l'erreur est inattendue ou mal formée
+		errorMessages = ["Une erreur inconnue s'est produite."];
+	}
 
 	// Itération sur chaque message d'erreur
 	errorMessages.forEach((errorMsg: string) => {

@@ -1,7 +1,7 @@
-import data from './../../translateJson/en/data.json'
+import data from './../../translateJson/en/data.json';
 
 const translationsEn = {
-  data,
-}
+	data
+};
 
-export default translationsEn
+export default translationsEn;

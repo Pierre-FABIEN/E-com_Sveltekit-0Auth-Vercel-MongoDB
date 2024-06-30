@@ -37,7 +37,7 @@
 	.linkabout {
 		transform-origin: center;
 	}
-	
+
 	.about {
 		position: absolute;
 		width: 100vw;

@@ -16,13 +16,19 @@
 				container.appendChild(renderer.domElement);
 				renderer.setClearColor(0x000000, 0);
 				renderer.setSize(500, 300);
-				
+
 				// Définir la géométrie du triangle
 				const geometry = new THREE.BufferGeometry();
 				const vertices = new Float32Array([
-					0.0,  1.0,  0.0, // sommet A
-				   -1.0, -1.0,  0.0, // sommet B
-					1.0, -1.0,  0.0  // sommet C
+					0.0,
+					1.0,
+					0.0, // sommet A
+					-1.0,
+					-1.0,
+					0.0, // sommet B
+					1.0,
+					-1.0,
+					0.0 // sommet C
 				]);
 				geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 

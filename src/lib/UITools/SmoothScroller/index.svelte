@@ -64,10 +64,9 @@
 </div>
 
 <style lang="scss">
-	
-.smoothScoller {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
+	.smoothScoller {
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+	}
 </style>

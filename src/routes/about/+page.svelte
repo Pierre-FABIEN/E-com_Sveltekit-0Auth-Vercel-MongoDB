@@ -26,10 +26,10 @@
 
 <div class="about" in:enter={{ path, title, text, link }} out:exit={{ path, title, text, link }}>
 	<div>
-		<h1 bind:this={title}>{$t('data.about-title')}</h1>
-		<p bind:this={text}>{@html $t('data.about-text')}</p>
+		<h1 bind:this={title}>{$t('general.about-title')}</h1>
+		<p bind:this={text}>{@html $t('general.about-text')}</p>
 		<div class="linkabout" bind:this={link}>
-			<a href="/">{$t('data.about-link')}</a>
+			<a href="/">{$t('general.about-link')}</a>
 		</div>
 	</div>
 	<Circle />

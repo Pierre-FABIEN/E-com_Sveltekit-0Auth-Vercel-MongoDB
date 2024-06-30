@@ -16,13 +16,14 @@ export const config = {
 	loaders: [
 		{
 			locale: 'en',
-			key: 'data',
-			loader: async () => (await import('./../../translateJson/en/data.json')).default
+			key: 'general',
+			loader: async () => (await import('./en/general.json')).default
 		},
+
 		{
 			locale: 'fr',
-			key: 'data',
-			loader: async () => (await import('./../../translateJson/fr/data.json')).default
+			key: 'general',
+			loader: async () => (await import('./fr/general.json')).default
 		}
 	]
 };

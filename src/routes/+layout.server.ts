@@ -1,16 +1,16 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
-import { checkAuth } from '$lib/functions/checkAuth';
+//import { checkAuth } from '$lib/functions/checkAuth';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;
 	const { pathname } = url;
 
-	const session = await locals.getSession();
-	const user = await checkAuth(session);
-	if (user && session) {
-		session.user.role = user.role;
-	}
+	// const session = await locals.getSession();
+	// const user = await checkAuth(session);
+	// if (user && session) {
+	// 	session.user.role = user.role;
+	// }
 
 	// Try to get the locale from cookie
 	let locale = (cookies.get('lang') || '').toLowerCase();
@@ -34,7 +34,7 @@ export const load: LayoutServerLoad = async (event) => {
 	await loadTranslations(locale, pathname); // Load translations for the current locale and path
 
 	return {
-		session,
+		//session,
 		i18n: { locale, route: pathname },
 		translations: translations.get() // Return loaded translations
 	};

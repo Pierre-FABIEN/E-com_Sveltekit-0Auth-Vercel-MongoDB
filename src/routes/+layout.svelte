@@ -71,9 +71,9 @@
 	<meta name="theme-color" content="#4285f4" />
 </svelte:head>
 
-{#if !$firstLoadComplete}
+<!-- {#if !$firstLoadComplete}
 	<Loader />
-{/if}
+{/if} -->
 
 <NotificationWrapper />
 <Head />

@@ -1,7 +1,8 @@
-import data from './../../translateJson/en/data.json';
+// Assurez-vous que les chemins d'importation correspondent à la structure de votre projet
+import general from './en/general.json';
 
 const translationsEn = {
-	data
+	general
 };
 
 export default translationsEn;

@@ -46,10 +46,10 @@
 	in:enter={{ duration: 1, title, text, link }}
 	out:exit={{ duration: 1, title, text, link }}
 >
-	<h1 bind:this={title}>{$t('data.home-title')}</h1>
-	<p bind:this={text}>{@html $t('data.home-text', { linkUrl })}</p>
+	<h1 bind:this={title}>{$t('general.home-title')}</h1>
+	<p bind:this={text}>{@html $t('general.home-text', { linkUrl })}</p>
 	<div class="linkhome" bind:this={link}>
-		<a href="/about" use:hoverable={'first'}>{$t('data.home-link')}</a>
+		<a href="/about" use:hoverable={'first'}>{$t('general.home-link')}</a>
 	</div>
 	<Slider />
 	<Box />

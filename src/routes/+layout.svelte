@@ -87,5 +87,8 @@
 </SmoothScroller>
 
 <style lang="scss" global>
-	@import './src/styles/main';
+	main {
+		min-height: 100vh;
+		padding-top: 70px;
+	}
 </style>

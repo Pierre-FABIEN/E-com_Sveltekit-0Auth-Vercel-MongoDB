@@ -62,3 +62,12 @@
 <div bind:this={smoothScoller} class="smoothScoller" id="smoothScoller">
 	<slot />
 </div>
+
+<style lang="scss">
+	
+.smoothScoller {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+</style>

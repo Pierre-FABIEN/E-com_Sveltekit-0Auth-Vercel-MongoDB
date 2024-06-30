@@ -132,10 +132,12 @@
 </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import '../styles/utils/flex';
   .home {
     width: 100vw;
     position: absolute;
 	padding-top: 70px;
+	@include ccc;
   }
 </style>

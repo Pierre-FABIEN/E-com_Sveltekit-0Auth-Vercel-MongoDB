@@ -92,11 +92,27 @@
 </div>
 
 <style lang="scss">
+		@import '../styles/utils/flex';
+		
 	#Cursor {
 		z-index: 1001;
 		width: 50px;
 		height: 50px;
 		position: fixed;
 		pointer-events: none;
+
+		svg {
+    @include ccc;
+    position: absolute;
+    transform-origin: center;
+
+    path {
+      max-width: 50px;
+      max-height: 50px;
+      transform: translate(25%, 25%);
+    }
+  }
 	}
+
+
 </style>

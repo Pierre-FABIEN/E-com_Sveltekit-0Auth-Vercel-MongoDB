@@ -49,6 +49,10 @@
 		right: 20px;
 		width: 200px;
 		z-index: 9999999;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 101;
 	}
 
 	.notification {

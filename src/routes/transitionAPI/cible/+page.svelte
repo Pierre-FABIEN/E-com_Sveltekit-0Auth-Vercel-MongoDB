@@ -37,15 +37,21 @@
 	.linkabout {
 		transform-origin: center;
 	}
+	
 	.about {
 		position: absolute;
 		width: 100vw;
 	}
+
 	.logo {
 		position: absolute;
 		right: 40vw;
 		margin-right: auto;
 		margin-left: auto;
 		transform: scale(4);
+	}
+
+	:root {
+		view-transition-name: none;
 	}
 </style>

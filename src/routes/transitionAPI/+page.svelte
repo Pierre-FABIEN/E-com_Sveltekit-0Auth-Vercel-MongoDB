@@ -32,7 +32,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="scss" global>
 	.linkabout {
 		transform-origin: center;
 	}
@@ -46,5 +46,20 @@
 		right: 0;
 		margin-left: auto;
 		transform: scale(1);
+
+		width: 200px;
+		height: 200px;
+		view-transition-name: var(--logo);
 	}
+
+	:root {
+		view-transition-name: none;
+	}
+
+	.logo {
+		width: 200px;
+		height: 200px;
+		view-transition-name: var(--logo);
+	}
+
 </style>

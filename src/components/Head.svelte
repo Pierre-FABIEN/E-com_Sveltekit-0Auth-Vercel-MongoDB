@@ -86,3 +86,32 @@
     <FullScreen />
   </div>
 </header>
+
+
+<style lang="scss">
+  @import '../styles/utils/flex';
+  header {
+  @include rcb;
+  padding: 20px;
+
+  width: 100%;
+  height: 70px;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  color: white;
+
+  ul {
+    width: 500px;
+    @include rcb;
+  }
+
+  .left-side {
+    @include rcc;
+
+    .nojs-show {
+      @include rcc;
+    }
+  }
+}
+</style>

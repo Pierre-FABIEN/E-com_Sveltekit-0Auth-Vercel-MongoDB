@@ -86,7 +86,19 @@
 </div>
 
 <style lang="scss">
+	@import '../styles/utils/flex';
+
 	.letter {
 		opacity: 0;
+	}
+	.initalLoader {
+		@include rcc;
+		background-color: white;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 200;
+		width: 100vw;
+		height: 100vh;
 	}
 </style>

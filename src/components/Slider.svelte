@@ -60,3 +60,8 @@
 </Splide>
 
 
+<style lang="scss" global>
+	.splideContainer {
+		width: 100vw;
+	}
+</style>

@@ -4,13 +4,13 @@
 	import AutoScroll from 'embla-carousel-auto-scroll';
 
 	let embla: any;
-	let viewport: any;
+	let viewport: HTMLElement;
 
-	const options = { loop: true };
+	const options = { loop: true, speed: 2 };
 	const slides = Array.from({ length: 8 }, (_, i) => i + 1);
 
 	onMount(() => {
-		embla = EmblaCarousel(viewport, options, [AutoScroll({ playOnInit: true, speed: 1 })]);
+		embla = EmblaCarousel(viewport, options, [AutoScroll({ playOnInit: true, speed: 2 })]);
 
 		// Ajoute les écouteurs d'événements pour arrêter et reprendre le défilement
 		viewport.addEventListener('mouseenter', handleMouseEnter);
@@ -58,7 +58,6 @@
 		display: flex;
 		touch-action: pan-y pinch-zoom;
 		margin-left: calc(var(--slide-spacing) * -1);
-		transition: transform 0.5s ease; /* Ajoute une transition pour l'effet de facilité */
 	}
 
 	.embla__slide {

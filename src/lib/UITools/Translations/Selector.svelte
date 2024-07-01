@@ -27,17 +27,19 @@
 	});
 </script>
 
-<Select.Root portal={null}>
-	<Select.Trigger class="w-[180px]">
-		<Select.Value placeholder={$t('general.language')} />
-	</Select.Trigger>
-	<Select.Content>
-		<Select.Group>
-			<Select.Label>{$t('general.language')}</Select.Label>
-			{#each $locales as value}
-				<Select.Item {value} label={value}>{value}</Select.Item>
-			{/each}
-		</Select.Group>
-	</Select.Content>
-	<Select.Input name="favoriteLang" />
-</Select.Root>
+<div class="mx-2">
+	<Select.Root portal={null}>
+		<Select.Trigger class="w-[180px]">
+			<Select.Value placeholder={$t('general.language')} />
+		</Select.Trigger>
+		<Select.Content>
+			<Select.Group>
+				<Select.Label>{$t('general.language')}</Select.Label>
+				{#each $locales as value}
+					<Select.Item {value} label={value}>{value}</Select.Item>
+				{/each}
+			</Select.Group>
+		</Select.Content>
+		<Select.Input name="favoriteLang" />
+	</Select.Root>
+</div>

@@ -24,7 +24,7 @@
 	}
 </script>
 
-<Button on:click={toggleFullScreen} variant="outline" size="icon">
+<Button on:click={toggleFullScreen} class="mx-2" variant="outline" size="icon">
 	<Expand
 		class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
 	/>

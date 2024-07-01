@@ -20,8 +20,12 @@ model Data {
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  email     String @unique
+  email     String   @unique
   image     String?
   role      String
+  address   String?
+  city      String?
+  postalCode String?
+  phoneNumber String?
   @@map("users")
 }

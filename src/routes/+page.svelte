@@ -11,7 +11,6 @@
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
 	import { users, loading, error, fetchUsers } from '$stores/Data/userStore';
-	import type { PageData } from './$types';
 
 	const linkUrl: string = 'https://kit.svelte.dev';
 	let title: HTMLElement;
@@ -19,8 +18,6 @@
 	let link: HTMLElement;
 	let path: string | undefined | null;
 	let focal: any[] = [];
-
-	export let data: PageData;
 
 	onNavigate((navigation) => {
 		path = navigation.to?.route.id;
@@ -44,10 +41,13 @@
 	out:exit={{ duration: 1, title, text, link }}
 >
 	<h1 bind:this={title}>{$t('general.home-title')}</h1>
+
 	<p bind:this={text}>{@html $t('general.home-text', { linkUrl })}</p>
+
 	<div class="linkhome" bind:this={link}>
 		<a href="/about" use:hoverable={'first'}>{$t('general.home-link')}</a>
 	</div>
+
 	<Slider />
 	<Box />
 

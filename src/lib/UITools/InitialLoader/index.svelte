@@ -89,7 +89,6 @@
 	}
 	.initalLoader {
 		@include rcc;
-		background-color: white;
 		position: absolute;
 		top: 0;
 		right: 0;

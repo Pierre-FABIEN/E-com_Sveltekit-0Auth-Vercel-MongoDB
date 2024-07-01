@@ -14,8 +14,6 @@
 	onNavigate((navigation) => {
 		path = navigation.to?.route.id;
 	});
-
-	onMount(() => {});
 </script>
 
 <svelte:head>

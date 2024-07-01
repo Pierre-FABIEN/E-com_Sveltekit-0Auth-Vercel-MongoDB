@@ -5,6 +5,7 @@ import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
+import { updateUserData } from '$lib/prisma/Request/updateUserData';
 
 const allowedRoles = ['user', 'admin'];
 
@@ -37,28 +38,29 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	create: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData, 'formdata');
 		const form = await superValidate(formData, zod(profileSchema));
 
 		if (!form.valid) return fail(400, { form });
 
-		console.log(form, 'srdghjmsdolkirgjhdo');
+		try {
+			const userData: ProfileSchema = {
+				...form.data,
+				id: formData.get('id') as string,
+				address: formData.get('address') as string,
+				city: formData.get('city') as string,
+				postalCode: formData.get('postalCode') as string,
+				phoneNumber: formData.get('phoneNumber') as string
+			};
 
-		// try {
-		// 	const userData: ProfileSchema = {
-		// 		...form.data,
-		// 		user: JSON.parse(formData.get('user') as string)
-		// 	};
+			await updateUserData(userData);
 
-		// 	await updateUserData(userData);
-
-		// 	return message(form, 'User created successfully');
-		// } catch (error: any) {
-		// 	console.error('Error creating user:', error);
-		// 	if (error.message === 'One or more workspaces do not exist') {
-		// 		return fail(400, { form, error: error.message });
-		// 	}
-		// 	return fail(500, { form, error: 'An error occurred while creating the user' });
-		// }
+			return message(form, 'User created successfully');
+		} catch (error: any) {
+			console.error('Error creating user:', error);
+			if (error.message === 'One or more workspaces do not exist') {
+				return fail(400, { form, error: error.message });
+			}
+			return fail(500, { form, error: 'An error occurred while creating the user' });
+		}
 	}
 };

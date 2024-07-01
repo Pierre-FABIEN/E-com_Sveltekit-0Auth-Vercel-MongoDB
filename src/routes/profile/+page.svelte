@@ -28,7 +28,6 @@
 	let userId: string = data.session?.user.id;
 </script>
 
-<SuperDebug data={$form} />
 <div class="card">
 	<Card.Root class="w-full">
 		<form method="POST" action="?/create" use:enhance class="space-y-4">
@@ -68,20 +67,20 @@
 				</div>
 
 				<div>
-					<Form.Field name="postalcode" form={formProfil}>
+					<Form.Field name="postalCode" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Postal Code</Form.Label>
-							<Input {...attrs} type="text" bind:value={$form.postalcode} />
+							<Input {...attrs} type="text" bind:value={$form.postalCode} />
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
 				</div>
 
 				<div>
-					<Form.Field name="phone" form={formProfil}>
+					<Form.Field name="phoneNumber" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Phone</Form.Label>
-							<Input {...attrs} type="phone" bind:value={$form.phone} />
+							<Input {...attrs} type="phone" bind:value={$form.phoneNumber} />
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>

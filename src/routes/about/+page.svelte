@@ -1,7 +1,6 @@
 <script lang="ts">
-	import gsap from 'gsap';
 	import { t } from '$UITools/Translations/index.js';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
@@ -27,7 +26,7 @@
 <div class="about" in:enter={{ path, title, text, link }} out:exit={{ path, title, text, link }}>
 	<div>
 		<h1 bind:this={title}>{$t('general.about-title')}</h1>
-		<p bind:this={text}>{@html $t('general.about-text')}</p>
+		<p bind:this={text}>{$t('general.about-text')}</p>
 		<div class="linkabout" bind:this={link}>
 			<a href="/">{$t('general.about-link')}</a>
 		</div>

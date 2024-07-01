@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Pagination as PaginationPrimitive } from 'bits-ui';
 	import { cn } from '$lib/utils/TailwindUtils.js';
-	import { type Props, buttonVariants } from '$lib/components/ui/button/index.js';
+	import { type Props, buttonVariants } from '$UITools/shadcn/button/index.js';
 
 	type $$Props = PaginationPrimitive.PageProps &
 		Props & {

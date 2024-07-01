@@ -1,40 +1,39 @@
 <script lang="ts">
+	import { superForm } from 'sveltekit-superforms/client';
+	import SuperDebug from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+
 	import * as Card from '$UITools/shadcn/card';
-	import { Label } from '$UITools/shadcn/label';
-	import * as Select from '$UITools/shadcn/select';
 	import { Button } from '$UITools/shadcn/button';
-	import { Textarea } from '$UITools/shadcn/textarea';
 	import { Input } from '$UITools/shadcn/input';
+	import * as Form from '$UITools/shadcn/form';
+
+	import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
 
 	export let data: PageData;
 
-	const areas = [
-		{ value: 'team', label: 'Team' },
-		{ value: 'billing', label: 'Billing' },
-		{ value: 'account', label: 'Account' },
-		{ value: 'deployments', label: 'Deployments' },
-		{ value: 'support', label: 'Support' }
-	];
-
-	const securityLevels = [
-		{ value: '1', label: 'Severity 1 (Highest)' },
-		{ value: '2', label: 'Severity 2' },
-		{ value: '3', label: 'Severity 3' },
-		{ value: '4', label: 'Severity 4 (Lowest)' }
-	];
-
 	onMount(() => {
-		console.log(data);
+		console.log(data, 'data de profil ');
 	});
+
+	const formProfil = superForm(data.formProfil, {
+		validators: zodClient(profileSchema)
+	});
+
+	const { form, enhance, message, validate } = formProfil;
 </script>
+
+<SuperDebug data={$form} />
 
 <div class="card">
 	<Card.Root class="w-full">
 		<Card.Header>
 			<Card.Title>Information sur votre profil</Card.Title>
-			<Card.Description>Vous ne pouvez pas modifier les informations compte google</Card.Description
+			<Card.Description
+				>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
 			>
 		</Card.Header>
 		<Card.Content class="grid gap-6">
@@ -46,26 +45,50 @@
 				</div>
 			</div>
 
-			<div class="grid gap-2">
-				<Label for="adress">adress</Label>
-				<Input id="adress" placeholder="I need help with..." />
-			</div>
-			<div class="grid gap-2">
-				<Label for="city">city</Label>
-				<Input id="city" placeholder="I need help with..." />
-			</div>
-			<div class="grid gap-2">
-				<Label for="postalcode">postalcode</Label>
-				<Input id="postalcode" placeholder="I need help with..." />
-			</div>
-			<div class="grid gap-2">
-				<Label for="phone">phone</Label>
-				<Input id="phone" placeholder="I need help with..." />
-			</div>
+			<form method="POST" action="?/create" use:enhance class="space-y-4">
+				<div>
+					<Form.Field name="address" form={formProfil}>
+						<Form.Control let:attrs>
+							<Form.Label>Address</Form.Label>
+							<Input {...attrs} type="text" bind:value={$form.address} />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				</div>
+
+				<div>
+					<Form.Field name="city" form={formProfil}>
+						<Form.Control let:attrs>
+							<Form.Label>City</Form.Label>
+							<Input {...attrs} type="text" bind:value={$form.city} />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				</div>
+
+				<div>
+					<Form.Field name="postalcode" form={formProfil}>
+						<Form.Control let:attrs>
+							<Form.Label>Postal Code</Form.Label>
+							<Input {...attrs} type="text" bind:value={$form.postalcode} />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				</div>
+
+				<div>
+					<Form.Field name="phone" form={formProfil}>
+						<Form.Control let:attrs>
+							<Form.Label>Phone</Form.Label>
+							<Input {...attrs} type="text" bind:value={$form.phone} />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				</div>
+			</form>
 		</Card.Content>
-		<Card.Footer class="justify-between space-x-2">
-			<Button variant="ghost">Cancel</Button>
-			<Button>Submit</Button>
+		<Card.Footer class="justify-end space-x-2">
+			<Button type="submit" variant="outline">Submit</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>

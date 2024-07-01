@@ -9,7 +9,7 @@
 	function handleValueChange(event: Event) {
 		const target = event.target as HTMLInputElement;
 		selectedLangue = target.value;
-		console.log(`Selected lang: ${selectedLangue}`);
+
 		document.cookie = `lang=${selectedLangue};`;
 
 		setLocale(selectedLangue);
@@ -21,9 +21,6 @@
 		if (selectInput) {
 			selectInput.addEventListener('change', handleValueChange);
 		}
-
-		console.log($locale, 'locale');
-		console.log($locales, 'locales');
 	});
 </script>
 

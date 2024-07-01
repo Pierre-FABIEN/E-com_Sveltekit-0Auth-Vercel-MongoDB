@@ -29,10 +29,7 @@
 	onMount(async () => {
 		setTransitionLoader(false);
 		fetchMockData;
-		console.log(data, 'data');
-
 		focal = await fetchUsers();
-		console.log(focal, 'uihsfusoierfuhsifueh');
 	});
 </script>
 

@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import DarkMode from '$UITools/DarkMode/index.svelte';
+	import * as DropdownMenu from '$UITools/shadcn/dropdown-menu';
 
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import FullScreen from '$UITools/FullScreen/FullScreen.svelte';
 	import Selector from '$UITools/Translations/Selector.svelte';
+
+	console.log('page', $page.data.session?.user.role);
 </script>
 
 <header>
@@ -26,30 +29,43 @@
 	</nav>
 
 	<div class="left-side">
-		<div class="signedInStatus">
-			<div class="nojs-show loaded">
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger>
 				<img
-					width="25px"
-					height="25px"
+					width="40px"
+					height="40px"
 					alt="User avatar"
 					src={$page.data?.session?.user?.image ?? 'https://source.boringavatars.com/marble/120'}
 					class="avatar"
 				/>
-				{#if $page.data.session}
-					<span class="signedInText">
-						{$page.data.session.user?.email ?? $page.data.session.user?.name}
-					</span>
-					<SignOut>
-						<div slot="submitButton" class="buttonPrimary">Sign out</div>
-					</SignOut>
-				{:else}
-					<span class="notSignedInText">You are not signed in</span>
-					<SignIn>
-						<div slot="submitButton" class="buttonPrimary">Sign in</div>
-					</SignIn>
-				{/if}
-			</div>
-		</div>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content>
+				<DropdownMenu.Group>
+					<DropdownMenu.Label>
+						{#if $page.data.session}
+							<SignOut>
+								<div slot="submitButton" class="buttonPrimary">Sign out</div>
+							</SignOut>
+						{:else}
+							<SignIn>
+								<div slot="submitButton" class="buttonPrimary">Sign in</div>
+							</SignIn>
+						{/if}
+					</DropdownMenu.Label>
+					{#if $page.data.session?.user}
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>
+							<a href="/profile">Profile</a>
+						</DropdownMenu.Item>
+					{/if}
+					{#if $page.data.session?.user.role === 'admin'}
+						<DropdownMenu.Item>
+							<a href="/dashboard">Dashboard</a>
+						</DropdownMenu.Item>
+					{/if}
+				</DropdownMenu.Group>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 
 		<Selector />
 

@@ -1,8 +1,9 @@
-import { checkAuth } from '$lib/functions/checkAuth';
-import { superValidate } from 'sveltekit-superforms/server';
+import { checkAuth } from '$lib/prisma/Request/checkAuth';
+import { message, superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad, Actions } from './$types';
+import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import { profileSchema } from '$lib/ZodSchema/profileSchema';
+import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 const allowedRoles = ['user', 'admin'];
@@ -12,10 +13,13 @@ export const load: PageServerLoad = async (event) => {
 	const { locals } = event;
 
 	// Récupérer le rôle de l'utilisateur depuis la session
-	const session = await locals.getSession();
+	const session: any = await locals.getSession();
+
 	const user = await checkAuth(session);
 	if (user && session) {
 		session.user.role = user.role;
+		session.user.id = user.id;
+		session.user.image = user.image;
 	}
 
 	if (!allowedRoles.includes(user?.role as string)) {
@@ -31,22 +35,30 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	create: async ({ request }) => {
 		const formData = await request.formData();
-		const validationResult = profileSchema.safeParse(Object.fromEntries(formData));
+		console.log(formData, 'formdata');
+		const form = await superValidate(formData, zod(profileSchema));
 
-		if (!validationResult.success) {
-			return {
-				status: 400,
-				errors: validationResult.error.flatten()
-			};
-		}
+		if (!form.valid) return fail(400, { form });
 
-		// Process the valid data
-		console.log(validationResult.data);
+		console.log(form, 'srdghjmsdolkirgjhdo');
 
-		return {
-			success: true
-		};
+		// try {
+		// 	const userData: ProfileSchema = {
+		// 		...form.data,
+		// 		user: JSON.parse(formData.get('user') as string)
+		// 	};
+
+		// 	await updateUserData(userData);
+
+		// 	return message(form, 'User created successfully');
+		// } catch (error: any) {
+		// 	console.error('Error creating user:', error);
+		// 	if (error.message === 'One or more workspaces do not exist') {
+		// 		return fail(400, { form, error: error.message });
+		// 	}
+		// 	return fail(500, { form, error: 'An error occurred while creating the user' });
+		// }
 	}
 };

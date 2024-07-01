@@ -11,12 +11,12 @@
 	import { Input } from '$UITools/shadcn/input';
 	import * as Form from '$UITools/shadcn/form';
 
-	import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
+	import { profileSchema } from '$lib/ZodSchema/profileSchema';
 
 	export let data: PageData;
 
 	onMount(() => {
-		console.log(data, 'data de profil ');
+		console.log(userId, 'data de profil ');
 	});
 
 	const formProfil = superForm(data.formProfil, {
@@ -24,28 +24,29 @@
 	});
 
 	const { form, enhance, message, validate } = formProfil;
+
+	let userId: string = data.session?.user.id;
 </script>
 
 <SuperDebug data={$form} />
-
 <div class="card">
 	<Card.Root class="w-full">
-		<Card.Header>
-			<Card.Title>Information sur votre profil</Card.Title>
-			<Card.Description
-				>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
-			>
-		</Card.Header>
-		<Card.Content class="grid gap-6">
-			<div class="content-basic">
-				<img src={data.session?.user.image} alt="image du compte" />
-				<div class="content-basic-wrapper">
-					<h1>{data.session?.user.name}</h1>
-					<p>{data.session?.user.email}</p>
+		<form method="POST" action="?/create" use:enhance class="space-y-4">
+			<Card.Header>
+				<Card.Title>Information sur votre profil</Card.Title>
+				<Card.Description
+					>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
+				>
+			</Card.Header>
+			<Card.Content class="grid gap-6">
+				<div class="content-basic">
+					<img src={data.session?.user.image} alt="image du compte" />
+					<div class="content-basic-wrapper">
+						<h1>{data.session?.user.name}</h1>
+						<p>{data.session?.user.email}</p>
+					</div>
 				</div>
-			</div>
 
-			<form method="POST" action="?/create" use:enhance class="space-y-4">
 				<div>
 					<Form.Field name="address" form={formProfil}>
 						<Form.Control let:attrs>
@@ -80,16 +81,17 @@
 					<Form.Field name="phone" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Phone</Form.Label>
-							<Input {...attrs} type="text" bind:value={$form.phone} />
+							<Input {...attrs} type="phone" bind:value={$form.phone} />
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
 				</div>
-			</form>
-		</Card.Content>
-		<Card.Footer class="justify-end space-x-2">
-			<Button type="submit" variant="outline">Submit</Button>
-		</Card.Footer>
+			</Card.Content>
+			<input type="hidden" name="id" value={userId} />
+			<Card.Footer class="justify-end space-x-2">
+				<Button type="submit" variant="outline">Submit</Button>
+			</Card.Footer>
+		</form>
 	</Card.Root>
 </div>
 

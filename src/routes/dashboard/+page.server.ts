@@ -1,4 +1,4 @@
-import { checkAuth } from '$lib/functions/checkAuth';
+import { checkAuth } from '$lib/prisma/Request/checkAuth';
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 const allowedRoles = ['admin'];

@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
-import { checkAuth } from '$lib/functions/checkAuth';
+import { checkAuth } from '$lib/prisma/Request/checkAuth';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;

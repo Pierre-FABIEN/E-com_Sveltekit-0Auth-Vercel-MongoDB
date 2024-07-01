@@ -54,6 +54,7 @@
     "@types/three": "latest",
     "bits-ui": "latest",
     "clsx": "latest",
+    "cmdk-sv": "^0.0.17",
     "embla-carousel-auto-scroll": "latest",
     "embla-carousel-autoplay": "latest",
     "embla-carousel-svelte": "latest",

@@ -1,4 +1,5 @@
 import { checkAuth } from '$lib/prisma/Request/checkAuth';
+import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 const allowedRoles = ['admin'];
@@ -16,7 +17,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, '/');
 	}
 
+	const allUsers = await getAllUsers();
+
 	return {
+		allUsers,
 		session
 	};
 };

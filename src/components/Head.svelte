@@ -55,12 +55,12 @@
 					{#if $page.data.session?.user}
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
-							<a href="/profile">Profile</a>
+							<a href="/profile" class="w-[100%]">Profile</a>
 						</DropdownMenu.Item>
 					{/if}
 					{#if $page.data.session?.user.role === 'admin'}
 						<DropdownMenu.Item>
-							<a href="/dashboard">Dashboard</a>
+							<a href="/dashboard" class="w-[100%]">Dashboard</a>
 						</DropdownMenu.Item>
 					{/if}
 				</DropdownMenu.Group>
@@ -86,6 +86,7 @@
 		position: absolute;
 		z-index: 100;
 		top: 0;
+
 		ul {
 			width: 500px;
 			@include rcb;
@@ -93,10 +94,6 @@
 
 		.left-side {
 			@include rcc;
-
-			.nojs-show {
-				@include rcc;
-			}
 		}
 	}
 </style>

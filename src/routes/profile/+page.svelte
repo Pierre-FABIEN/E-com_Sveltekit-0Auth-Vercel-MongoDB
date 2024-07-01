@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { onMount } from 'svelte';
@@ -16,7 +15,7 @@
 	export let data: PageData;
 
 	onMount(() => {
-		console.log(userId, 'data de profil ');
+		console.log(data, 'data de profil ');
 	});
 
 	const formProfil = superForm(data.formProfil, {
@@ -50,7 +49,12 @@
 					<Form.Field name="address" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Address</Form.Label>
-							<Input {...attrs} type="text" bind:value={$form.address} />
+							<Input
+								{...attrs}
+								type="text"
+								placeholder={data.user?.address}
+								bind:value={$form.address}
+							/>
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
@@ -60,7 +64,7 @@
 					<Form.Field name="city" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>City</Form.Label>
-							<Input {...attrs} type="text" bind:value={$form.city} />
+							<Input {...attrs} type="text" placeholder={data.user?.city} bind:value={$form.city} />
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
@@ -70,7 +74,12 @@
 					<Form.Field name="postalCode" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Postal Code</Form.Label>
-							<Input {...attrs} type="text" bind:value={$form.postalCode} />
+							<Input
+								{...attrs}
+								type="text"
+								placeholder={data.user?.postalCode}
+								bind:value={$form.postalCode}
+							/>
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
@@ -80,7 +89,12 @@
 					<Form.Field name="phoneNumber" form={formProfil}>
 						<Form.Control let:attrs>
 							<Form.Label>Phone</Form.Label>
-							<Input {...attrs} type="phone" bind:value={$form.phoneNumber} />
+							<Input
+								{...attrs}
+								type="phone"
+								placeholder={data.user?.phoneNumber}
+								bind:value={$form.phoneNumber}
+							/>
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>

@@ -30,6 +30,7 @@ export const load: PageServerLoad = async (event) => {
 	const formProfil = await superValidate(zod(profileSchema));
 
 	return {
+		user,
 		formProfil,
 		session
 	};

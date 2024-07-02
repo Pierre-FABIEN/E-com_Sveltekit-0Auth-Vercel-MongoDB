@@ -25,12 +25,14 @@ async function run() {
 		const addressesCollection = database.collection('addresses');
 		const ordersCollection = database.collection('orders');
 		const productsCollection = database.collection('products');
+		const categoriesCollection = database.collection('categories');
 
 		// Supprimer les données existantes
 		await usersCollection.deleteMany({});
 		await addressesCollection.deleteMany({});
 		await ordersCollection.deleteMany({});
 		await productsCollection.deleteMany({});
+		await categoriesCollection.deleteMany({});
 
 		// Ajouter l'utilisateur admin
 		const adminUser = {
@@ -58,6 +60,20 @@ async function run() {
 		await usersCollection.insertOne(pierreFabienUser);
 
 		const users = [adminUser, pierreFabienUser];
+
+		// Créer des catégories
+		const categories = ['Electronics', 'Books', 'Clothing', 'Home & Kitchen', 'Toys & Games'];
+		const categoryIds = [];
+
+		for (const categoryName of categories) {
+			const category = {
+				name: categoryName,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			const categoryResult = await categoriesCollection.insertOne(category);
+			categoryIds.push(categoryResult.insertedId);
+		}
 
 		// Générer des adresses et des commandes pour Pierre FABIEN
 		const pierreFabienAddresses = [];
@@ -89,7 +105,7 @@ async function run() {
 			const orderId = orderResult.insertedId;
 
 			// Générer entre 1 et 5 produits pour chaque commande
-			const productCount = faker.number.int({ min: 1, max: 5 });
+			const productCount = faker.number.int({ min: 1, max: 2 });
 			for (let k = 0; k < productCount; k++) {
 				const product = {
 					name: faker.commerce.productName(),
@@ -98,6 +114,7 @@ async function run() {
 						faker.image.imageUrl()
 					), // Générer plusieurs images
 					orderId: orderId,
+					categoryId: categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })], // Associer à une catégorie
 					createdAt: new Date(),
 					updatedAt: new Date()
 				};
@@ -160,6 +177,7 @@ async function run() {
 							faker.image.imageUrl()
 						), // Générer plusieurs images
 						orderId: orderId,
+						categoryId: categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })], // Associer à une catégorie
 						createdAt: new Date(),
 						updatedAt: new Date()
 					};

@@ -10,9 +10,6 @@
 	import Separator from '$UITools/shadcn/separator/separator.svelte';
 
 	export let Users: App.User[] = [];
-	export let data;
-
-	console.log(data, 'data from users');
 
 	// Store for search query
 	let searchQuery = writable<string>('');

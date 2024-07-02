@@ -74,7 +74,7 @@
 			<!-- Liste des utilisateurs filtrés -->
 			{#each $paginatedUsers as user}
 				<div class="flex items-center justify-between space-x-4">
-					<div class="flex items-center space-x-4">
+					<div class="flex items-top space-x-4">
 						<Avatar.Root>
 							<Avatar.Image src={user.image} alt={user.name} />
 						</Avatar.Root>
@@ -93,8 +93,19 @@
 							{#if user.orders && user.orders.length > 0}
 								{#each user.orders as order}
 									<Separator />
-									<p class="text-sm text-muted-foreground">{order.state}</p>
-									<p class="text-sm text-muted-foreground">{order.city}</p>
+									<h2>Adresse de la commande</h2>
+									<p class="text-sm text-muted-foreground">{order.createdAt}</p>
+									<p class="text-sm text-muted-foreground">{order.address.state}</p>
+									<p class="text-sm text-muted-foreground">{order.address.street}</p>
+
+									<h2>Produit de la commande</h2>
+									{#if order.products && order.products.length > 0}
+										{#each order.products as product}
+											<Separator />
+											<p class="text-sm text-muted-foreground">{product.name}</p>
+											<p class="text-sm text-muted-foreground">{product.price}</p>
+										{/each}
+									{/if}
 								{/each}
 							{/if}
 						</div>

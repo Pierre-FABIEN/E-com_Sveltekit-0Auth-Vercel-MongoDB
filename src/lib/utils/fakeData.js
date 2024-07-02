@@ -94,6 +94,9 @@ async function run() {
 				const product = {
 					name: faker.commerce.productName(),
 					price: parseFloat(faker.commerce.price()), // S'assurer que le prix est un nombre
+					images: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
+						faker.image.imageUrl()
+					), // Générer plusieurs images
 					orderId: orderId,
 					createdAt: new Date(),
 					updatedAt: new Date()
@@ -153,6 +156,9 @@ async function run() {
 					const product = {
 						name: faker.commerce.productName(),
 						price: parseFloat(faker.commerce.price()), // S'assurer que le prix est un nombre
+						images: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
+							faker.image.imageUrl()
+						), // Générer plusieurs images
 						orderId: orderId,
 						createdAt: new Date(),
 						updatedAt: new Date()

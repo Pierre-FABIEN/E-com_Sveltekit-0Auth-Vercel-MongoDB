@@ -1,10 +1,6 @@
 <script lang="ts">
-	import { t } from '$UITools/Translations/index.js';
-	import { onMount } from 'svelte';
-
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
-	import Circle from '$components/three/Circle.svelte';
 
 	let title: HTMLElement;
 	let text: HTMLElement;
@@ -26,6 +22,8 @@
 
 <div class="shop" in:enter={{ path, title, text, link }} out:exit={{ path, title, text, link }}>
 	{#each data.AllProducts as product}
+		<img src={product.images[0]} alt="First image" />
 		<p>{product.name}</p>
+		<h1>{product.price}</h1>
 	{/each}
 </div>

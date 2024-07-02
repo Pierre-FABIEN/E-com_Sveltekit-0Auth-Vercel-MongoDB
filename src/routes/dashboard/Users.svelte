@@ -9,24 +9,27 @@
 	import { Input } from '$UITools/shadcn/input';
 	import Separator from '$UITools/shadcn/separator/separator.svelte';
 
-	export let Users: any;
+	export let Users: App.User[] = [];
+	export let data;
 
-	// Store pour le texte de recherche
-	let searchQuery = writable('');
+	console.log(data, 'data from users');
 
-	// Store pour la page actuelle et le nombre d'éléments par page
-	let currentPage = writable(1);
-	let itemsPerPage = writable(6);
+	// Store for search query
+	let searchQuery = writable<string>('');
 
-	// Utilisateurs filtrés en fonction de la recherche
-	let filteredUsers = writable(Users);
+	// Store for current page and items per page
+	let currentPage = writable<number>(1);
+	let itemsPerPage = writable<number>(6);
 
-	// Met à jour la liste des utilisateurs filtrés chaque fois que la recherche change
-	searchQuery.subscribe((query: any) => {
+	// Filtered users based on search query
+	let filteredUsers = writable<App.User[]>(Users);
+
+	// Update the filtered users list whenever the search query changes
+	searchQuery.subscribe((query: string) => {
 		if (query) {
 			filteredUsers.set(
 				Users.filter(
-					(user: any) =>
+					(user: App.User) =>
 						user.name.toLowerCase().includes(query.toLowerCase()) ||
 						user.email.toLowerCase().includes(query.toLowerCase())
 				)
@@ -36,7 +39,7 @@
 		}
 	});
 
-	// Calcul des utilisateurs affichés pour la page actuelle
+	// Calculate the displayed users for the current page
 	const paginatedUsers = derived(
 		[filteredUsers, currentPage, itemsPerPage],
 		([$filteredUsers, $currentPage, $itemsPerPage]) => {
@@ -46,10 +49,16 @@
 		}
 	);
 
-	// Calcul du nombre total de pages
+	// Calculate the total number of pages
 	const totalPages = derived([filteredUsers, itemsPerPage], ([$filteredUsers, $itemsPerPage]) => {
 		return Math.ceil($filteredUsers.length / $itemsPerPage);
 	});
+
+	// Handle input change
+	function handleInputChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		searchQuery.set(target.value);
+	}
 </script>
 
 <div class="flex w-[100%] justify-center">
@@ -59,19 +68,15 @@
 			<Card.Description>Invite your Users to collaborate</Card.Description>
 		</Card.Header>
 		<Card.Content class="grid gap-6 w-[100%]">
-			<!-- Barre de recherche -->
+			<!-- Search bar -->
 			<div class="relative">
 				<Search
 					class="absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%] text-muted-foreground"
 				/>
-				<Input
-					placeholder="Search"
-					class="pl-8"
-					on:input={(e) => searchQuery.set(e.target?.value)}
-				/>
+				<Input placeholder="Search" class="pl-8" on:input={handleInputChange} />
 			</div>
-			<!-- Liste des utilisateurs filtrés -->
-			{#each $paginatedUsers as user}
+			<!-- Filtered users list -->
+			{#each $paginatedUsers as user (user.email)}
 				<div class="flex items-center justify-between space-x-4">
 					<div class="flex items-top space-x-4">
 						<Avatar.Root>
@@ -90,16 +95,15 @@
 							{/if}
 							<h2>Commandes</h2>
 							{#if user.orders && user.orders.length > 0}
-								{#each user.orders as order}
+								{#each user.orders as order (order.createdAt)}
 									<Separator />
 									<h2>Adresse de la commande</h2>
 									<p class="text-sm text-muted-foreground">{order.createdAt}</p>
 									<p class="text-sm text-muted-foreground">{order.address.state}</p>
 									<p class="text-sm text-muted-foreground">{order.address.street}</p>
-
 									<h2>Produit de la commande</h2>
 									{#if order.products && order.products.length > 0}
-										{#each order.products as product}
+										{#each order.products as product (product.name)}
 											<Separator />
 											<p class="text-sm text-muted-foreground">{product.name}</p>
 											<p class="text-sm text-muted-foreground">{product.price}</p>

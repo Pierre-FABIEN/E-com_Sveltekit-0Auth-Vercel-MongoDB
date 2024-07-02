@@ -82,3 +82,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.scroll-content {
+  height: 100vh;
+}

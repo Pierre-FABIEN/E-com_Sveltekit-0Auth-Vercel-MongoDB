@@ -1,6 +1,6 @@
-import type { PageLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
-export const load: PageLoad = async ({ data }) => {
+export const load = (async ({ data }) => {
 	const {
 		session,
 		allUsers
@@ -15,4 +15,4 @@ export const load: PageLoad = async ({ data }) => {
 		allUsers,
 		session
 	};
-};
+}) satisfies LayoutLoad;

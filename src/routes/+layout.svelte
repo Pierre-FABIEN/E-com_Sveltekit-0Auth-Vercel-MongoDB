@@ -19,6 +19,7 @@
 	} from '$stores/UX/initialLoaderStore';
 
 	export let data;
+
 	onNavigate(async (navigation) => {
 		// @ts-ignore
 		if (!document.startViewTransition) return;
@@ -83,7 +84,7 @@
 
 	<SmoothScroller>
 		<main>
-			<slot />
+			<slot {data} />
 		</main>
 	</SmoothScroller>
 {/if}

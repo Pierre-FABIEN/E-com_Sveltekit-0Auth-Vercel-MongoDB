@@ -3,9 +3,9 @@
     "fr": "Français",
     "en": "Anglais",
 
-    "about-title": "À propos",
-    "about-text": "FRANCAIS",
-    "about-link": "Lien vers la page accueil",
+    "shop-title": "À propos",
+    "shop-text": "FRANCAIS",
+    "shop-link": "Lien vers la page accueil",
 
     "home-title": "Accueil",
     "home-text": "Voici le lien Github <a href=\"{{link}}\">lien</a>",

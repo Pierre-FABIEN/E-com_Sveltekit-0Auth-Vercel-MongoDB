@@ -14,10 +14,6 @@
 
 	export let data: PageData;
 
-	onMount(() => {
-		console.log(data, 'data de profil ');
-	});
-
 	const formProfil = superForm(data.formProfil, {
 		validators: zodClient(profileSchema)
 	});

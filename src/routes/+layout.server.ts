@@ -1,10 +1,13 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
 import { checkAuth } from '$lib/prisma/Request/checkAuth';
+import { getAllProducts } from '$lib/prisma/Request/getAllProducts';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;
 	const { pathname } = url;
+
+	const AllProducts = await getAllProducts();
 
 	const session = await locals.getSession();
 	const user = await checkAuth(session);
@@ -34,6 +37,7 @@ export const load: LayoutServerLoad = async (event) => {
 	await loadTranslations(locale, pathname); // Load translations for the current locale and path
 
 	return {
+		AllProducts,
 		session,
 		i18n: { locale, route: pathname },
 		translations: translations.get() // Return loaded translations

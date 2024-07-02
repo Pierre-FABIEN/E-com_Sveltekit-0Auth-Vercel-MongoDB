@@ -69,7 +69,7 @@
 	<p bind:this={text}>{@html $t('general.home-text', { linkUrl })}</p>
 
 	<div class="linkhome" bind:this={link}>
-		<a href="/about" use:hoverable={'first'}>{$t('general.home-link')}</a>
+		<a href="/shop" use:hoverable={'first'}>{$t('general.home-link')}</a>
 	</div>
 
 	<button on:click={() => handleCheckout('6683f28893e2411bb4b11348')}> Checkout </button>

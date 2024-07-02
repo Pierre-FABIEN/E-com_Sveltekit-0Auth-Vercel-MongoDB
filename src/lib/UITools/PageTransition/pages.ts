@@ -36,10 +36,10 @@ export const animateOut = (
 			{ selector: '.home form', animationProps: { opacity: 0, y: -100, duration: 2 } },
 			{ selector: '.home .linkhome', animationProps: { opacity: 0, y: -100, duration: 2 } }
 		],
-		about: [
-			{ selector: '.about h1', animationProps: { opacity: 0, y: 100, duration: 2 } },
-			{ selector: '.about p', animationProps: { opacity: 0, y: 100, duration: 2 } },
-			{ selector: '.about .linkabout', animationProps: { opacity: 0, y: 100, duration: 2 } }
+		shop: [
+			{ selector: '.shop h1', animationProps: { opacity: 0, y: 100, duration: 2 } },
+			{ selector: '.shop p', animationProps: { opacity: 0, y: 100, duration: 2 } },
+			{ selector: '.shop .linkshop', animationProps: { opacity: 0, y: 100, duration: 2 } }
 		]
 	};
 
@@ -68,10 +68,10 @@ export const animateIn = (classUrlTo: string | undefined | null, layoutContainer
 			{ selector: '.home .linkhome', animationProps: { opacity: 0, y: -100, duration: 2 } },
 			{ selector: '.home form', animationProps: { opacity: 0, y: -100, duration: 2 } }
 		],
-		about: [
-			{ selector: '.about h1', animationProps: { opacity: 0, y: 100, duration: 2 } },
-			{ selector: '.about p', animationProps: { opacity: 0, y: 100, duration: 2 } },
-			{ selector: '.about .linkabout', animationProps: { opacity: 0, y: 100, duration: 2 } }
+		shop: [
+			{ selector: '.shop h1', animationProps: { opacity: 0, y: 100, duration: 2 } },
+			{ selector: '.shop p', animationProps: { opacity: 0, y: 100, duration: 2 } },
+			{ selector: '.shop .linkshop', animationProps: { opacity: 0, y: 100, duration: 2 } }
 		]
 	};
 

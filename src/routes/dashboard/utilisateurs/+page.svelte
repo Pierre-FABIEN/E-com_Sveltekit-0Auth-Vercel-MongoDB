@@ -13,6 +13,8 @@
 
 	export let Users: App.User[] = data.allUsers;
 
+	console.log(data.allUsers, 'data.allUsers');
+
 	// Store for search query
 	let searchQuery = writable<string>('');
 

@@ -18,27 +18,27 @@
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>shop</title>
+	<meta name="description" content="shop this app" />
 </svelte:head>
 
-<div class="about">
+<div class="shop">
 	<div>
 		<h1 bind:this={title}>ET HOP !</h1>
 
-		<div class="linkabout" bind:this={link}>
-			<a class="linkabout-link" href="/transitionAPI">LIEN ANIMATION</a>
+		<div class="linkshop" bind:this={link}>
+			<a class="linkshop-link" href="/transitionAPI">LIEN ANIMATION</a>
 		</div>
 		<img class="logo" src="../logo.svg" alt="" style:--logo="logo" />
 	</div>
 </div>
 
 <style>
-	.linkabout {
+	.linkshop {
 		transform-origin: center;
 	}
 
-	.about {
+	.shop {
 		position: absolute;
 		width: 100vw;
 	}

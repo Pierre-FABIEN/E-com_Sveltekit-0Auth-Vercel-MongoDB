@@ -497,3 +497,299 @@
 	-ms-flex-wrap: column-reverse;
 	flex-wrap: column-reverse;
 }
+
+//____________________________________________________________________Getters CSS _______________________________________________________________________
+
+.rts {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_stretch;
+	@include align-items_start;
+}
+
+.rte {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_end;
+	@include align-content_stretch;
+	@include align-items_start;
+}
+
+.rtc {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_center;
+	@include align-content_stretch;
+	@include align-items_start;
+}
+
+.rtb {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.rta {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.rcs {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.rce {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.rcc {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content-center;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.rcb {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.rca {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.rbs {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.rbe {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.rbc {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content-center;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.rbb {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.rba {
+	@include display_flex;
+	@include flex-direction_row;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.cls {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.cle {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_end;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.clc {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content-center;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.clb {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.cla {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_start;
+	@include align-items_start;
+}
+
+.ccs {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.cce {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_end;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.ccc {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content-center;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.ccb {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.cca {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_center;
+	@include align-items_center;
+}
+
+.crs {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_start;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.cre {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.crc {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content-center;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.crb {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-between;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.cra {
+	@include display_flex;
+	@include flex-direction_column;
+	@include flex-wrap_wrap;
+	@include justify-content_space-around;
+	@include align-content_end;
+	@include align-items_end;
+}
+
+.nowrap {
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+}
+
+.wrap-reverse {
+	-webkit-flex-wrap: wrap-reverse;
+	-ms-flex-wrap: wrap-reverse;
+	flex-wrap: wrap-reverse;
+}
+
+.row-reverse {
+	-webkit-flex-wrap: row-reverse;
+	-ms-flex-wrap: row-reverse;
+	flex-wrap: row-reverse;
+}
+
+.column-reverse {
+	-webkit-flex-wrap: column-reverse;
+	-ms-flex-wrap: column-reverse;
+	flex-wrap: column-reverse;
+}

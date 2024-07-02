@@ -2,10 +2,12 @@ import { checkAuth } from '$lib/prisma/Request/checkAuth';
 
 import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
 import { getAllProducts } from '$lib/prisma/Request/getAllProducts';
-import { getAllArticles } from '$lib/prisma/Request/getAllArticles';
+import { getAllOrders } from '$lib/prisma/Request/getAllOrders';
+import { getAllAddress } from '$lib/prisma/Request/getAllAdress';
 
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
+
 const allowedRoles = ['admin'];
 
 // Fonction de chargement côté serveur
@@ -14,6 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.getSession();
 
 	const user = await checkAuth(session);
+
 	if (user && session) {
 		session.user.role = user.role;
 	}
@@ -23,12 +26,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	const allUsers = await getAllUsers();
-	const allProducts = await getAllProducts();
-	const allArticles = await getAllArticles();
+	const allAdress = await getAllAddress();
+	// const allProducts = await getAllProducts();
+	// const allOrders = await getAllOrders();
 
 	return {
-		allArticles,
-		allProducts,
+		// allOrders,
+		// allProducts,
+		allAdress,
 		allUsers,
 		session
 	};

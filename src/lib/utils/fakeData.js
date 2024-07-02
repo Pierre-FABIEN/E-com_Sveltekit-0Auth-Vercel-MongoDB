@@ -7,8 +7,8 @@ dotenv.config();
 const uri = process.env.DATABASE_URL;
 
 if (!uri) {
-	console.error('DATABASE_URL is not defined');
-	process.exit(1);
+  console.error('DATABASE_URL is not defined');
+  process.exit(1);
 }
 
 console.log('Using database URL:', uri);
@@ -16,49 +16,56 @@ console.log('Using database URL:', uri);
 const client = new MongoClient(uri);
 
 async function run() {
-	try {
-		await client.connect();
+  try {
+    await client.connect();
 
-		const database = client.db('DataBaseSveltekit'); // Remplacez par le nom de votre base de données
-		const articlesCollection = database.collection('articles');
-		const productsCollection = database.collection('products');
+    const database = client.db('DataBaseSveltekit');
+    const usersCollection = database.collection('users');
+    const addressesCollection = database.collection('addresses');
 
-		// Supprimer les données existantes
-		await articlesCollection.deleteMany({});
-		await productsCollection.deleteMany({});
+    // Supprimer les données existantes
+    await usersCollection.deleteMany({});
+    await addressesCollection.deleteMany({});
 
-		const articles = [];
-		const products = [];
+    const users = [];
 
-		for (let i = 0; i < 10; i++) {
-			articles.push({
-				id: faker.string.uuid(),
-				title: faker.lorem.sentence(),
-				content: faker.lorem.paragraphs(),
-				author: faker.person.fullName(),
-				publishedAt: faker.date.past(),
-				tags: faker.lorem.words().split(' ')
-			});
+    for (let i = 0; i < 20; i++) {
+      const user = {
+        name: faker.name.fullName(),
+        email: faker.internet.email(),
+        image: faker.image.avatar(),
+        role: 'user',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
-			products.push({
-				id: faker.string.uuid(),
-				name: faker.commerce.productName(),
-				description: faker.commerce.productDescription(),
-				price: parseFloat(faker.commerce.price()),
-				sku: faker.string.uuid(),
-				stock: faker.number.int({ min: 0, max: 100 }),
-				createdAt: faker.date.past(),
-				updatedAt: new Date()
-			});
-		}
+      // Insérer l'utilisateur et obtenir l'ID inséré
+      const result = await usersCollection.insertOne(user);
+      const userId = result.insertedId;
 
-		await articlesCollection.insertMany(articles);
-		await productsCollection.insertMany(products);
+      // Générer entre 0 et 3 adresses pour chaque utilisateur
+      const addressCount = faker.datatype.number({ min: 0, max: 3 });
+      for (let j = 0; j < addressCount; j++) {
+        const address = {
+          street: faker.address.streetAddress(),
+          city: faker.address.city(),
+          state: faker.address.state(),
+          zip: faker.address.zipCode(),
+          country: faker.address.country(),
+          userId: userId
+        };
+        await addressesCollection.insertOne(address);
+      }
 
-		console.log('Fake data inserted successfully');
-	} finally {
-		await client.close();
-	}
+      users.push(user);
+    }
+
+    console.log('Inserted users:', users.length);
+  } catch (error) {
+    console.error('An error occurred:', error);
+  } finally {
+    await client.close();
+  }
 }
 
 run().catch(console.dir);

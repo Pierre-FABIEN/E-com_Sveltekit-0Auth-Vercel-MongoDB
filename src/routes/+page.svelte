@@ -10,7 +10,7 @@
 	import { fetchMockData } from '$lib/utils/mockService';
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
-	import { users, loading, error, fetchUsers } from '$stores/Data/userStore';
+	//import { users, loading, error, fetchUsers } from '$stores/Data/userStore';
 
 	const linkUrl: string = 'https://kit.svelte.dev';
 	let title: HTMLElement;
@@ -26,7 +26,7 @@
 	onMount(async () => {
 		setTransitionLoader(false);
 		fetchMockData;
-		focal = await fetchUsers();
+		//focal = await fetchUsers();
 	});
 </script>
 

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import '../app.css';
+	import '../styles/utils/flex.css';
+
 	import { onMount } from 'svelte';
 	import { onNavigate } from '$app/navigation';
 
@@ -60,7 +62,7 @@
 		// Détermine le premier chargement de l'application
 		setFirstOpen(true);
 		setRessourceToValide(true);
-		console.log(data, 'data fron layout');
+		//console.log(data, 'data fron layout');
 	});
 </script>
 
@@ -74,6 +76,7 @@
 {#if !$firstLoadComplete}
 	<Loader />
 {/if}
+
 {#if $firstLoadComplete}
 	<NotificationWrapper />
 	<Head />

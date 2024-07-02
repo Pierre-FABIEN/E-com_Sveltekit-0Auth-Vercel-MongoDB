@@ -74,15 +74,16 @@
 {#if !$firstLoadComplete}
 	<Loader />
 {/if}
+{#if $firstLoadComplete}
+	<NotificationWrapper />
+	<Head />
 
-<NotificationWrapper />
-<Head />
-
-<SmoothScroller>
-	<main>
-		<slot />
-	</main>
-</SmoothScroller>
+	<SmoothScroller>
+		<main>
+			<slot />
+		</main>
+	</SmoothScroller>
+{/if}
 
 <style lang="scss" global>
 	main {

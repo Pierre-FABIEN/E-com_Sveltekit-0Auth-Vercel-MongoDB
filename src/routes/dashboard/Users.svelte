@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { writable, derived } from 'svelte/store';
-	import type { PageData } from './$types';
 	import { ChevronDown, Search } from 'lucide-svelte';
 	import * as Avatar from '$UITools/shadcn/avatar';
 	import { Button } from '$UITools/shadcn/button';
@@ -23,7 +22,7 @@
 	let filteredUsers = writable(Users);
 
 	// Met à jour la liste des utilisateurs filtrés chaque fois que la recherche change
-	searchQuery.subscribe((query) => {
+	searchQuery.subscribe((query: any) => {
 		if (query) {
 			filteredUsers.set(
 				Users.filter(
@@ -68,7 +67,7 @@
 				<Input
 					placeholder="Search"
 					class="pl-8"
-					on:input={(e) => searchQuery.set(e.target.value)}
+					on:input={(e) => searchQuery.set(e.target?.value)}
 				/>
 			</div>
 			<!-- Liste des utilisateurs filtrés -->

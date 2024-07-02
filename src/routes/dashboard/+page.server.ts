@@ -1,11 +1,9 @@
 import { checkAuth } from '$lib/prisma/Request/checkAuth';
 
 import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
-import { getAllProducts } from '$lib/prisma/Request/getAllProducts';
-import { getAllOrders } from '$lib/prisma/Request/getAllOrders';
-import { getAllAddress } from '$lib/prisma/Request/getAllAdress';
 
-import type { PageServerLoad, Actions } from './$types';
+import type { PageServerLoad } from './$types';
+
 import { redirect } from '@sveltejs/kit';
 
 const allowedRoles = ['admin'];

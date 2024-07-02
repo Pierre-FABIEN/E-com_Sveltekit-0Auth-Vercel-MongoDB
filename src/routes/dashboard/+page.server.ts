@@ -26,14 +26,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	const allUsers = await getAllUsers();
-	const allAdress = await getAllAddress();
 	// const allProducts = await getAllProducts();
 	// const allOrders = await getAllOrders();
 
 	return {
 		// allOrders,
 		// allProducts,
-		allAdress,
 		allUsers,
 		session
 	};

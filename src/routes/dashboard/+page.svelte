@@ -15,7 +15,7 @@
 
 <div class="ccc">
 	<div class="w-[100vw] rts">
-		<div class="w-[500px] m-5">
+		<div class="m-5">
 			<Users Users={data.allUsers} />
 		</div>
 		<!-- <div class="w-[500px] m-5">

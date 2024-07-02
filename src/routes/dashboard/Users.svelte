@@ -8,8 +8,9 @@
 	import * as Command from '$UITools/shadcn/command';
 	import * as Popover from '$UITools/shadcn/popover';
 	import { Input } from '$UITools/shadcn/input';
+	import Separator from '$UITools/shadcn/separator/separator.svelte';
 
-	export let Users: Array<{ name: string; email: string; image: string }>;
+	export let Users: any;
 
 	// Store pour le texte de recherche
 	let searchQuery = writable('');
@@ -26,7 +27,7 @@
 		if (query) {
 			filteredUsers.set(
 				Users.filter(
-					(user) =>
+					(user: any) =>
 						user.name.toLowerCase().includes(query.toLowerCase()) ||
 						user.email.toLowerCase().includes(query.toLowerCase())
 				)
@@ -52,8 +53,8 @@
 	});
 </script>
 
-<div class="flex w-[100%] h-[650px] justify-center">
-	<Card.Root class="w-[80vw] mt-5 ccb">
+<div class="flex w-[100%] justify-center">
+	<Card.Root class="mt-5 w-[100%] ccb">
 		<Card.Header class="w-[100%]">
 			<Card.Title>Clients</Card.Title>
 			<Card.Description>Invite your Users to collaborate</Card.Description>
@@ -80,6 +81,22 @@
 						<div>
 							<p class="text-sm font-medium leading-none">{user.name}</p>
 							<p class="text-sm text-muted-foreground">{user.email}</p>
+							<h2>Adresses</h2>
+							{#if user.addresses && user.addresses.length > 0}
+								{#each user.addresses as address}
+									<Separator />
+									<p class="text-sm text-muted-foreground">{address.state}</p>
+									<p class="text-sm text-muted-foreground">{address.city}</p>
+								{/each}
+							{/if}
+							<h2>Commandes</h2>
+							{#if user.orders && user.orders.length > 0}
+								{#each user.orders as order}
+									<Separator />
+									<p class="text-sm text-muted-foreground">{order.state}</p>
+									<p class="text-sm text-muted-foreground">{order.city}</p>
+								{/each}
+							{/if}
 						</div>
 					</div>
 					<Popover.Root>

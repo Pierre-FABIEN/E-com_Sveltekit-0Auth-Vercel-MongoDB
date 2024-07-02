@@ -3,8 +3,7 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ data }) => {
 	const {
 		session,
-		allUsers,
-		allAdress
+		allUsers
 		// allProducts,
 		// allOrders
 	} = data;
@@ -13,7 +12,6 @@ export const load: PageLoad = async ({ data }) => {
 	return {
 		// allOrders,
 		// allProducts,
-		allAdress,
 		allUsers,
 		session
 	};

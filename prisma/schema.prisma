@@ -34,16 +34,17 @@ model Address {
 }
 
 model Order {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  addressId String   @db.ObjectId
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String        @db.ObjectId
+  addressId String        @db.ObjectId
   total     Float
   products  Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  transactions Transaction[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
 
-  user      User     @relation(fields: [userId], references: [id])
-  address   Address  @relation(fields: [addressId], references: [id])
+  user      User          @relation(fields: [userId], references: [id])
+  address   Address       @relation(fields: [addressId], references: [id])
   @@map("orders")
 }
 
@@ -53,8 +54,21 @@ model Product {
   price     Float
   orderId   String   @db.ObjectId
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   order     Order    @relation(fields: [orderId], references: [id])
   @@map("products")
+}
+
+model Transaction {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  stripePaymentId String   @unique
+  orderId         String   @db.ObjectId
+  amount          Float
+  status          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  order           Order    @relation(fields: [orderId], references: [id])
+  @@map("transactions")
 }

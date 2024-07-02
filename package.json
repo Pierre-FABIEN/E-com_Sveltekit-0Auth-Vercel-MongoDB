@@ -49,6 +49,7 @@
   "dependencies": {
     "@auth/sveltekit": "latest",
     "@faker-js/faker": "latest",
+    "@stripe/stripe-js": "^4.0.0",
     "@sveltejs/vite-plugin-svelte": "latest",
     "@tsconfig/svelte": "latest",
     "@tweakpane/core": "latest",
@@ -70,6 +71,7 @@
     "postprocessing": "latest",
     "prettier-plugin-tailwindcss": "latest",
     "quoted-printable": "latest",
+    "stripe": "^16.1.0",
     "svelte": "latest",
     "svelte-check": "latest",
     "svelte-tweakpane-ui": "latest",

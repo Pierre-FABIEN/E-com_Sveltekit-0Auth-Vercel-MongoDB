@@ -43,9 +43,64 @@ async function run() {
 			updatedAt: new Date('2024-07-02T10:08:01.265Z')
 		};
 
-		await usersCollection.insertOne(adminUser);
+		// Ajouter l'utilisateur Pierre FABIEN
+		const pierreFabienUser = {
+			_id: new ObjectId('6683f1268f9651debb5dbc43'),
+			name: 'Pierre FABIEN',
+			email: 'pierre.fabien.dev@gmail.com',
+			image: 'https://lh3.googleusercontent.com/a/ACg8ocL5_nMIVfXS_Q0mxRX13c8KFbSx3C…',
+			role: 'user',
+			createdAt: new Date('2024-07-02T12:23:02.433Z'),
+			updatedAt: new Date('2024-07-02T12:23:02.433Z')
+		};
 
-		const users = [adminUser];
+		await usersCollection.insertOne(adminUser);
+		await usersCollection.insertOne(pierreFabienUser);
+
+		const users = [adminUser, pierreFabienUser];
+
+		// Générer des adresses et des commandes pour Pierre FABIEN
+		const pierreFabienAddresses = [];
+		for (let j = 0; j < 2; j++) {
+			const address = {
+				street: faker.location.streetAddress(),
+				city: faker.location.city(),
+				state: faker.location.state(),
+				zip: faker.location.zipCode(),
+				country: faker.location.country(),
+				userId: pierreFabienUser._id
+			};
+			const addressResult = await addressesCollection.insertOne(address);
+			pierreFabienAddresses.push(addressResult.insertedId);
+		}
+
+		// Créer une commande pour Pierre FABIEN avec une adresse aléatoire parmi celles créées pour lui
+		for (let j = 0; j < 2; j++) {
+			const randomAddressId =
+				pierreFabienAddresses[faker.number.int({ min: 0, max: pierreFabienAddresses.length - 1 })];
+			const order = {
+				userId: pierreFabienUser._id,
+				addressId: randomAddressId,
+				total: parseFloat(faker.commerce.price()), // S'assurer que le total est un nombre
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};
+			const orderResult = await ordersCollection.insertOne(order);
+			const orderId = orderResult.insertedId;
+
+			// Générer entre 1 et 5 produits pour chaque commande
+			const productCount = faker.number.int({ min: 1, max: 5 });
+			for (let k = 0; k < productCount; k++) {
+				const product = {
+					name: faker.commerce.productName(),
+					price: parseFloat(faker.commerce.price()), // S'assurer que le prix est un nombre
+					orderId: orderId,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				};
+				await productsCollection.insertOne(product);
+			}
+		}
 
 		// Générer des utilisateurs fictifs et leurs adresses
 		for (let i = 0; i < 20; i++) {

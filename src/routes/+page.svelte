@@ -10,6 +10,7 @@
 	import { fetchMockData } from '$lib/utils/mockService';
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
+	import { loadStripe } from '@stripe/stripe-js';
 	//import { users, loading, error, fetchUsers } from '$stores/Data/userStore';
 
 	const linkUrl: string = 'https://kit.svelte.dev';
@@ -19,6 +20,8 @@
 	let path: string | undefined | null;
 	let focal: any[] = [];
 
+	let stripe: any;
+
 	onNavigate((navigation) => {
 		path = navigation.to?.route.id;
 	});
@@ -27,7 +30,28 @@
 		setTransitionLoader(false);
 		fetchMockData;
 		//focal = await fetchUsers();
+		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 	});
+
+	async function handleCheckout(orderId: any) {
+		const response = await fetch('/api/create-checkout-session', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ orderId })
+		});
+
+		const { id } = await response.json();
+
+		const { error } = await stripe.redirectToCheckout({
+			sessionId: id
+		});
+
+		if (error) {
+			console.error(error);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -47,6 +71,8 @@
 	<div class="linkhome" bind:this={link}>
 		<a href="/about" use:hoverable={'first'}>{$t('general.home-link')}</a>
 	</div>
+
+	<button on:click={() => handleCheckout('6683f28893e2411bb4b11348')}> Checkout </button>
 
 	<Slider />
 	<Box />

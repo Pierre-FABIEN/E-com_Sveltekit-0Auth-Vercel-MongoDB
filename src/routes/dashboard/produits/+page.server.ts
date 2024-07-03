@@ -1,4 +1,6 @@
 import type { PageServerLoad } from './$types';
+import { fail, type Actions } from '@sveltejs/kit';
+
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -32,4 +34,14 @@ export const load: PageServerLoad = async () => {
 		IupdateProductSchema,
 		IdeleteProductSchema
 	};
+};
+
+export const actions: Actions = {
+	createProduct: async ({ request }) => {
+		const formData = await request.formData();
+		console.log(formData, 'form data');
+
+		try {
+		} catch (error: any) {}
+	}
 };

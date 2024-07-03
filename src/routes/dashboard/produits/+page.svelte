@@ -97,9 +97,39 @@
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
-	onMount(() => {
-		console.log(data, 'sdoirsgjhsdrxoigh');
-	});
+	let DataPrice: number = 0;
+	let images: string[] = [];
+
+	const handleImageUpload = (event: Event) => {
+		const files = (event.target as HTMLInputElement).files;
+		if (files) {
+			images = [];
+			const promises = Array.from(files).map((file) => {
+				return new Promise<string>((resolve, reject) => {
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						if (e.target) {
+							resolve(e.target.result as string);
+						} else {
+							reject('Failed to read file');
+						}
+					};
+					reader.readAsDataURL(file);
+				});
+			});
+
+			Promise.all(promises).then((base64Images) => {
+				images = base64Images;
+				$createProductData.images = images;
+			});
+		}
+	};
+
+	$: $createProductData.categoryId = data.AllCategories.filter(
+		(category: any) => category.checked
+	).map((category: any) => category.id);
+
+	$: $createProductData.price = Number(DataPrice);
 </script>
 
 <div class="ccc mt-5">
@@ -120,7 +150,17 @@
 				<Form.Field name="price" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>price</Form.Label>
-						<Input {...attrs} type="number" bind:value={$createProductData.price} />
+						<Input {...attrs} type="number" bind:value={DataPrice} />
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+
+			<div>
+				<Form.Field name="images" form={createProduct}>
+					<Form.Control let:attrs>
+						<Form.Label>Images</Form.Label>
+						<input type="file" multiple on:change={handleImageUpload} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -130,7 +170,7 @@
 				<Form.Field name="description" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>description</Form.Label>
-						<Input {...attrs} type="description" bind:value={$createProductData.description} />
+						<Input {...attrs} type="text" bind:value={$createProductData.description} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -159,8 +199,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-
-			<!-- <input type="hidden" name="workspaces" value={hiddenWorkspacesValue} /> -->
+			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
 			<Button type="submit" variant="outline">Submit</Button>
 		</form>
 	</div>

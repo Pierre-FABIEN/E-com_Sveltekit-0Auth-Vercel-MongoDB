@@ -5,10 +5,8 @@ const createProductSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	description: z.string().min(1, 'description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	images: z
-		.array(z.string().url('Each image must be a valid URL'))
-		.nonempty('At least one image is required'),
-	categoryId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid Category ID format')
+	images: z.array(z.any()).optional(),
+	categoryId: z.array(z.string().url('You have to select a category'))
 });
 
 // Schéma pour la mise à jour d'un produit
@@ -17,10 +15,8 @@ const updateProductSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	description: z.string().min(1, 'description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	images: z
-		.array(z.string().url('Each image must be a valid URL'))
-		.nonempty('At least one image is required'),
-	categoryId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid Category ID format')
+	images: z.array(z.any()).optional(),
+	categoryId: z.array(z.string().url('You have to select a category'))
 });
 
 // Schéma pour la suppression d'un produit

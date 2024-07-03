@@ -135,7 +135,13 @@
 <div class="ccc mt-5">
 	<div class="w-[80vw]">
 		<SuperDebug data={$createProductData} />
-		<form method="POST" action="?/createProduct" use:createProductEnhance class="space-y-4">
+		<form
+			method="POST"
+			enctype="multipart/form-data"
+			action="?/createProduct"
+			use:createProductEnhance
+			class="space-y-4"
+		>
 			<div>
 				<Form.Field name="name" form={createProduct}>
 					<Form.Control let:attrs>

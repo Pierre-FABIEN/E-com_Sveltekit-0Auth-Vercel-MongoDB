@@ -38,10 +38,27 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	createProduct: async ({ request }) => {
+		console.log('Request:', JSON.stringify(request, null, 2));
+
 		const formData = await request.formData();
 		console.log(formData, 'form data');
 
 		try {
-		} catch (error: any) {}
+			const parsedData = createProductSchema.parse({
+				name: formData.get('name'),
+				description: formData.get('description'),
+				price: Number(formData.get('price')),
+				images: formData.getAll('images'), // Ensure images are retrieved
+				categoryId: formData.getAll('categoryId')
+			});
+
+			console.log('Parsed Data:', parsedData);
+
+			// Perform further processing like saving the product to the database
+			// For example: await saveProduct(parsedData);
+		} catch (error: any) {
+			console.error('Validation Error:', error);
+			return fail(500, { error: 'Internal Server Error' });
+		}
 	}
 };

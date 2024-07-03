@@ -63,6 +63,7 @@
     "embla-carousel-svelte": "latest",
     "eslint-plugin-svelte": "latest",
     "flubber": "latest",
+    "formidable": "^3.5.1",
     "formsnap": "latest",
     "lucide-svelte": "latest",
     "mongodb": "latest",

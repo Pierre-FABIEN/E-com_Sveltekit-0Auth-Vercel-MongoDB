@@ -1,25 +1,23 @@
 import { z } from 'zod';
 
-// Schéma pour la création d'un produit
+// Schema for creating a product
 const createProductSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
-	description: z.string().min(1, 'description is required'),
+	description: z.string().min(1, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	images: z.array(z.string()),
 	categoryId: z.array(z.string())
 });
 
-// Schéma pour la mise à jour d'un produit
+// Schema for updating a product
 const updateProductSchema = z.object({
 	_id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
 	name: z.string().min(1, 'Name is required'),
-	description: z.string().min(1, 'description is required'),
+	description: z.string().min(1, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	images: z.array(z.string()),
 	categoryId: z.array(z.string())
 });
 
-// Schéma pour la suppression d'un produit
+// Schema for deleting a product
 const deleteProductSchema = z.object({
 	_id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format')
 });

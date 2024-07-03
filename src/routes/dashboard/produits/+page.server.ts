@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
 
+import { IncomingForm } from 'formidable';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -42,6 +43,8 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		console.log(formData, 'form data');
+
+		const file = formData.get('file-upload');
 
 		try {
 			const parsedData = createProductSchema.parse({

@@ -162,15 +162,8 @@
 				</Form.Field>
 			</div>
 
-			<div>
-				<Form.Field name="images" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>Images</Form.Label>
-						<input type="file" multiple on:change={handleImageUpload} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
+			<label for="file-upload">Select file :</label>
+			<input type="file" id="Images" name="file-upload" />
 
 			<div>
 				<Form.Field name="description" form={createProduct}>

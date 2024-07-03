@@ -1,6 +1,5 @@
 import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
-import { z } from 'zod';
 
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -45,15 +44,13 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, withFiles({ form }));
 		}
+
 		const images = formData.getAll('images') as File[];
 		images.forEach((image) => {
 			if (image instanceof File) {
-				console.log(image);
 				// TODO: Process each image file
 			}
 		});
-
-		console.log(formData, 'formData');
 
 		// try {
 		// 	const parsedData = createProductSchema.parse({

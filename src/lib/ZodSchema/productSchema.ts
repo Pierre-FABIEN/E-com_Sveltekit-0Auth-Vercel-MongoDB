@@ -5,7 +5,11 @@ const createProductSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	description: z.string().min(1, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	categoryId: z.array(z.string())
+	categoryId: z.array(z.string()),
+	images: z
+		.instanceof(File, { message: 'Please upload a file.' })
+		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		.array()
 });
 
 // Schema for updating a product
@@ -14,7 +18,11 @@ const updateProductSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	description: z.string().min(1, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	categoryId: z.array(z.string())
+	categoryId: z.array(z.string()),
+	images: z
+		.instanceof(File, { message: 'Please upload a file.' })
+		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		.array()
 });
 
 // Schema for deleting a product

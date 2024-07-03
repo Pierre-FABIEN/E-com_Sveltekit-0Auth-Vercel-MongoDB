@@ -3,7 +3,7 @@
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import SuperDebug from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms';
+	import { superForm, filesProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import * as Form from '$UITools/shadcn/form';
@@ -98,32 +98,8 @@
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
 	let DataPrice: number = 0;
-	let images: string[] = [];
 
-	const handleImageUpload = (event: Event) => {
-		const files = (event.target as HTMLInputElement).files;
-		if (files) {
-			images = [];
-			const promises = Array.from(files).map((file) => {
-				return new Promise<string>((resolve, reject) => {
-					const reader = new FileReader();
-					reader.onload = (e) => {
-						if (e.target) {
-							resolve(e.target.result as string);
-						} else {
-							reject('Failed to read file');
-						}
-					};
-					reader.readAsDataURL(file);
-				});
-			});
-
-			Promise.all(promises).then((base64Images) => {
-				images = base64Images;
-				$createProductData.images = images;
-			});
-		}
-	};
+	const files = filesProxy(createProduct, 'images');
 
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
@@ -162,8 +138,21 @@
 				</Form.Field>
 			</div>
 
-			<label for="file-upload">Select file :</label>
-			<input type="file" id="Images" name="file-upload" />
+			<div>
+				<Form.Field name="images" form={createProduct}>
+					<Form.Control let:attrs>
+						<Form.Label>Images</Form.Label>
+						<input
+							type="file"
+							multiple
+							name="images"
+							accept="image/png, image/jpeg"
+							bind:files={$files}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
 
 			<div>
 				<Form.Field name="description" form={createProduct}>

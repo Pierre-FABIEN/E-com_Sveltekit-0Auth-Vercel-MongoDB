@@ -1,8 +1,8 @@
 import type { PageServerLoad } from './$types';
-import { fail, type Actions } from '@sveltejs/kit';
+import { type Actions } from '@sveltejs/kit';
+import { z } from 'zod';
 
-import { IncomingForm } from 'formidable';
-import { superValidate } from 'sveltekit-superforms';
+import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import {
@@ -39,29 +39,38 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	createProduct: async ({ request }) => {
-		console.log('Request:', JSON.stringify(request, null, 2));
-
 		const formData = await request.formData();
-		console.log(formData, 'form data');
+		const form = await superValidate(formData, zod(createProductSchema));
 
-		const file = formData.get('file-upload');
-
-		try {
-			const parsedData = createProductSchema.parse({
-				name: formData.get('name'),
-				description: formData.get('description'),
-				price: Number(formData.get('price')),
-				images: formData.getAll('images'), // Ensure images are retrieved
-				categoryId: formData.getAll('categoryId')
-			});
-
-			console.log('Parsed Data:', parsedData);
-
-			// Perform further processing like saving the product to the database
-			// For example: await saveProduct(parsedData);
-		} catch (error: any) {
-			console.error('Validation Error:', error);
-			return fail(500, { error: 'Internal Server Error' });
+		if (!form.valid) {
+			return fail(400, withFiles({ form }));
 		}
+		const images = formData.getAll('images') as File[];
+		images.forEach((image) => {
+			if (image instanceof File) {
+				console.log(image);
+				// TODO: Process each image file
+			}
+		});
+
+		console.log(formData, 'formData');
+
+		// try {
+		// 	const parsedData = createProductSchema.parse({
+		// 		name: formData.get('name'),
+		// 		description: formData.get('description'),
+		// 		price: Number(formData.get('price')),
+		// 		images: formData.getAll('images'), // Ensure images are retrieved
+		// 		categoryId: formData.getAll('categoryId')
+		// 	});
+
+		// 	console.log('Parsed Data:', parsedData);
+
+		// 	// Perform further processing like saving the product to the database
+		// 	// For example: await saveProduct(parsedData);
+		// } catch (error: any) {
+		// 	console.error('Validation Error:', error);
+		// 	return fail(500, { error: 'Internal Server Error' });
+		// }
 	}
 };

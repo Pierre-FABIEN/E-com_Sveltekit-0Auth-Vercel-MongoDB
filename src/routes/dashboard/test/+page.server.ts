@@ -1,17 +1,31 @@
-import type { Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+// src/routes/dashboard/produits/+page.server.ts
+import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { schema } from '$lib/schema';
 
-export const load = (async () => {
-	return {};
-}) satisfies PageServerLoad;
+export const load = async () => {
+	const form = await superValidate(zod(schema));
+	return { form };
+};
 
-export const actions: Actions = {
-	upload: async ({ request }) => {
-		const data = await request.formData();
-		const file = data.get('file-upload');
+export const actions = {
+	default: async ({ request }) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, zod(schema));
 
-		console.log(file);
+		if (!form.valid) {
+			return fail(400, withFiles({ form }));
+		}
 
-		return { success: true };
+		// Traitement des fichiers
+		const images = formData.getAll('images') as File[];
+		images.forEach((image) => {
+			if (image instanceof File) {
+				console.log(image);
+				// TODO: Process each image file
+			}
+		});
+
+		return message(form, 'You have uploaded valid files!');
 	}
 };

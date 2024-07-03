@@ -1,9 +1,10 @@
 /// <reference types="@auth/sveltekit" />
 // TS.d.ts
-import { NextFunction } from 'express';
 
 declare global {
 	namespace App {
+		export type PageLoad<Data = any> = (input: { data: Data }) => Promise<{}>;
+
 		interface Locals {
 			getSession: () => Promise<Session | null>;
 			role?: string; // Ajout de la propriété 'role'

@@ -1,10 +1,8 @@
-import { checkAuth } from '$lib/prisma/Request/checkAuth';
-
-import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
-
 import type { LayoutServerLoad } from './$types';
-
 import { redirect } from '@sveltejs/kit';
+
+import { checkAuth } from '$lib/prisma/Request/checkAuth';
+import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
 
 const allowedRoles = ['admin'];
 
@@ -24,12 +22,8 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	}
 
 	const allUsers = await getAllUsers();
-	// const allProducts = await getAllProducts();
-	// const allOrders = await getAllOrders();
 
 	return {
-		// allOrders,
-		// allProducts,
 		allUsers,
 		session
 	};

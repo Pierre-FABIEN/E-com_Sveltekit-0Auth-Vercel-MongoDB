@@ -6,6 +6,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
 model User {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -37,7 +38,6 @@ model Order {
   userId        String        @db.ObjectId
   addressId     String        @db.ObjectId
   total         Float
-  products      Product[]
   transactions  Transaction[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @default(now())
@@ -48,27 +48,23 @@ model Order {
 }
 
 model Product {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   name         String
+  description  String
   price        Float
   images       String[]
-  orderId      String    @db.ObjectId
-  categoryId   String    @db.ObjectId
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-
-  order        Order     @relation(fields: [orderId], references: [id])
-  category     Category  @relation(fields: [categoryId], references: [id])
+  categories   ProductCategory[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
   @@map("products")
 }
 
 model Category {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  
+  products  ProductCategory[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
   @@map("categories")
 }
 
@@ -83,4 +79,14 @@ model Transaction {
 
   order           Order    @relation(fields: [orderId], references: [id])
   @@map("transactions")
+}
+
+model ProductCategory {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String   @db.ObjectId
+  categoryId  String   @db.ObjectId
+
+  product     Product  @relation(fields: [productId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+  @@map("product_categories")
 }

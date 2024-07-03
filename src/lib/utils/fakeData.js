@@ -26,6 +26,7 @@ async function run() {
 		const ordersCollection = database.collection('orders');
 		const productsCollection = database.collection('products');
 		const categoriesCollection = database.collection('categories');
+		const productCategoryCollection = database.collection('product_categories');
 
 		// Supprimer les données existantes
 		await usersCollection.deleteMany({});
@@ -33,6 +34,7 @@ async function run() {
 		await ordersCollection.deleteMany({});
 		await productsCollection.deleteMany({});
 		await categoriesCollection.deleteMany({});
+		await productCategoryCollection.deleteMany({});
 
 		// Ajouter l'utilisateur admin
 		const adminUser = {
@@ -102,23 +104,32 @@ async function run() {
 				updatedAt: new Date()
 			};
 			const orderResult = await ordersCollection.insertOne(order);
-			const orderId = orderResult.insertedId;
 
 			// Générer entre 1 et 5 produits pour chaque commande
 			const productCount = faker.number.int({ min: 1, max: 2 });
 			for (let k = 0; k < productCount; k++) {
 				const product = {
 					name: faker.commerce.productName(),
-					price: parseFloat(faker.commerce.price()), // S'assurer que le prix est un nombre
+					description: faker.commerce.productDescription(), // Ajout de la description
+					price: parseFloat(faker.commerce.price()),
 					images: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
 						faker.image.imageUrl()
 					), // Générer plusieurs images
-					orderId: orderId,
-					categoryId: categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })], // Associer à une catégorie
 					createdAt: new Date(),
 					updatedAt: new Date()
 				};
-				await productsCollection.insertOne(product);
+				const productResult = await productsCollection.insertOne(product);
+				const productId = productResult.insertedId;
+
+				// Associer le produit à plusieurs catégories
+				const numCategories = faker.number.int({ min: 1, max: 3 });
+				for (let j = 0; j < numCategories; j++) {
+					const categoryId = categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })];
+					await productCategoryCollection.insertOne({
+						productId: productId,
+						categoryId: categoryId
+					});
+				}
 			}
 		}
 
@@ -153,7 +164,7 @@ async function run() {
 				userAddresses.push(addressResult.insertedId);
 			}
 
-			// Créer une commande pour chaque utilisateur avec une adresse aléatoire parmi celles créées pour cet utilisateur
+			// Créer une commande pour chaque utilisateur avec les produits générés
 			if (userAddresses.length > 0) {
 				const randomAddressId =
 					userAddresses[faker.number.int({ min: 0, max: userAddresses.length - 1 })];
@@ -165,23 +176,33 @@ async function run() {
 					updatedAt: new Date()
 				};
 				const orderResult = await ordersCollection.insertOne(order);
-				const orderId = orderResult.insertedId;
 
 				// Générer entre 1 et 5 produits pour chaque commande
 				const productCount = faker.number.int({ min: 1, max: 5 });
 				for (let k = 0; k < productCount; k++) {
 					const product = {
 						name: faker.commerce.productName(),
+						description: faker.commerce.productDescription(), // Ajout de la description
 						price: parseFloat(faker.commerce.price()), // S'assurer que le prix est un nombre
 						images: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
 							faker.image.imageUrl()
-						), // Générer plusieurs images
-						orderId: orderId,
-						categoryId: categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })], // Associer à une catégorie
+						),
 						createdAt: new Date(),
 						updatedAt: new Date()
 					};
-					await productsCollection.insertOne(product);
+					const productResult = await productsCollection.insertOne(product);
+					const productId = productResult.insertedId;
+
+					// Associer le produit à plusieurs catégories
+					const numCategories = faker.number.int({ min: 1, max: 3 });
+					for (let j = 0; j < numCategories; j++) {
+						const categoryId =
+							categoryIds[faker.number.int({ min: 0, max: categoryIds.length - 1 })];
+						await productCategoryCollection.insertOne({
+							productId: productId,
+							categoryId: categoryId
+						});
+					}
 				}
 			}
 

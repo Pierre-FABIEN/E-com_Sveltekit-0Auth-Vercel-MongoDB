@@ -106,6 +106,8 @@
 	).map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
+
+	console.log(data);
 </script>
 
 <div class="ccc mt-5">

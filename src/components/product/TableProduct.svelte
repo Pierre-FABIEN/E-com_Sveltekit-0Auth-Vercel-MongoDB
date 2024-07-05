@@ -7,22 +7,28 @@
 	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
 	import CreateProduct from './CreateProduct.svelte';
 	import { Input } from '$UITools/shadcn/input';
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
 	import Trash from 'svelte-radix/Trash.svelte';
+	import EditProduct from './EditProduct.svelte';
 
 	export let data: any;
 	export let createProductEnhance;
+
 	export let createProduct;
 	export let createProductData;
 	export let deleteProductEnhance;
-	export let deleteProductMessage;
+
+	export let updateProduct;
+	export let updateProductData;
+	export let updateProductEnhance;
 
 	// Nouvelle variable pour le texte de recherche
 	let searchQuery: string = '';
 
 	// Pagination variables
 	let currentPage: number = 1;
-	let itemsPerPage: number = 10;
+	let itemsPerPage: number = 5;
 
 	// Fonction pour filtrer les produits
 	$: filteredProducts = data.AllProducts.filter((product: any) =>
@@ -39,13 +45,6 @@
 	function changePage(page: number) {
 		currentPage = page;
 	}
-
-	function deleteProduct(id: number) {
-		// Remplacer cette logique par la logique de suppression réelle (ex: appel API)
-		data.AllProducts = data.AllProducts.filter((product: any) => product.id !== id);
-	}
-
-	$: console.log($deleteProductMessage);
 </script>
 
 <div class="w-[500px] border p-2">
@@ -110,6 +109,23 @@
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
+						</TableCell>
+
+						<TableCell>
+							<Sheet.Root>
+								<Sheet.Trigger asChild let:builder>
+									<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">
+										<PencilIcon class="h-4 w-8" />
+									</Button>
+								</Sheet.Trigger>
+								<EditProduct
+									{data}
+									{product}
+									{updateProduct}
+									{updateProductData}
+									{updateProductEnhance}
+								/>
+							</Sheet.Root>
 						</TableCell>
 					</TableRow>
 				{/each}

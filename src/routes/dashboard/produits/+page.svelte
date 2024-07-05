@@ -14,9 +14,7 @@
 		updateCategorySchema,
 		deleteCategorySchema
 	} from '$lib/ZodSchema/categorySchema';
-	import TableProduct from './TableProduct.svelte';
-	import { onMount } from 'svelte';
-	import { productStore } from '$stores/Data/productStore';
+	import TableProduct from '$components/product/TableProduct.svelte';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -91,11 +89,6 @@
 	} = updateCategory;
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
-
-	console.log(data, 'data');
-	onMount(() => {
-		productStore.set(data.AllProducts);
-	});
 </script>
 
 <div class="ccc mt-5">
@@ -105,6 +98,8 @@
 		{createProduct}
 		{createProductData}
 		{deleteProductEnhance}
-		{deleteProductMessage}
+		{updateProduct}
+		{updateProductData}
+		{updateProductEnhance}
 	/>
 </div>

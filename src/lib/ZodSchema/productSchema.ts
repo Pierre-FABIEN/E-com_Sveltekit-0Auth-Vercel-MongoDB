@@ -14,15 +14,15 @@ const createProductSchema = z.object({
 
 // Schema for updating a product
 const updateProductSchema = z.object({
-	_id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
-	name: z.string().min(1, 'Name is required'),
-	description: z.string().min(1, 'Description is required'),
-	price: z.number().positive('Price must be a positive number'),
-	categoryId: z.array(z.string()),
-	images: z
-		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
-		.array()
+	// _id: z.string(),
+	// name: z.string().min(1, 'Name is required'),
+	// description: z.string().min(1, 'Description is required'),
+	// price: z.number().positive('Price must be a positive number'),
+	// categoryId: z.array(z.string()),
+	// images: z
+	// 	.instanceof(File, { message: 'Please upload a file.' })
+	// 	.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+	// 	.array()
 });
 
 // Schema for deleting a product

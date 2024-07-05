@@ -2,6 +2,7 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { filesProxy } from 'sveltekit-superforms';
+	import SuperDebug from 'sveltekit-superforms';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -25,8 +26,6 @@
 		categoryId: [] as string[]
 	});
 
-	const files = filesProxy(updateProduct, 'images');
-
 	// Function to initialize the stores with product data
 	const initializeProductData = () => {
 		productData.set({
@@ -43,13 +42,14 @@
 		initializeProductData();
 	});
 
-	// Reactive statement to update the hidden input values
-	$: updateProductData.categoryId = $productData.categoryId;
-	$: updateProductData.price = Number($productData.price);
-
 	// Helper function to check if a category is selected
 	const isCategorySelected = (categoryId: string) => {
-		return $productData.categoryId.includes(categoryId);
+		let selected = false;
+		productData.update((current) => {
+			selected = current.categoryId.includes(categoryId);
+			return current;
+		});
+		return selected;
 	};
 
 	// Helper function to toggle category selection
@@ -68,6 +68,22 @@
 			}
 		});
 	};
+
+	// Function to handle file input change
+	// Function to handle file input change
+	const handleFileChange = (event: Event) => {
+		const input = event.target as HTMLInputElement;
+		if (input.files) {
+			const filesArray = Array.from(input.files);
+			productData.update((current) => ({
+				...current,
+				images: filesArray
+			}));
+		}
+	};
+
+	$: updateProductData = productData;
+	$: console.log($updateProductData, 'updateProductData');
 </script>
 
 <Sheet.Content side="right">
@@ -114,7 +130,7 @@
 							multiple
 							name="images"
 							accept="image/png, image/jpeg"
-							bind:files={$files}
+							on:change={handleFileChange}
 						/>
 					</Form.Control>
 					<Form.FieldErrors />
@@ -141,7 +157,7 @@
 									<Checkbox
 										id={category.id}
 										checked={isCategorySelected(category.id)}
-										on:change={() => toggleCategory(category.id)}
+										on:click={() => toggleCategory(category.id)}
 									/>
 									<Label
 										for={category.id}
@@ -158,7 +174,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-			<input type="hidden" name="categoryId" bind:value={$productData.categoryId} />
+			<input type="hidden" name="categoryId" value={$productData.categoryId.join(',')} />
 		</div>
 		<Sheet.Footer>
 			<Sheet.Close asChild let:builder>

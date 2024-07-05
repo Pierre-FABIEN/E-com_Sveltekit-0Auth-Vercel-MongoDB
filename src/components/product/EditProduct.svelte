@@ -46,6 +46,28 @@
 	// Reactive statement to update the hidden input values
 	$: updateProductData.categoryId = $productData.categoryId;
 	$: updateProductData.price = Number($productData.price);
+
+	// Helper function to check if a category is selected
+	const isCategorySelected = (categoryId: string) => {
+		return $productData.categoryId.includes(categoryId);
+	};
+
+	// Helper function to toggle category selection
+	const toggleCategory = (categoryId: string) => {
+		productData.update((current) => {
+			if (current.categoryId.includes(categoryId)) {
+				return {
+					...current,
+					categoryId: current.categoryId.filter((id) => id !== categoryId)
+				};
+			} else {
+				return {
+					...current,
+					categoryId: [...current.categoryId, categoryId]
+				};
+			}
+		});
+	};
 </script>
 
 <Sheet.Content side="right">
@@ -116,10 +138,11 @@
 						{#if data.AllCategories.length > 0}
 							{#each data.AllCategories as category (category.id)}
 								<div class="my-3 flex items-center space-x-2">
-									<!-- <Checkbox
+									<Checkbox
 										id={category.id}
-										bind:checked={$productData.categoryId.includes(category.id)}
-									/> -->
+										checked={isCategorySelected(category.id)}
+										on:change={() => toggleCategory(category.id)}
+									/>
 									<Label
 										for={category.id}
 										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

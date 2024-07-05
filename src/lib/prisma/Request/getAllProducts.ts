@@ -2,7 +2,15 @@ import prisma from '$lib/prisma';
 
 export const getAllProducts = async () => {
 	try {
-		const products = await prisma.product.findMany();
+		const products = await prisma.product.findMany({
+			include: {
+				categories: {
+					include: {
+						category: true
+					}
+				}
+			}
+		});
 		return products;
 	} catch (error) {
 		console.error('Error fetching products:', error);

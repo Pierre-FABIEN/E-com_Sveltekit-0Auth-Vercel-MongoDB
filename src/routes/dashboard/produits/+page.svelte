@@ -89,6 +89,8 @@
 	} = updateCategory;
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
+
+	console.log(data, 'data');
 </script>
 
 <div class="ccc mt-5">

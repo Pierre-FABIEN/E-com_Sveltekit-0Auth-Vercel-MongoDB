@@ -34,9 +34,7 @@
 			price: product.price,
 			images: product.images,
 			description: product.description,
-			categoryId: data.AllCategories.filter((category: any) => category.checked).map(
-				(category: any) => category.id
-			)
+			categoryId: product.categories.map((category: any) => category.categoryId)
 		});
 	};
 
@@ -48,8 +46,6 @@
 	// Reactive statement to update the hidden input values
 	$: updateProductData.categoryId = $productData.categoryId;
 	$: updateProductData.price = Number($productData.price);
-
-	console.log(product);
 </script>
 
 <Sheet.Content side="right">
@@ -61,9 +57,9 @@
 		class="space-y-4"
 	>
 		<Sheet.Header>
-			<Sheet.Title>Edit profile</Sheet.Title>
+			<Sheet.Title>Edit product</Sheet.Title>
 			<Sheet.Description>
-				Make changes to your profile here. Click save when you're done.
+				Make changes to your product here. Click save when you're done.
 			</Sheet.Description>
 		</Sheet.Header>
 		<div class="ccs mt-5">
@@ -120,7 +116,10 @@
 						{#if data.AllCategories.length > 0}
 							{#each data.AllCategories as category (category.id)}
 								<div class="my-3 flex items-center space-x-2">
-									<Checkbox id={category.id} bind:checked={category.checked} />
+									<!-- <Checkbox
+										id={category.id}
+										bind:checked={$productData.categoryId.includes(category.id)}
+									/> -->
 									<Label
 										for={category.id}
 										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

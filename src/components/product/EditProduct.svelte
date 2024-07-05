@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 	import { filesProxy } from 'sveltekit-superforms';
 
 	import * as Form from '$UITools/shadcn/form';
@@ -14,15 +16,38 @@
 	export let updateProductEnhance;
 	export let updateProductData;
 
-	let DataPrice: number = 0;
+	// Stores for product data
+	const productData = writable({
+		name: '',
+		price: 0,
+		images: [] as File[],
+		description: '',
+		categoryId: [] as string[]
+	});
 
 	const files = filesProxy(updateProduct, 'images');
 
-	$: $updateProductData.categoryId = data.AllCategories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
+	// Function to initialize the stores with product data
+	const initializeProductData = () => {
+		productData.set({
+			name: product.name,
+			price: product.price,
+			images: product.images,
+			description: product.description,
+			categoryId: data.AllCategories.filter((category: any) => category.checked).map(
+				(category: any) => category.id
+			)
+		});
+	};
 
-	$: $updateProductData.price = Number(DataPrice);
+	// Initialize product data when the component is mounted
+	onMount(() => {
+		initializeProductData();
+	});
+
+	// Reactive statement to update the hidden input values
+	$: updateProductData.categoryId = $productData.categoryId;
+	$: updateProductData.price = Number($productData.price);
 
 	console.log(product);
 </script>
@@ -46,7 +71,7 @@
 				<Form.Field name="name" form={updateProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$updateProductData.name} />
+						<Input {...attrs} type="text" bind:value={$productData.name} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -55,8 +80,8 @@
 			<div class="w-[100%]">
 				<Form.Field name="price" form={updateProduct}>
 					<Form.Control let:attrs>
-						<Form.Label>price</Form.Label>
-						<Input {...attrs} type="number" bind:value={DataPrice} />
+						<Form.Label>Price</Form.Label>
+						<Input {...attrs} type="number" bind:value={$productData.price} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -81,15 +106,15 @@
 			<div class="w-[100%]">
 				<Form.Field name="description" form={updateProduct}>
 					<Form.Control let:attrs>
-						<Form.Label>description</Form.Label>
-						<Input {...attrs} type="text" bind:value={$updateProductData.description} />
+						<Form.Label>Description</Form.Label>
+						<Input {...attrs} type="text" bind:value={$productData.description} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div class="w-[100%]">
-				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">categories</h4>
+				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
 				<Form.Field name="categoryId" form={updateProduct}>
 					<Form.Control let:attrs>
 						{#if data.AllCategories.length > 0}
@@ -111,7 +136,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-			<input type="hidden" name="categoryId" bind:value={$updateProductData.categoryId} />
+			<input type="hidden" name="categoryId" bind:value={$productData.categoryId} />
 		</div>
 		<Sheet.Footer>
 			<Sheet.Close asChild let:builder>

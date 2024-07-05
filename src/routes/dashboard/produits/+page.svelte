@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
-	import { superForm, filesProxy } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import * as Form from '$UITools/shadcn/form';
-	import { Input } from '$UITools/shadcn/input';
 	import { Button } from '$UITools/shadcn/button';
-	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
-	import { Label } from '$UITools/shadcn/label';
+	import * as Sheet from '$UITools/shadcn/sheet/index.js';
+	import * as Table from '$UITools/shadcn/table';
+	import TableRow from '$UITools/shadcn/table/table-row.svelte';
+	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
+	import CreateProduct from './CreateProduct.svelte';
+	import { Input } from '$UITools/shadcn/input';
 
 	import {
 		createProductSchema,
@@ -33,6 +32,7 @@
 		IupdateCategorySchema: SuperValidated<Infer<typeof updateCategorySchema>>;
 		IdeleteCategorySchema: SuperValidated<Infer<typeof deleteCategorySchema>>;
 		AllCategories: typeof updateCategorySchema;
+		AllProducts: any;
 	};
 
 	const createProduct = superForm(data.IcreateProductSchema, {
@@ -97,100 +97,85 @@
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
-	let DataPrice: number = 0;
+	// Nouvelle variable pour le texte de recherche
+	let searchQuery: string = '';
 
-	const files = filesProxy(createProduct, 'images');
+	// Pagination variables
+	let currentPage: number = 1;
+	let itemsPerPage: number = 10;
 
-	$: $createProductData.categoryId = data.AllCategories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
+	// Fonction pour filtrer les produits
+	$: filteredProducts = data.AllProducts.filter((product) =>
+		product.name.toLowerCase().includes(searchQuery.toLowerCase())
+	);
 
-	$: $createProductData.price = Number(DataPrice);
+	// Fonction pour paginer les produits
+	$: paginatedProducts = filteredProducts.slice(
+		(currentPage - 1) * itemsPerPage,
+		currentPage * itemsPerPage
+	);
 
-	console.log(data);
+	// Fonction pour changer de page
+	function changePage(page: number) {
+		currentPage = page;
+	}
 </script>
 
-<div class="ccc mt-5">
+<div class="ccc">
 	<div class="w-[80vw]">
-		<SuperDebug data={$createProductData} />
-		<form
-			method="POST"
-			enctype="multipart/form-data"
-			action="?/createProduct"
-			use:createProductEnhance
-			class="space-y-4"
-		>
-			<div>
-				<Form.Field name="name" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createProductData.name} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
+		<div class="rcb">
+			<Input
+				type="text"
+				placeholder="Cherchez un produit"
+				class="max-w-xs"
+				bind:value={searchQuery}
+			/>
+			<Sheet.Root>
+				<Sheet.Trigger asChild let:builder>
+					<Button builders={[builder]} variant="outline">Créer un produit</Button>
+				</Sheet.Trigger>
+				<CreateProduct {data} {createProductEnhance} {createProduct} {createProductData} />
+			</Sheet.Root>
+		</div>
 
-			<div>
-				<Form.Field name="price" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>price</Form.Label>
-						<Input {...attrs} type="number" bind:value={DataPrice} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-
-			<div>
-				<Form.Field name="images" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>Images</Form.Label>
-						<input
-							type="file"
-							multiple
-							name="images"
-							accept="image/png, image/jpeg"
-							bind:files={$files}
-						/>
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-
-			<div>
-				<Form.Field name="description" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>description</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createProductData.description} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-
-			<div>
-				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">categories</h4>
-				<Form.Field name="categoryId" form={createProduct}>
-					<Form.Control let:attrs>
-						{#if data.AllCategories.length > 0}
-							{#each data.AllCategories as category (category.id)}
-								<div class="my-3 flex items-center space-x-2">
-									<Checkbox id={category.id} bind:checked={category.checked} />
-									<Label
-										for={category.id}
-										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-									>
-										{category.name}
-									</Label>
-								</div>
+		<Table.Root>
+			<Table.Header>
+				<Table.Row>
+					<Table.Head>name</Table.Head>
+					<Table.Head>description</Table.Head>
+					<Table.Head>price</Table.Head>
+					<Table.Head>images</Table.Head>
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{#each paginatedProducts as product, i (i)}
+					<TableRow>
+						<TableCell>{product.name}</TableCell>
+						<TableCell>{product.description}</TableCell>
+						<TableCell>{product.price}</TableCell>
+						<!-- <TableCell>
+							{#each product.images as image}
+								<img src={image} alt={product.name} class="w-16 h-16 object-cover" />
 							{/each}
-						{:else}
-							<p>No categories found.</p>
-						{/if}
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
-			<Button type="submit" variant="outline">Submit</Button>
-		</form>
+						</TableCell> -->
+					</TableRow>
+				{/each}
+			</Table.Body>
+		</Table.Root>
+
+		<!-- Pagination Controls -->
+		<div class="pagination-controls mt-4">
+			{#if currentPage > 1}
+				<Button on:click={() => changePage(currentPage - 1)}>Previous</Button>
+			{/if}
+
+			{#each Array(Math.ceil(filteredProducts.length / itemsPerPage)) as _, pageIndex}
+				<Button class="mx-1" on:click={() => changePage(pageIndex + 1)}>{pageIndex + 1}</Button>
+			{/each}
+
+			{#if currentPage < Math.ceil(filteredProducts.length / itemsPerPage)}
+				<Button on:click={() => changePage(currentPage + 1)}>Next</Button>
+			{/if}
+		</div>
 	</div>
 </div>

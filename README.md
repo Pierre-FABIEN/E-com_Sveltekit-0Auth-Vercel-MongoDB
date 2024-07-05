@@ -39,9 +39,8 @@ You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/nextauthjs/sveltekit-auth-example&project-name=sveltekit-auth-example&repository-name=sveltekit-auth-example)
 
 
-installer ZOD et validform
 
-créer l"espace user et admin
+faire la gestion produit et des catégories
 
 
 Cartes de test Stripe

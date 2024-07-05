@@ -272,5 +272,51 @@ export const actions: Actions = {
 			console.error('Error deleting product:', error);
 			return fail(500, { message: 'Product deletion failed' });
 		}
+	},
+
+	deleteCategory: async ({ request }) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, zod(deleteCategorySchema));
+
+		const categoryId = formData.get('categoryId') as string;
+
+		console.log('Received categoryId:', categoryId);
+
+		if (!categoryId) {
+			console.log('No categoryId provided');
+			return fail(400, { message: 'Category ID is required' });
+		}
+
+		try {
+			// Vérifier si la catégorie existe
+			const existingCategory = await prisma.category.findUnique({
+				where: { id: categoryId }
+			});
+
+			if (!existingCategory) {
+				console.log('Category not found:', categoryId);
+				return fail(400, { message: 'Category not found' });
+			}
+
+			console.log('Category found:', existingCategory);
+
+			// Supprimer les relations de catégorie associées au produit
+			const deletedProductCategories = await prisma.productCategory.deleteMany({
+				where: { categoryId: categoryId } // Utiliser categoryId comme string
+			});
+			console.log('Deleted product categories:', deletedProductCategories);
+
+			// Supprimer la catégorie
+			const deletedCategory = await prisma.category.delete({
+				where: { id: categoryId } // Utiliser categoryId comme string
+			});
+
+			console.log('Deleted category:', deletedCategory);
+
+			return message(form, 'Category deleted successfully');
+		} catch (error) {
+			console.error('Error deleting category:', error);
+			return fail(500, { message: 'Category deletion failed' });
+		}
 	}
 };

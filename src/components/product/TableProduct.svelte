@@ -47,7 +47,7 @@
 	}
 </script>
 
-<div class="w-[500px] border p-2">
+<div class="border p-2">
 	<h1 class="my-5">Produits</h1>
 	<div class="rcb mb-5">
 		<Input

@@ -96,7 +96,7 @@
 </script>
 
 <div class="rcs m-5">
-	<div class="m-5">
+	<div class="w-[70%] m-5">
 		<TableProduct
 			{data}
 			{createProductEnhance}
@@ -109,7 +109,7 @@
 		/>
 	</div>
 
-	<div class="m-5">
+	<div class="w-[20%] m-5">
 		<TableCategories
 			{data}
 			{createCategoryEnhance}

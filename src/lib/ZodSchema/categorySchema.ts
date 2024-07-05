@@ -9,14 +9,14 @@ const createCategorySchema = z.object({
 
 // Schéma pour la mise à jour d'une catégorie
 const updateCategorySchema = z.object({
-	id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+	id: z.string(),
 	name: z.string().min(1, 'Name is required'),
 	updatedAt: z.date().optional() // Auto-generated in the database
 });
 
 // Schéma pour la suppression d'une catégorie
 const deleteCategorySchema = z.object({
-	id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format')
+	id: z.string()
 });
 
 // Types TypeScript inférés des schémas Zod

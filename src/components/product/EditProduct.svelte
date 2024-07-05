@@ -2,7 +2,6 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { filesProxy } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -10,6 +9,10 @@
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
 	import * as Sheet from '$UITools/shadcn/sheet/index.js';
+
+	import Minus from 'lucide-svelte/icons/minus';
+	import Plus from 'lucide-svelte/icons/plus';
+	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 
 	export let data;
 	export let product;
@@ -84,6 +87,7 @@
 
 	$: updateProductData = productData;
 	$: console.log($updateProductData, 'updateProductData');
+	$: console.log($productData, 'productData');
 </script>
 
 <Sheet.Content side="right">
@@ -136,6 +140,29 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
+			<Drawer.Root>
+				<Drawer.Trigger asChild let:builder>
+					<Button builders={[builder]} variant="outline">Open Drawer</Button>
+				</Drawer.Trigger>
+				<Drawer.Content>
+					<div class="mx-auto w-full max-w-sm">
+						<Drawer.Header>
+							<Drawer.Title>Move Goal</Drawer.Title>
+							<Drawer.Description>Set your daily activity goal.</Drawer.Description>
+						</Drawer.Header>
+						<div class="p-4 pb-0">
+							<div class="flex items-center justify-center space-x-2">Les images ici</div>
+						</div>
+						<Drawer.Footer>
+							<Button>Submit</Button>
+							<Drawer.Close asChild let:builder>
+								<Button builders={[builder]} variant="outline">Cancel</Button>
+							</Drawer.Close>
+						</Drawer.Footer>
+					</div>
+				</Drawer.Content>
+			</Drawer.Root>
 
 			<div class="w-[100%]">
 				<Form.Field name="description" form={updateProduct}>

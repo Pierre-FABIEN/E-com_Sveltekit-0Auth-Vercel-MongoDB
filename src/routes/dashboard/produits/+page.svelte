@@ -3,6 +3,9 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
+	import TableProduct from '$components/product/TableProduct.svelte';
+	import TableCategories from '$components/product/TableCategories.svelte';
+
 	import {
 		createProductSchema,
 		updateProductSchema,
@@ -14,7 +17,6 @@
 		updateCategorySchema,
 		deleteCategorySchema
 	} from '$lib/ZodSchema/categorySchema';
-	import TableProduct from '$components/product/TableProduct.svelte';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -93,15 +95,30 @@
 	console.log(data, 'data');
 </script>
 
-<div class="ccc mt-5">
-	<TableProduct
-		{data}
-		{createProductEnhance}
-		{createProduct}
-		{createProductData}
-		{deleteProductEnhance}
-		{updateProduct}
-		{updateProductData}
-		{updateProductEnhance}
-	/>
+<div class="rcs m-5">
+	<div class="m-5">
+		<TableProduct
+			{data}
+			{createProductEnhance}
+			{createProduct}
+			{createProductData}
+			{deleteProductEnhance}
+			{updateProduct}
+			{updateProductData}
+			{updateProductEnhance}
+		/>
+	</div>
+
+	<div class="m-5">
+		<TableCategories
+			{data}
+			{createCategoryEnhance}
+			{createCategory}
+			{createCategoryData}
+			{deleteCategoryEnhance}
+			{updateCategory}
+			{updateCategoryData}
+			{updateCategoryEnhance}
+		/>
+	</div>
 </div>

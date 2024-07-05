@@ -90,6 +90,7 @@
     "tslib": "latest",
     "tweakpane": "latest",
     "typescript": "latest",
+    "vaul-svelte": "^0.3.2",
     "vite": "latest",
     "vite-plugin-pwa": "latest",
     "zod": "latest"

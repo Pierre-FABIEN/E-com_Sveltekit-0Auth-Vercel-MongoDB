@@ -41,6 +41,7 @@ You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=
 
 
 faire la gestion produit et des catégories
+Faire une bonne gestion pour les images
 
 
 Cartes de test Stripe

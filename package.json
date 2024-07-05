@@ -79,6 +79,7 @@
     "stripe": "^16.1.0",
     "svelte": "latest",
     "svelte-check": "latest",
+    "svelte-radix": "^1.1.0",
     "svelte-tweakpane-ui": "latest",
     "sveltekit-i18n": "latest",
     "sveltekit-superforms": "latest",

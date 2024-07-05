@@ -202,9 +202,9 @@
     flex-wrap: wrap;
     -webkit-box-pack: justify;
     -moz-box-pack: justify;
-    -webkit-justify-content: space-between;
+    -webkit-justify-content: flex-end;
     -ms-flex-pack: justify;
-    justify-content: space-between;
+    justify-content: flex-end;
     -webkit-align-content: center;
     -ms-flex-line-pack: center;
     align-content: center;

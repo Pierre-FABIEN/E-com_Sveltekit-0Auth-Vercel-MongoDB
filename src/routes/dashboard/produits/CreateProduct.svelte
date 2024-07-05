@@ -25,21 +25,21 @@
 </script>
 
 <Sheet.Content side="right">
-	<Sheet.Header>
-		<Sheet.Title>Edit profile</Sheet.Title>
-		<Sheet.Description>
-			Make changes to your profile here. Click save when you're done.
-		</Sheet.Description>
-	</Sheet.Header>
-	<div class="ccc mt-5">
-		<form
-			method="POST"
-			enctype="multipart/form-data"
-			action="?/createProduct"
-			use:createProductEnhance
-			class="space-y-4"
-		>
-			<div>
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		action="?/createProduct"
+		use:createProductEnhance
+		class="space-y-4"
+	>
+		<Sheet.Header>
+			<Sheet.Title>Edit profile</Sheet.Title>
+			<Sheet.Description>
+				Make changes to your profile here. Click save when you're done.
+			</Sheet.Description>
+		</Sheet.Header>
+		<div class="ccs mt-5">
+			<div class="w-[100%]">
 				<Form.Field name="name" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
@@ -49,7 +49,7 @@
 				</Form.Field>
 			</div>
 
-			<div>
+			<div class="w-[100%]">
 				<Form.Field name="price" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>price</Form.Label>
@@ -59,7 +59,7 @@
 				</Form.Field>
 			</div>
 
-			<div>
+			<div class="w-[100%]">
 				<Form.Field name="images" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Images</Form.Label>
@@ -75,7 +75,7 @@
 				</Form.Field>
 			</div>
 
-			<div>
+			<div class="w-[100%]">
 				<Form.Field name="description" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>description</Form.Label>
@@ -85,7 +85,7 @@
 				</Form.Field>
 			</div>
 
-			<div>
+			<div class="w-[100%]">
 				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">categories</h4>
 				<Form.Field name="categoryId" form={createProduct}>
 					<Form.Control let:attrs>
@@ -109,12 +109,11 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
-			<Button type="submit" variant="outline">Submit</Button>
-		</form>
-	</div>
-	<Sheet.Footer>
-		<Sheet.Close asChild let:builder>
-			<Button builders={[builder]} type="submit">Save changes</Button>
-		</Sheet.Close>
-	</Sheet.Footer>
+		</div>
+		<Sheet.Footer>
+			<Sheet.Close asChild let:builder>
+				<Button builders={[builder]} type="submit">Save changes</Button>
+			</Sheet.Close>
+		</Sheet.Footer>
+	</form>
 </Sheet.Content>

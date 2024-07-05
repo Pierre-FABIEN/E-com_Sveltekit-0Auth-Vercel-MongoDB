@@ -558,7 +558,7 @@
 	@include display_flex;
 	@include flex-direction_row;
 	@include flex-wrap_wrap;
-	@include justify-content_space-between;
+	@include justify-content_end;
 	@include align-content_center;
 	@include align-items_center;
 }

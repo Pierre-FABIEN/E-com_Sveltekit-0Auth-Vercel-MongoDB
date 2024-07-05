@@ -27,7 +27,7 @@ const updateProductSchema = z.object({
 
 // Schema for deleting a product
 const deleteProductSchema = z.object({
-	_id: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format')
+	_id: z.string()
 });
 
 // TypeScript types inferred from the Zod schemas

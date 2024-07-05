@@ -130,5 +130,51 @@ export const actions: Actions = {
 			console.error('Error creating product:', error);
 			return fail(500, { message: 'Product creation failed' });
 		}
+	},
+
+	deleteProduct: async ({ request }) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, zod(deleteProductSchema));
+
+		const productId = formData.get('productId') as string;
+
+		console.log('Received productId:', productId);
+
+		if (!productId) {
+			console.log('No productId provided');
+			return fail(400, { message: 'Product ID is required' });
+		}
+
+		try {
+			// Vérifier si le produit existe
+			const existingProduct = await prisma.product.findUnique({
+				where: { id: productId }
+			});
+
+			if (!existingProduct) {
+				console.log('Product not found:', productId);
+				return fail(400, { message: 'Product not found' });
+			}
+
+			console.log('Product found:', existingProduct);
+
+			// Supprimer les relations de catégorie associées au produit
+			const deletedCategories = await prisma.productCategory.deleteMany({
+				where: { productId: productId } // Utiliser productId comme string
+			});
+			console.log('Deleted product categories:', deletedCategories);
+
+			// Supprimer le produit
+			const deletedProduct = await prisma.product.delete({
+				where: { id: productId } // Utiliser productId comme string
+			});
+
+			console.log('Deleted product:', deletedProduct);
+
+			return message(form, 'product deleted successfully');
+		} catch (error) {
+			console.error('Error deleting product:', error);
+			return fail(500, { message: 'Product deletion failed' });
+		}
 	}
 };

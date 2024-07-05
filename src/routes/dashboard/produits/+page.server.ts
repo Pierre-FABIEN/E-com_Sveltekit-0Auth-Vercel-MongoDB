@@ -274,6 +274,45 @@ export const actions: Actions = {
 		}
 	},
 
+	createCategory: async ({ request }) => {
+		const formData = await request.formData();
+		console.log(formData, 'formData');
+		const form = await superValidate(formData, zod(createCategorySchema));
+		console.log(form, 'form');
+
+		if (!form.valid) {
+			return fail(400, withFiles({ form }));
+		}
+
+		const categoryName = form.data.name;
+
+		// Vérifier si une catégorie avec le même nom existe déjà
+		const existingCategory = await prisma.category.findFirst({
+			where: { name: categoryName }
+		});
+
+		if (existingCategory) {
+			return fail(400, {
+				message: 'Category with this name already exists'
+			});
+		}
+
+		try {
+			// Créer une nouvelle catégorie dans la base de données
+			const newCategory = await prisma.category.create({
+				data: {
+					name: categoryName
+				}
+			});
+
+			console.log(newCategory, 'newCategory');
+			return message(form, 'Category created successfully');
+		} catch (error) {
+			console.error('Error creating category:', error);
+			return fail(500, { message: 'Category creation failed' });
+		}
+	},
+
 	deleteCategory: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, zod(deleteCategorySchema));

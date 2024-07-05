@@ -2,16 +2,13 @@ import { z } from 'zod';
 
 // Schéma pour la création d'une catégorie
 const createCategorySchema = z.object({
-	name: z.string().min(1, 'Name is required'),
-	createdAt: z.date().optional(), // Auto-generated in the database, not required on create
-	updatedAt: z.date().optional() // Auto-generated in the database, not required on create
+	name: z.string().min(3, 'Name is required')
 });
 
 // Schéma pour la mise à jour d'une catégorie
 const updateCategorySchema = z.object({
 	id: z.string(),
-	name: z.string().min(1, 'Name is required'),
-	updatedAt: z.date().optional() // Auto-generated in the database
+	name: z.string().min(3, 'Name is required')
 });
 
 // Schéma pour la suppression d'une catégorie

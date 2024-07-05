@@ -4,7 +4,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import TableProduct from '$components/product/TableProduct.svelte';
-	import TableCategories from '$components/product/TableCategories.svelte';
+	import TableCategories from '$components/categories/TableCategories.svelte';
 
 	import {
 		createProductSchema,
@@ -63,15 +63,13 @@
 	const {
 		form: createProductData,
 		enhance: createProductEnhance,
-		message: createProductMessage,
-		validate: createProductValidate
+		message: createProductMessage
 	} = createProduct;
 
 	const {
 		form: updateProductData,
 		enhance: updateProductEnhance,
-		message: updateProductMessage,
-		validate: updateProductValidate
+		message: updateProductMessage
 	} = updateProduct;
 
 	const { enhance: deleteProductEnhance, message: deleteProductMessage } = deleteProduct;
@@ -79,29 +77,28 @@
 	const {
 		form: createCategoryData,
 		enhance: createCategoryEnhance,
-		message: createCategoryMessage,
-		validate: createCategoryValidate
+		message: createCategoryMessage
 	} = createCategory;
 
 	const {
 		form: updateCategoryData,
 		enhance: updateCategoryEnhance,
-		message: updateCategoryMessage,
-		validate: updateCategoryValidate
+		message: updateCategoryMessage
 	} = updateCategory;
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
 	console.log(data, 'data');
+	$: console.log('createCategoryData', $createCategoryData);
 </script>
 
 <div class="rcs m-5">
 	<div class="w-[70%] m-5">
 		<TableProduct
 			{data}
-			{createProductEnhance}
 			{createProduct}
 			{createProductData}
+			{createProductEnhance}
 			{deleteProductEnhance}
 			{updateProduct}
 			{updateProductData}
@@ -112,9 +109,9 @@
 	<div class="w-[20%] m-5">
 		<TableCategories
 			{data}
-			{createCategoryEnhance}
 			{createCategory}
 			{createCategoryData}
+			{createCategoryEnhance}
 			{deleteCategoryEnhance}
 			{updateCategory}
 			{updateCategoryData}

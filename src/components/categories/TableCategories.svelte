@@ -5,18 +5,19 @@
 	import TableRow from '$UITools/shadcn/table/table-row.svelte';
 	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
 	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
-	//import CreateCategory from './CreateCategory.svelte';
 	import { Input } from '$UITools/shadcn/input';
-	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
-	//import EditCategory from './EditCategory.svelte';
+
+	import CreateCategory from './CreateCategory.svelte';
 
 	export let data: any;
-	export let createCategoryEnhance;
 
+	export let createCategoryEnhance;
 	export let createCategory;
 	export let createCategoryData;
+
 	export let deleteCategoryEnhance;
 
 	export let updateCategory;
@@ -60,7 +61,7 @@
 			<Sheet.Trigger asChild let:builder>
 				<Button builders={[builder]} variant="outline">Créer un categorie</Button>
 			</Sheet.Trigger>
-			<!-- <CreateCategory {data} {createCategoryEnhance} {createCategory} {createCategoryData} /> -->
+			<CreateCategory {createCategoryEnhance} {createCategory} {createCategoryData} />
 		</Sheet.Root>
 	</div>
 	<div class="border">
@@ -68,20 +69,12 @@
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>name</Table.Head>
-					<!-- <Table.Head>images</Table.Head> -->
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
 				{#each paginatedCategories as category, i (i)}
 					<TableRow>
 						<TableCell>{category.name}</TableCell>
-						<!-- <TableCell>{category.description.slice(0, 20)}...</TableCell> -->
-						<!-- <TableCell>{category.price}</TableCell> -->
-						<!-- <TableCell>
-								{#each category.images as image}
-									<img src={image} alt={category.name} class="w-16 h-16 object-cover" />
-								{/each}
-							</TableCell> -->
 						<TableCell>
 							<AlertDialog.Root>
 								<AlertDialog.Trigger asChild let:builder>

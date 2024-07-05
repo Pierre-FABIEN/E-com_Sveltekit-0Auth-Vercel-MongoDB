@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 // Schema for creating a product
 const createProductSchema = z.object({
-	name: z.string().min(1, 'Name is required'),
-	description: z.string().min(1, 'Description is required'),
+	name: z.string().min(3, 'Name is required'),
+	description: z.string().min(3, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
 	categoryId: z.array(z.string()),
 	images: z

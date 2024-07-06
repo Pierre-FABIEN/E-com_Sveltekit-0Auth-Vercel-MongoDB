@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import { filesProxy } from 'sveltekit-superforms';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -10,15 +9,24 @@
 	import { Label } from '$UITools/shadcn/label';
 	import * as Sheet from '$UITools/shadcn/sheet/index.js';
 
-	import Minus from 'lucide-svelte/icons/minus';
-	import Plus from 'lucide-svelte/icons/plus';
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 
 	export let data;
 	export let product;
-	export let updateProduct;
-	export let updateProductEnhance;
-	export let updateProductData;
+
+	const updateProduct = superForm(data.IupdateProductSchema, {
+		validators: zodClient(updateProductSchema),
+		id: 'updateProduct'
+	});
+
+	const {
+		form: updateProductData,
+		enhance: updateProductEnhance,
+		message: updateProductMessage
+	} = updateProduct;
 
 	// Stores for product data
 	const productData = writable({

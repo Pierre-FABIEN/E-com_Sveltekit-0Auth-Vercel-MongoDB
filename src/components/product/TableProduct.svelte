@@ -1,27 +1,27 @@
 <script lang="ts">
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+
 	import { Button } from '$UITools/shadcn/button';
-	import * as Sheet from '$UITools/shadcn/sheet/index.js';
 	import * as Table from '$UITools/shadcn/table';
 	import TableRow from '$UITools/shadcn/table/table-row.svelte';
 	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
 	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
-	import CreateProduct from './CreateProduct.svelte';
 	import { Input } from '$UITools/shadcn/input';
-	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
-	import EditProduct from './EditProduct.svelte';
+
+	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
 
 	export let data: any;
-	export let createProductEnhance;
 
-	export let createProduct;
-	export let createProductData;
-	export let deleteProductEnhance;
+	const deleteProduct = superForm(data.IdeleteProductSchema, {
+		validators: zodClient(deleteProductSchema),
+		id: 'deleteProduct'
+	});
 
-	export let updateProduct;
-	export let updateProductData;
-	export let updateProductEnhance;
+	const { enhance: deleteProductEnhance, message: deleteProductMessage } = deleteProduct;
 
 	// Nouvelle variable pour le texte de recherche
 	let searchQuery: string = '';
@@ -56,12 +56,7 @@
 			class="max-w-xs"
 			bind:value={searchQuery}
 		/>
-		<Sheet.Root>
-			<Sheet.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="outline">Créer un produit</Button>
-			</Sheet.Trigger>
-			<CreateProduct {data} {createProductEnhance} {createProduct} {createProductData} />
-		</Sheet.Root>
+		<a href="/dashboard/products/create">Creer un produit</a>
 	</div>
 	<div class="border">
 		<Table.Root>
@@ -110,8 +105,15 @@
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</TableCell>
-
 						<TableCell>
+							<Button variant="outline" class="ml-0 p-1 text-xs">
+								<a href="/dashboard/products/{product.id}">
+									<PencilIcon class="h-4 w-8" />
+								</a>
+							</Button>
+						</TableCell>
+
+						<!-- <TableCell>
 							<Sheet.Root>
 								<Sheet.Trigger asChild let:builder>
 									<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">
@@ -126,7 +128,7 @@
 									{updateProductEnhance}
 								/>
 							</Sheet.Root>
-						</TableCell>
+						</TableCell> -->
 					</TableRow>
 				{/each}
 			</Table.Body>

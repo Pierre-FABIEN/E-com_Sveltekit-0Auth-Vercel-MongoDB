@@ -26,8 +26,8 @@
 			Ventes
 		</a>
 		<a
-			href="/dashboard/produits"
-			class={`text-sm font-medium ${$page.url.pathname === '/dashboard/produits' ? 'text-primary' : 'text-muted-foreground'} transition-colors hover:text-primary`}
+			href="/dashboard/products"
+			class={`text-sm font-medium ${$page.url.pathname === '/dashboard/products' ? 'text-primary' : 'text-muted-foreground'} transition-colors hover:text-primary`}
 		>
 			Produits
 		</a>

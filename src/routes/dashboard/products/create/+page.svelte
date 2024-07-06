@@ -43,22 +43,28 @@
 
 	$: $createProductData.price = Number(DataPrice);
 
-	$: console.log($createProductData.categoryId, '$createProductData.categoryId');
+	$: console.log($createProductData, '$createProductData');
 
-	let images: string[] = [];
+	let images: [File, ...File[]] | [] = [];
 
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
-			for (let i = 0; i < input.files.length; i++) {
-				const file = input.files[i];
-				images = [...images, URL.createObjectURL(file)];
-			}
+			const newFiles = Array.from(input.files);
+			images = images.length
+				? ([...images, ...newFiles] as [File, ...File[]])
+				: (newFiles as [File, ...File[]]);
+			$createProductData.images = images;
 		}
 	}
 
 	function removeImage(index: number) {
-		images = images.filter((_, i) => i !== index);
+		images = images.filter((_, i) => i !== index) as [File, ...File[]] | [];
+		if (images.length) {
+			$createProductData.images = images;
+		} else {
+			delete $createProductData.images;
+		}
 	}
 </script>
 
@@ -130,6 +136,7 @@
 									<div class="mt-2 text-sm text-gray-600">
 										<label
 											class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500"
+											for="file-input"
 										>
 											<span>Upload a file</span>
 										</label>
@@ -137,10 +144,14 @@
 									<p class="text-xs text-gray-500">PNG, JPG up to 10MB</p>
 								</div>
 							</div>
-							<div class="mt-3 rts">
+							<div class="mt-3 flex flex-wrap gap-2 flex-1">
 								{#each images as image, index}
 									<div class="relative w-[100px] h-[100px]">
-										<img src={image} alt="Product Image" class="w-full h-full object-cover" />
+										<img
+											src={URL.createObjectURL(image)}
+											alt="Image downloaded from the internet"
+											class="w-full h-full object-cover rounded"
+										/>
 										<button
 											class="w-[32px] h-[32px] absolute top-0 right-0 p-1 bg-red-500 text-white"
 											on:click={() => removeImage(index)}>X</button
@@ -192,6 +203,7 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
+			<input type="hidden" name="images" bind:value={$createProductData.images} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

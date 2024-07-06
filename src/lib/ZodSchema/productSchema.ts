@@ -9,9 +9,12 @@ const createProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
-		.array()
+		.array(
+			z
+				.instanceof(File, { message: 'Please upload a file.' })
+				.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		)
+		.nonempty('At least one image is required.')
 });
 
 // Schema for updating a product
@@ -22,9 +25,12 @@ const updateProductSchema = z.object({
 	price: z.number().positive('Price must be a positive number'),
 	categoryId: z.array(z.any()),
 	images: z
-		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
-		.array()
+		.array(
+			z
+				.instanceof(File, { message: 'Please upload a file.' })
+				.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		)
+		.nonempty('At least one image is required.')
 });
 
 // Schema for deleting a product

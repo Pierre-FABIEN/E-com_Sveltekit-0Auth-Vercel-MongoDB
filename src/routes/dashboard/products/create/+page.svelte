@@ -8,6 +8,7 @@
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { superForm, filesProxy } from 'sveltekit-superforms';
+	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
@@ -86,6 +87,8 @@
 				console.error(error);
 			});
 	}
+
+	$: console.log(createProductMessage, 'createProductMessage');
 </script>
 
 <div class="ccc">
@@ -165,7 +168,7 @@
 														<span>Upload a file</span>
 													</label>
 												</div>
-												<p class="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+												<p class="text-xs text-gray-500">PNG, JPG up to 100kB</p>
 											</div>
 										</div>
 										<div class="mt-3 flex flex-wrap gap-2 flex-1">
@@ -192,16 +195,6 @@
 								</div>
 							</Drawer.Content>
 						</Drawer.Root>
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-			</div>
-
-			<div class="w-[100%]">
-				<Form.Field name="images" form={createProduct}>
-					<Form.Control let:attrs>
-						<Form.Label>Description</Form.Label>
-						<Textarea {...attrs} bind:value={$createProductData.description} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

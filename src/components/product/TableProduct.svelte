@@ -9,17 +9,15 @@
 	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
 	import { Input } from '$UITools/shadcn/input';
 	import { Badge } from '$UITools/shadcn/badge';
+	import { Toggle } from '$UITools/shadcn/toggle';
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 
 	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
-	import { Toggle } from '$UITools/shadcn/toggle';
 
 	export let data: any;
-
-	console.log(data, 'data');
 
 	const deleteProduct = superForm(data.IdeleteProductSchema, {
 		validators: zodClient(deleteProductSchema),
@@ -79,6 +77,7 @@
 					<Table.Head>description</Table.Head>
 					<Table.Head>price</Table.Head>
 					<Table.Head>catégories</Table.Head>
+					<Table.Head>images</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -89,20 +88,18 @@
 						<TableCell>{product.price}</TableCell>
 						<TableCell>
 							{#each product.categories as category}
-								<Badge>
+								<Badge class="m-1">
 									{category.category.name}
 								</Badge>
 							{/each}
 						</TableCell>
-						<!-- <TableCell>
-								{#each product.images as image}
-									<img src={image} alt={product.name} class="w-16 h-16 object-cover" />
-								{/each}
-							</TableCell> -->
 						<TableCell>
+							{product.images.length}
+						</TableCell>
+						<TableCell class="rce">
 							<AlertDialog.Root>
 								<AlertDialog.Trigger asChild let:builder>
-									<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">
+									<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
 										<Trash class="h-4 w-8" />
 									</Button>
 								</AlertDialog.Trigger>
@@ -124,9 +121,8 @@
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
-						</TableCell>
-						<TableCell>
-							<Button variant="outline" class="ml-0 p-1 text-xs">
+
+							<Button variant="outline" class="m-1 p-1 text-xs">
 								<a href="/dashboard/products/{product.id}">
 									<PencilIcon class="h-4 w-8" />
 								</a>
@@ -138,7 +134,6 @@
 		</Table.Root>
 	</div>
 
-	<!-- Pagination Controls -->
 	<div class="pagination-controls mt-4 rce">
 		{#if currentPage > 1}
 			<Button on:click={() => changePage(currentPage - 1)}>Previous</Button>

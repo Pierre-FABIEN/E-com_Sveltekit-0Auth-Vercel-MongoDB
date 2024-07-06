@@ -6,70 +6,115 @@
 	import { Label } from '$UITools/shadcn/label';
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { superForm, filesProxy } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { createProductSchema } from '$lib/ZodSchema/productSchema';
+	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 	import { Textarea } from '$UITools/shadcn/textarea';
 
 	export let data: {
-		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
-		AllCategories: any;
-		AllProducts: any;
+		IupdateProductSchema: SuperValidated<Infer<typeof updateProductSchema>>;
+		AllCategories: any[];
+		AllProducts: any[];
 	};
 
-	console.log(data);
+	type Product = {
+		_id: string;
+		name: string;
+		price: number;
+		description: string;
+		categoryId: string[];
+		images: string[]; // Use string[] for URLs
+	};
 
-	const createProduct = superForm(data.IcreateProductSchema, {
-		validators: zodClient(createProductSchema),
-		id: 'createProduct'
+	const updateProduct = superForm(data.IupdateProductSchema, {
+		validators: zodClient(updateProductSchema),
+		id: 'updateProduct'
 	});
 
 	const {
-		form: createProductData,
-		enhance: createProductEnhance,
-		message: createProductMessage
-	} = createProduct;
+		form: updateProductData,
+		enhance: updateProductEnhance,
+		message: updateProductMessage
+	} = updateProduct;
 
+	let productId: string;
 	let DataPrice: number = 0;
 
-	const files = filesProxy(createProduct, 'images');
+	productId = $page.params.productId;
 
-	// Mettre à jour les IDs de catégories sélectionnées
-	$: $createProductData.categoryId = data.AllCategories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
+	// Stores for product data
+	const productData = writable<Product>({
+		_id: '',
+		name: '',
+		price: 0,
+		description: '',
+		categoryId: [],
+		images: []
+	});
 
-	$: $createProductData.price = Number(DataPrice);
+	// Function to initialize the stores with product data
+	const initializeProductData = (productId: string) => {
+		const product = data.AllProducts.find((product: any) => product.id === productId);
+		if (product) {
+			images = product.images;
 
-	let images: [File, ...File[]] | [] = [];
+			const productInfo: Product = {
+				_id: product.id,
+				name: product.name,
+				price: product.price,
+				description: product.description,
+				categoryId: product.categories.map((category: any) => category.categoryId),
+				images: product.images
+			};
+
+			productData.set(productInfo);
+
+			// Update the form data
+			updateProductData.set(productInfo);
+		} else {
+			console.error('Product not found for productId:', productId);
+		}
+	};
+
+	let images: string[] = [];
 
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
-			const newFiles = Array.from(input.files);
-			images = images.length
-				? ([...images, ...newFiles] as [File, ...File[]])
-				: (newFiles as [File, ...File[]]);
-			$createProductData.images = images;
+			const newFiles = Array.from(input.files).map((file) => URL.createObjectURL(file));
+			images = images.length ? [...images, ...newFiles] : newFiles;
+			updateProductData.set({
+				...$updateProductData,
+				images: images
+			});
 		}
 	}
 
 	function removeImage(index: number) {
-		images = images.filter((_, i) => i !== index) as [File, ...File[]] | [];
-		if (images.length) {
-			$createProductData.images = images;
-		} else {
-			delete $createProductData.images;
-		}
+		images = images.filter((_, i) => i !== index);
+		updateProductData.set({
+			...$updateProductData,
+			images: images
+		});
 	}
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
-		images.forEach((file, index) => {
-			formData.append(`images`, file);
+		const fileInputs = (event.target as HTMLFormElement).querySelectorAll('input[type="file"]');
+		fileInputs.forEach((input) => {
+			const files = (input as HTMLInputElement).files;
+			if (files) {
+				for (let i = 0; i < files.length; i++) {
+					formData.append('images', files[i]);
+				}
+			}
 		});
 
 		// Envoyer formData avec fetch ou une autre méthode
@@ -86,6 +131,13 @@
 				console.error(error);
 			});
 	}
+
+	// Initialize product data when the component is mounted
+	onMount(() => {
+		if (productId) {
+			initializeProductData(productId);
+		}
+	});
 </script>
 
 <div class="ccc">
@@ -93,25 +145,26 @@
 		<form
 			method="POST"
 			enctype="multipart/form-data"
-			action="?/createProduct"
-			on:submit={handleSubmit}
+			action="?/updateProduct"
+			use:updateProductEnhance
 			class="space-y-4"
+			on:submit={handleSubmit}
 		>
 			<div class="w-[100%]">
-				<Form.Field name="name" form={createProduct}>
+				<Form.Field name="name" form={updateProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createProductData.name} />
+						<Input {...attrs} type="text" bind:value={$updateProductData.name} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div class="w-[100%]">
-				<Form.Field name="price" form={createProduct}>
+				<Form.Field name="price" form={updateProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Price</Form.Label>
-						<Input {...attrs} type="number" bind:value={DataPrice} />
+						<Input {...attrs} type="number" bind:value={$updateProductData.price} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -168,7 +221,7 @@
 								{#each images as image, index}
 									<div class="relative w-[100px] h-[100px]">
 										<img
-											src={URL.createObjectURL(image)}
+											src={image}
 											alt="Image downloaded from the internet"
 											class="w-full h-full object-cover rounded"
 										/>
@@ -190,10 +243,10 @@
 			</Drawer.Root>
 
 			<div class="w-[100%]">
-				<Form.Field name="description" form={createProduct}>
+				<Form.Field name="description" form={updateProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Description</Form.Label>
-						<Textarea {...attrs} bind:value={$createProductData.description} />
+						<Textarea {...attrs} bind:value={$updateProductData.description} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -201,12 +254,28 @@
 
 			<div class="w-[100%]">
 				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
-				<Form.Field name="categoryId" form={createProduct}>
+				<Form.Field name="categoryId" form={updateProduct}>
 					<Form.Control let:attrs>
 						{#if data.AllCategories.length > 0}
 							{#each data.AllCategories as category (category.id)}
 								<div class="my-3 flex items-center space-x-2">
-									<Checkbox id={category.id} bind:checked={category.checked} />
+									<Checkbox
+										id={category.id}
+										checked={$updateProductData.categoryId.includes(category.id)}
+										on:click={() => {
+											const index = $updateProductData.categoryId.indexOf(category.id);
+											if (index === -1) {
+												$updateProductData.categoryId = [
+													...$updateProductData.categoryId,
+													category.id
+												];
+											} else {
+												$updateProductData.categoryId = $updateProductData.categoryId.filter(
+													(id) => id !== category.id
+												);
+											}
+										}}
+									/>
 									<Label
 										for={category.id}
 										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -222,7 +291,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
+			<input type="hidden" name="categoryId" bind:value={$updateProductData.categoryId} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

@@ -12,7 +12,9 @@ const createProductSchema = z.object({
 		.array(
 			z
 				.instanceof(File, { message: 'Please upload a file.' })
-				.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+				.refine((file) => file.size < 100_000, {
+					message: 'Max 100 kB upload size.'
+				})
 		)
 		.nonempty('At least one image is required.')
 });
@@ -28,7 +30,9 @@ const updateProductSchema = z.object({
 		.array(
 			z
 				.instanceof(File, { message: 'Please upload a file.' })
-				.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+				.refine((file) => file.size < 100_000, {
+					message: 'Max 100 kB upload size.'
+				})
 		)
 		.nonempty('At least one image is required.')
 });

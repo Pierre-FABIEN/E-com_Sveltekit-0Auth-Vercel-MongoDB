@@ -95,6 +95,7 @@
 			enctype="multipart/form-data"
 			action="?/createProduct"
 			on:submit={handleSubmit}
+			use:createProductEnhance
 			class="space-y-4"
 		>
 			<div class="w-[100%]">
@@ -117,77 +118,94 @@
 				</Form.Field>
 			</div>
 
-			<Drawer.Root>
-				<Drawer.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline">Manage Photos</Button>
-				</Drawer.Trigger>
-				<Drawer.Content>
-					<div class="mx-auto w-full">
-						<Drawer.Header>
-							<Drawer.Title>Manage Photos</Drawer.Title>
-							<Drawer.Description>Upload and manage your product photos.</Drawer.Description>
-						</Drawer.Header>
-						<div class="p-4 pb-0 flex flex-row w-full space-x-4">
-							<div
-								class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
-							>
-								<input
-									type="file"
-									multiple
-									accept="image/png, image/jpeg"
-									on:change={addImage}
-									class="absolute opacity-0 w-full h-full cursor-pointer z-10"
-								/>
-								<div class="text-center pointer-events-none">
-									<svg
-										class="mx-auto h-12 w-12 text-gray-400"
-										stroke="currentColor"
-										fill="none"
-										viewBox="0 0 48 48"
-										aria-hidden="true"
-									>
-										<path
-											d="M28 8H20v12H8v8h12v12h8V28h12v-8H28V8z"
-											stroke-width="2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										></path>
-									</svg>
-									<div class="mt-2 text-sm text-gray-600">
-										<label
-											class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500"
-											for="file-input"
+			<div class="w-[100%]">
+				<Form.Field name="images" form={createProduct}>
+					<Form.Control let:attrs>
+						<Drawer.Root>
+							<Drawer.Trigger asChild let:builder>
+								<Button builders={[builder]} variant="outline">Manage Photos</Button>
+							</Drawer.Trigger>
+							<Drawer.Content>
+								<div class="mx-auto w-full">
+									<Drawer.Header>
+										<Drawer.Title>Manage Photos</Drawer.Title>
+										<Drawer.Description>Upload and manage your product photos.</Drawer.Description>
+									</Drawer.Header>
+									<div class="p-4 pb-0 flex flex-row w-full space-x-4">
+										<div
+											class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
 										>
-											<span>Upload a file</span>
-										</label>
+											<input
+												type="file"
+												multiple
+												accept="image/png, image/jpeg"
+												on:change={addImage}
+												class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+											/>
+											<div class="text-center pointer-events-none">
+												<svg
+													class="mx-auto h-12 w-12 text-gray-400"
+													stroke="currentColor"
+													fill="none"
+													viewBox="0 0 48 48"
+													aria-hidden="true"
+												>
+													<path
+														d="M28 8H20v12H8v8h12v12h8V28h12v-8H28V8z"
+														stroke-width="2"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+													></path>
+												</svg>
+												<div class="mt-2 text-sm text-gray-600">
+													<label
+														class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500"
+														for="file-input"
+													>
+														<span>Upload a file</span>
+													</label>
+												</div>
+												<p class="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+											</div>
+										</div>
+										<div class="mt-3 flex flex-wrap gap-2 flex-1">
+											{#each images as image, index}
+												<div class="relative w-[100px] h-[100px]">
+													<img
+														src={URL.createObjectURL(image)}
+														alt="Image downloaded from the internet"
+														class="w-full h-full object-cover rounded"
+													/>
+													<button
+														class="w-[32px] h-[32px] absolute top-0 right-0 p-1 bg-red-500 text-white"
+														on:click={() => removeImage(index)}>X</button
+													>
+												</div>
+											{/each}
+										</div>
 									</div>
-									<p class="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+									<Drawer.Footer>
+										<Drawer.Close asChild let:builder>
+											<Button builders={[builder]} variant="outline">Close</Button>
+										</Drawer.Close>
+									</Drawer.Footer>
 								</div>
-							</div>
-							<div class="mt-3 flex flex-wrap gap-2 flex-1">
-								{#each images as image, index}
-									<div class="relative w-[100px] h-[100px]">
-										<img
-											src={URL.createObjectURL(image)}
-											alt="Image downloaded from the internet"
-											class="w-full h-full object-cover rounded"
-										/>
-										<button
-											class="w-[32px] h-[32px] absolute top-0 right-0 p-1 bg-red-500 text-white"
-											on:click={() => removeImage(index)}>X</button
-										>
-									</div>
-								{/each}
-							</div>
-						</div>
-						<Drawer.Footer>
-							<Drawer.Close asChild let:builder>
-								<Button builders={[builder]} variant="outline">Close</Button>
-							</Drawer.Close>
-						</Drawer.Footer>
-					</div>
-				</Drawer.Content>
-			</Drawer.Root>
+							</Drawer.Content>
+						</Drawer.Root>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+
+			<div class="w-[100%]">
+				<Form.Field name="images" form={createProduct}>
+					<Form.Control let:attrs>
+						<Form.Label>Description</Form.Label>
+						<Textarea {...attrs} bind:value={$createProductData.description} />
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
 
 			<div class="w-[100%]">
 				<Form.Field name="description" form={createProduct}>

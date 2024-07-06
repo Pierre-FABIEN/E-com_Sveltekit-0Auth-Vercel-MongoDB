@@ -8,6 +8,28 @@ import cloudinary from '$lib/Cloudinary';
 
 import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 
+function convertFormData(formData: FormData) {
+	const data: any = {};
+	formData.forEach((value, key) => {
+		if (key === 'images' && value instanceof File) {
+			if (!data.images) data.images = [];
+			data.images.push({
+				name: value.name,
+				size: value.size,
+				type: value.type,
+				lastModified: new Date(value.lastModified).toISOString()
+			});
+		} else if (key === 'price') {
+			data[key] = parseFloat(value as string);
+		} else if (key === 'categoryId') {
+			data[key] = [value];
+		} else {
+			data[key] = value;
+		}
+	});
+	return data;
+}
+
 export const load: PageServerLoad = async () => {
 	const IupdateProductSchema = await superValidate(zod(updateProductSchema));
 
@@ -21,7 +43,11 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		console.log(formData, 'formData');
 
-		const form = await superValidate(formData, zod(updateProductSchema));
+		// Convertir FormData en un format compatible
+		const convertedData = convertFormData(formData);
+		console.log(convertedData);
+
+		const form = await superValidate(convertedData, zod(updateProductSchema));
 		console.log(form, 'form');
 
 		if (!form.valid) {

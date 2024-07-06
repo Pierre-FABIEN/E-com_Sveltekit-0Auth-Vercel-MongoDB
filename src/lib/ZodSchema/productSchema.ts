@@ -5,7 +5,9 @@ const createProductSchema = z.object({
 	name: z.string().min(3, 'Name is required'),
 	description: z.string().min(3, 'Description is required'),
 	price: z.number().positive('Price must be a positive number'),
-	//categoryId: z.array(z.any()),
+	categoryId: z
+		.array(z.string().min(1, 'Category ID must be a non-empty string'))
+		.nonempty('At least one category ID is required'),
 	images: z
 		.instanceof(File, { message: 'Please upload a file.' })
 		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')

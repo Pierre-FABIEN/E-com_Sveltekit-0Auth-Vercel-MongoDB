@@ -4,10 +4,9 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
+import prisma from '$lib/prisma';
 
 import { createProductSchema } from '$lib/ZodSchema/productSchema';
-
-import prisma from '$lib/prisma';
 
 export const load: PageServerLoad = async () => {
 	const IcreateProductSchema = await superValidate(zod(createProductSchema));
@@ -20,7 +19,10 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	createProduct: async ({ request }) => {
 		const formData = await request.formData();
+		console.log(formData, 'formData');
+
 		const form = await superValidate(formData, zod(createProductSchema));
+		console.log(form, 'form');
 
 		if (!form.valid) {
 			return fail(400, withFiles({ form }));
@@ -50,7 +52,7 @@ export const actions: Actions = {
 			}
 		}
 
-		// Correction de la transformation de categoryId en tableau
+		// Traiter les categoryId comme un tableau de chaînes
 		const categoryIdsString = formData.get('categoryId') as string;
 		const categoryIds = categoryIdsString.split(',').map((id) => id.trim());
 		console.log(categoryIds, 'categoryIds');
@@ -86,18 +88,19 @@ export const actions: Actions = {
 					name: form.data.name,
 					description: form.data.description,
 					price: form.data.price,
-					images: uploadedImageUrls,
-					categories: {
-						connect: existingCategoryIds.map((id) => ({ id }))
-					}
+					images: uploadedImageUrls
 				}
 			});
 
-			console.log(product, 'product');
-			return {
-				success: true,
-				product
-			};
+			// Connecter les catégories au produit via ProductCategory
+			await prisma.productCategory.createMany({
+				data: existingCategoryIds.map((categoryId) => ({
+					productId: product.id,
+					categoryId
+				}))
+			});
+
+			return message(form, 'Product created successfully');
 		} catch (error) {
 			console.error('Error creating product:', error);
 			return fail(500, { message: 'Product creation failed' });

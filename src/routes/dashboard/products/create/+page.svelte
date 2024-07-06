@@ -66,6 +66,28 @@
 			delete $createProductData.images;
 		}
 	}
+
+	function handleSubmit(event: Event) {
+		event.preventDefault();
+		const formData = new FormData(event.target as HTMLFormElement);
+		images.forEach((file, index) => {
+			formData.append(`images`, file);
+		});
+
+		// Envoyer formData avec fetch ou une autre méthode
+		fetch(event.target.action, {
+			method: 'POST',
+			body: formData
+		})
+			.then((response) => {
+				// Gérer la réponse du serveur
+				console.log(response);
+			})
+			.catch((error) => {
+				// Gérer les erreurs
+				console.error(error);
+			});
+	}
 </script>
 
 <div class="ccc">
@@ -74,7 +96,7 @@
 			method="POST"
 			enctype="multipart/form-data"
 			action="?/createProduct"
-			use:createProductEnhance
+			on:submit={handleSubmit}
 			class="space-y-4"
 		>
 			<div class="w-[100%]">
@@ -203,7 +225,6 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
-			<input type="hidden" name="images" bind:value={$createProductData.images} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

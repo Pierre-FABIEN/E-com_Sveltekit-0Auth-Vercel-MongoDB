@@ -8,10 +8,10 @@
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { superForm, filesProxy } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
+	import { Textarea } from '$UITools/shadcn/textarea';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -195,7 +195,7 @@
 				<Form.Field name="description" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Description</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createProductData.description} />
+						<Textarea {...attrs} type="text" bind:value={$createProductData.description} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

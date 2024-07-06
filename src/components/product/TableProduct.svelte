@@ -8,13 +8,18 @@
 	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
 	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
 	import { Input } from '$UITools/shadcn/input';
+	import { Badge } from '$UITools/shadcn/badge';
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
+	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 
 	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
+	import { Toggle } from '$UITools/shadcn/toggle';
 
 	export let data: any;
+
+	console.log(data, 'data');
 
 	const deleteProduct = superForm(data.IdeleteProductSchema, {
 		validators: zodClient(deleteProductSchema),
@@ -48,7 +53,7 @@
 </script>
 
 <div class="border p-2">
-	<h1 class="my-5">Produits</h1>
+	<h1 class="my-5 text-xl">Produits</h1>
 	<div class="rcb mb-5">
 		<Input
 			type="text"
@@ -56,7 +61,15 @@
 			class="max-w-xs"
 			bind:value={searchQuery}
 		/>
-		<a href="/dashboard/products/create">Creer un produit</a>
+		<a
+			href="/dashboard/products/create"
+			class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+		>
+			<Toggle>
+				<span class="hidden">Creer un produit</span>
+				<PlusCircledIcon class="w-7 h-7" />
+			</Toggle>
+		</a>
 	</div>
 	<div class="border">
 		<Table.Root>
@@ -65,7 +78,7 @@
 					<Table.Head>name</Table.Head>
 					<Table.Head>description</Table.Head>
 					<Table.Head>price</Table.Head>
-					<!-- <Table.Head>images</Table.Head> -->
+					<Table.Head>catégories</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -74,6 +87,13 @@
 						<TableCell>{product.name}</TableCell>
 						<TableCell>{product.description.slice(0, 20)}...</TableCell>
 						<TableCell>{product.price}</TableCell>
+						<TableCell>
+							{#each product.categories as category}
+								<Badge>
+									{category.category.name}
+								</Badge>
+							{/each}
+						</TableCell>
 						<!-- <TableCell>
 								{#each product.images as image}
 									<img src={image} alt={product.name} class="w-16 h-16 object-cover" />
@@ -112,23 +132,6 @@
 								</a>
 							</Button>
 						</TableCell>
-
-						<!-- <TableCell>
-							<Sheet.Root>
-								<Sheet.Trigger asChild let:builder>
-									<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">
-										<PencilIcon class="h-4 w-8" />
-									</Button>
-								</Sheet.Trigger>
-								<EditProduct
-									{data}
-									{product}
-									{updateProduct}
-									{updateProductData}
-									{updateProductEnhance}
-								/>
-							</Sheet.Root>
-						</TableCell> -->
 					</TableRow>
 				{/each}
 			</Table.Body>

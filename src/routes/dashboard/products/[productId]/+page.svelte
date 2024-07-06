@@ -29,7 +29,7 @@
 		price: number;
 		description: string;
 		categoryId: string[];
-		images: string[]; // Use string[] for URLs
+		images: (string | File)[]; // Use string[] for URLs and File[] for new images
 	};
 
 	const updateProduct = superForm(data.IupdateProductSchema, {
@@ -48,8 +48,6 @@
 
 	productId = $page.params.productId;
 
-	$: $updateProductData.price = Number(DataPrice);
-
 	// Stores for product data
 	const productData = writable<Product>({
 		_id: '',
@@ -60,11 +58,15 @@
 		images: []
 	});
 
+	let images: (string | File)[] = [];
+
 	// Function to initialize the stores with product data
 	const initializeProductData = (productId: string) => {
 		const product = data.AllProducts.find((product: any) => product.id === productId);
 		if (product) {
 			images = product.images;
+
+			console.log(product);
 
 			const productInfo: Product = {
 				_id: product.id,
@@ -84,38 +86,29 @@
 		}
 	};
 
-	let images: string[] = [];
-
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
-			const newFiles = Array.from(input.files).map((file) => URL.createObjectURL(file));
-			images = images.length ? [...images, ...newFiles] : newFiles;
-			updateProductData.set({
-				...$updateProductData,
-				images: images
-			});
+			const newFiles = Array.from(input.files);
+			images = [...images, ...newFiles];
+			$updateProductData.images = images;
 		}
 	}
 
 	function removeImage(index: number) {
 		images = images.filter((_, i) => i !== index);
-		updateProductData.set({
-			...$updateProductData,
-			images: images
-		});
+		$updateProductData.images = images;
 	}
 
 	function handleSubmit(event: Event) {
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
-		const fileInputs = (event.target as HTMLFormElement).querySelectorAll('input[type="file"]');
-		fileInputs.forEach((input) => {
-			const files = (input as HTMLInputElement).files;
-			if (files) {
-				for (let i = 0; i < files.length; i++) {
-					formData.append('images', files[i]);
-				}
+
+		images.forEach((image) => {
+			if (typeof image === 'string') {
+				formData.append('images', image); // URL des images existantes
+			} else {
+				formData.append('images', image); // Fichiers des nouvelles images
 			}
 		});
 
@@ -140,6 +133,9 @@
 			initializeProductData(productId);
 		}
 	});
+
+	$: $updateProductData.price = Number(DataPrice);
+	$: console.log('updateProductData:', $updateProductData);
 </script>
 
 <div class="ccc">
@@ -152,6 +148,8 @@
 			class="space-y-4"
 			on:submit={handleSubmit}
 		>
+			<input type="hidden" name="_id" value={$updateProductData._id} />
+
 			<div class="w-[100%]">
 				<Form.Field name="name" form={updateProduct}>
 					<Form.Control let:attrs>
@@ -225,11 +223,19 @@
 										<div class="mt-3 flex flex-wrap gap-2 flex-1">
 											{#each images as image, index}
 												<div class="relative w-[100px] h-[100px]">
-													<img
-														src={image}
-														alt="Image downloaded from the internet"
-														class="w-full h-full object-cover rounded"
-													/>
+													{#if typeof image === 'string'}
+														<img
+															src={image}
+															alt="Existing image"
+															class="w-full h-full object-cover rounded"
+														/>
+													{:else}
+														<img
+															src={URL.createObjectURL(image)}
+															alt="New image"
+															class="w-full h-full object-cover rounded"
+														/>
+													{/if}
 													<button
 														class="w-[32px] h-[32px] absolute top-0 right-0 p-1 bg-red-500 text-white"
 														on:click={() => removeImage(index)}>X</button

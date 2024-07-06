@@ -115,7 +115,7 @@
 				<Form.Field name="price" form={createProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Price</Form.Label>
-						<Input {...attrs} type="number" bind:value={$updateProductData.price} />
+						<Input {...attrs} type="number" bind:value={DataPrice} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

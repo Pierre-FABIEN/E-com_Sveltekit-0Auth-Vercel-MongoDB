@@ -33,14 +33,22 @@ const updateProductSchema = z.object({
 	price: z.number().positive('Price must be a positive number'),
 	categoryId: z.array(z.any()),
 	images: z
-		.any()
-		.refine((files) => {
-			return files?.[0]?.size <= MAX_FILE_SIZE;
-		}, `Max image size is 5MB.`)
-		.refine(
-			(files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-			'Only .jpg, .jpeg, .png and .webp formats are supported.'
+		.array(
+			z.union([
+				z.string().url('Invalid URL format for image'), // Pour les URLs des images existantes
+				z
+					.instanceof(File)
+					.refine(
+						(file) => file.size <= MAX_FILE_SIZE,
+						`Max image size is ${MAX_FILE_SIZE / (1024 * 1024)}MB`
+					)
+					.refine(
+						(file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
+						'Only .jpg, .jpeg, .png and .webp formats are supported.'
+					)
+			])
 		)
+		.min(1, 'At least one image is required')
 });
 
 // Schema for deleting a product

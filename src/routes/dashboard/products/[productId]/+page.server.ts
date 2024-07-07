@@ -12,6 +12,8 @@ function convertFormData(formData: FormData) {
 		if (key === 'images' && (typeof value === 'string' || value instanceof File)) {
 			if (!data.images) data.images = [];
 			data.images.push(value);
+		} else if (key === 'deletedImages') {
+			data[key] = JSON.parse(value as string);
 		} else if (key === 'price') {
 			data[key] = parseFloat(value as string);
 		} else if (key === 'categoryId') {
@@ -21,6 +23,12 @@ function convertFormData(formData: FormData) {
 		}
 	});
 	return data;
+}
+
+function getPublicIdFromUrl(url: string): string | null {
+	const regex = /\/([^/]+)\.[a-z]+$/;
+	const match = url.match(regex);
+	return match ? match[1] : null;
 }
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -51,14 +59,12 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	updateProduct: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData, 'formData');
 
-		// Convertir FormData en un format compatible
 		const convertedData = convertFormData(formData);
-		console.log(convertedData);
+		console.log('Converted Data:', convertedData);
 
 		const form = await superValidate(convertedData, zod(updateProductSchema));
-		console.log(form, 'form');
+		console.log('Form Data:', form.data);
 
 		if (!form.valid) {
 			console.log('Validation errors:', form.errors);
@@ -67,6 +73,7 @@ export const actions: Actions = {
 
 		const productId = form.data._id;
 		const images = form.data.images;
+		const deletedImages = convertedData.deletedImages || [];
 		const uploadedImageUrls: string[] = [];
 
 		for (const image of images) {
@@ -93,9 +100,8 @@ export const actions: Actions = {
 		}
 
 		const categoryIds = form.data.categoryId;
-		console.log(categoryIds, 'categoryIds');
+		console.log('Category IDs:', categoryIds);
 
-		// Vérifier l'existence des catégories
 		const existingCategories = await prisma.category.findMany({
 			where: {
 				id: { in: categoryIds }
@@ -114,7 +120,26 @@ export const actions: Actions = {
 			});
 		}
 
-		// Mettre à jour le produit dans la base de données avec les URLs des nouvelles images uploadées
+		console.log('Deleted Images:', deletedImages);
+		for (const imageUrl of deletedImages) {
+			const publicId = getPublicIdFromUrl(imageUrl);
+			console.log('Public ID:', publicId);
+
+			if (publicId) {
+				try {
+					const result = await cloudinary.uploader.destroy(`products/${publicId}`);
+					console.log('Delete Result:', result);
+					if (result.result !== 'ok' && result.result !== 'not found') {
+						console.error('Error deleting image from Cloudinary:', result);
+						return fail(500, { message: 'Failed to delete image from Cloudinary' });
+					}
+				} catch (error) {
+					console.error('Error deleting image from Cloudinary:', error);
+					return fail(500, { message: 'Failed to delete image from Cloudinary' });
+				}
+			}
+		}
+
 		try {
 			const updatedProduct = await prisma.product.update({
 				where: { id: productId },
@@ -122,11 +147,10 @@ export const actions: Actions = {
 					name: form.data.name,
 					description: form.data.description,
 					price: form.data.price,
-					images: uploadedImageUrls // Mettre à jour avec les nouvelles URLs des images
+					images: uploadedImageUrls.length > 0 ? uploadedImageUrls : undefined // Only update images if new ones are uploaded
 				}
 			});
 
-			// Mettre à jour les relations dans ProductCategory
 			await prisma.productCategory.deleteMany({
 				where: { productId: productId }
 			});

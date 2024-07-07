@@ -59,14 +59,14 @@
 	});
 
 	let images: (string | File)[] = [];
+	let initialImages: string[] = [];
 
 	// Function to initialize the stores with product data
 	const initializeProductData = (productId: string) => {
 		const product = data.AllProducts.find((product: any) => product.id === productId);
 		if (product) {
 			images = product.images;
-
-			console.log(product);
+			initialImages = product.images.filter((img) => typeof img === 'string') as string[];
 
 			const productInfo: Product = {
 				_id: product.id,
@@ -78,8 +78,6 @@
 			};
 
 			productData.set(productInfo);
-
-			// Update the form data
 			updateProductData.set(productInfo);
 		} else {
 			console.error('Product not found for productId:', productId);
@@ -104,6 +102,9 @@
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
 
+		const currentImages = images.filter((img) => typeof img === 'string') as string[];
+		const deletedImages = initialImages.filter((img) => !currentImages.includes(img));
+
 		images.forEach((image) => {
 			if (typeof image === 'string') {
 				formData.append('images', image); // URL des images existantes
@@ -112,22 +113,20 @@
 			}
 		});
 
-		// Envoyer formData avec fetch ou une autre méthode
+		formData.append('deletedImages', JSON.stringify(deletedImages));
+
 		fetch(event.target.action, {
 			method: 'POST',
 			body: formData
 		})
 			.then((response) => {
-				// Gérer la réponse du serveur
 				console.log(response);
 			})
 			.catch((error) => {
-				// Gérer les erreurs
 				console.error(error);
 			});
 	}
 
-	// Initialize product data when the component is mounted
 	onMount(() => {
 		if (productId) {
 			initializeProductData(productId);

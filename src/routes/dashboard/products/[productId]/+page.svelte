@@ -104,7 +104,6 @@
 
 		const currentImages = images.filter((img) => typeof img === 'string') as string[];
 		const deletedImages = initialImages.filter((img) => !currentImages.includes(img));
-		console.log('formData:', formData);
 
 		images.forEach((image) => {
 			if (typeof image === 'string') {

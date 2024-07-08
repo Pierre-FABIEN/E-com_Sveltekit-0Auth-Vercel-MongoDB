@@ -119,7 +119,8 @@ export const actions: Actions = {
 				}))
 			});
 
-			return message(form, 'Product created successfully');
+			console.log('Product created:', product);
+			return message(form, 'Valid form!');
 		} catch (error) {
 			console.error('Error creating product:', error);
 			return fail(500, { message: 'Product creation failed' });

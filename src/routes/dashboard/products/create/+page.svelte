@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
 	import { Button } from '$UITools/shadcn/button';
@@ -8,11 +10,11 @@
 	import { Textarea } from '$UITools/shadcn/textarea';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { superForm, filesProxy } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
+	import { goto } from '$app/navigation';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -22,17 +24,22 @@
 
 	const createProduct = superForm(data.IcreateProductSchema, {
 		validators: zodClient(createProductSchema),
-		id: 'createProduct'
+		id: 'createProduct',
+		onResult({ result }) {
+			if (result.type === 'success') {
+				console.log('mlkmlkmlm');
+			}
+		}
 	});
 
 	const {
 		form: createProductData,
 		enhance: createProductEnhance,
-		message: createProductMessage
+		message: createProductMessage,
+		validate: createProductValidate
 	} = createProduct;
 
 	let DataPrice: number = 0;
-	const files = filesProxy(createProduct, 'images');
 
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
@@ -66,8 +73,6 @@
 			delete $createProductData.images;
 		}
 	}
-
-	$: console.log(createProductMessage, 'createProductMessage');
 </script>
 
 <div class="ccc">

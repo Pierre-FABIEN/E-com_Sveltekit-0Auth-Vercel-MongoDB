@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 const MAX_FILE_SIZE = 1024 * 1024 * 1;
 const ACCEPTED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
 // Schema for creating a product
 const createProductSchema = z.object({

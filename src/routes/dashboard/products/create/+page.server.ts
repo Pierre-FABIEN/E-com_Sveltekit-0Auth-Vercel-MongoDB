@@ -43,7 +43,7 @@ export const actions: Actions = {
 
 		// Convertir FormData en un format compatible
 		const convertedData = convertFormData(formData);
-		console.log(convertedData);
+		console.log(convertedData, 'convertedData');
 
 		const form = await superValidate(convertedData, zod(createProductSchema));
 		console.log(form, 'form');

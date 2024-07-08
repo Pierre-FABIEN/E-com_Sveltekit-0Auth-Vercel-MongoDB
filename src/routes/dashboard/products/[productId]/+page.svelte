@@ -136,7 +136,7 @@
 		}
 	});
 
-	$: $updateProductData.price = Number(DataPrice);
+	$: $updateProductData.price = Number($updateProductData.price);
 	$: console.log('updateProductData:', $updateProductData);
 </script>
 

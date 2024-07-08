@@ -82,7 +82,6 @@
     "svelte": "latest",
     "svelte-check": "latest",
     "svelte-radix": "^1.1.0",
-    "svelte-sonner": "^0.3.25",
     "svelte-tweakpane-ui": "latest",
     "sveltekit-i18n": "latest",
     "sveltekit-superforms": "latest",

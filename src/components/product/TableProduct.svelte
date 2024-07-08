@@ -16,7 +16,6 @@
 	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 
 	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
-	import { showNotification } from '$stores/Data/notificationStore';
 
 	export let data: any;
 
@@ -49,12 +48,6 @@
 	function changePage(page: number) {
 		currentPage = page;
 	}
-
-	$: if ($deleteProductMessage)
-		showNotification(
-			$deleteProductMessage,
-			$deleteProductMessage.includes('success') ? 'success' : 'error'
-		);
 </script>
 
 <div class="border p-2">

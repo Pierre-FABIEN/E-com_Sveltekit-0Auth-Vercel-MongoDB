@@ -10,11 +10,13 @@ import { createProductSchema } from '$lib/ZodSchema/productSchema';
 function convertFormData(formData: FormData) {
 	const data: any = {};
 	formData.forEach((value, key) => {
-		if (key === 'images') {
+		if (key === 'images' && value instanceof File) {
 			if (!data.images) data.images = [];
-			const images = JSON.parse(value as string);
-			images.forEach((image: any) => {
-				data.images.push(image);
+			data.images.push({
+				name: value.name,
+				size: value.size,
+				type: value.type,
+				lastModified: new Date(value.lastModified).toISOString()
 			});
 		} else if (key === 'price') {
 			data[key] = parseFloat(value as string);
@@ -75,10 +77,12 @@ export const actions: Actions = {
 			}
 		}
 
+		// Traiter les categoryId comme un tableau de chaînes
 		const categoryIdsString = formData.get('categoryId') as string;
 		const categoryIds = categoryIdsString.split(',').map((id) => id.trim());
 		console.log(categoryIds, 'categoryIds');
 
+		// Vérifier l'existence des catégories
 		const existingCategories = await prisma.category.findMany({
 			where: {
 				id: { in: categoryIds }
@@ -102,6 +106,7 @@ export const actions: Actions = {
 			});
 		}
 
+		// Créer un produit dans la base de données avec les URLs des images uploadées
 		try {
 			const product = await prisma.product.create({
 				data: {
@@ -112,6 +117,7 @@ export const actions: Actions = {
 				}
 			});
 
+			// Connecter les catégories au produit via ProductCategory
 			await prisma.productCategory.createMany({
 				data: existingCategoryIds.map((categoryId) => ({
 					productId: product.id,
@@ -119,8 +125,7 @@ export const actions: Actions = {
 				}))
 			});
 
-			console.log('Product created:', product);
-			return message(form, 'Valid form!');
+			return message(form, 'Product created successfully');
 		} catch (error) {
 			console.error('Error creating product:', error);
 			return fail(500, { message: 'Product creation failed' });

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
-	import Notification from '$components/notfication/Notification.svelte';
 
 	export let data: LayoutData;
 </script>
@@ -34,5 +33,5 @@
 		</a>
 	</nav>
 </div>
-<Notification />
+
 <slot {data} />

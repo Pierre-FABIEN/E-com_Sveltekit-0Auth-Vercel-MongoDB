@@ -16,6 +16,8 @@
 
 	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 	import { Textarea } from '$UITools/shadcn/textarea';
+	import { showNotification } from '$stores/Data/notificationStore';
+	import { goto } from '$app/navigation';
 
 	export let data: {
 		IupdateProductSchema: SuperValidated<Infer<typeof updateProductSchema>>;
@@ -120,7 +122,8 @@
 			body: formData
 		})
 			.then((response) => {
-				console.log(response);
+				showNotification('Produit créé.', 'success');
+				setTimeout(() => goto('/dashboard/products/'), 0);
 			})
 			.catch((error) => {
 				console.error(error);

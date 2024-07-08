@@ -1,22 +1,20 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Toaster, toast } from 'svelte-sonner';
-
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
 	import { Button } from '$UITools/shadcn/button';
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
-	import { Textarea } from '$UITools/shadcn/textarea';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms';
+	import { superForm, filesProxy } from 'sveltekit-superforms';
+	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
-	import { goto } from '$app/navigation';
+	import { Textarea } from '$UITools/shadcn/textarea';
 	import { showNotification } from '$stores/Data/notificationStore';
+	import { goto } from '$app/navigation';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -24,65 +22,76 @@
 		AllProducts: any;
 	};
 
+	console.log(data);
+
 	const createProduct = superForm(data.IcreateProductSchema, {
 		validators: zodClient(createProductSchema),
-		id: 'createProduct',
-		onResult({ result, formEl, cancel }) {
-			console.log('onResult called'); // Log to confirm onResult is called
-			console.log('Result:', result); // Log the result object
-
-			if (result.type === 'success') {
-				showNotification('Produit créé.', 'success');
-				setTimeout(() => goto('/dashboard/products/'), 0);
-			} else {
-				console.log('Result type is not success'); // Log for debugging
-			}
-		}
+		id: 'createProduct'
 	});
-
-	$: console.log($page, 'page');
 
 	const {
 		form: createProductData,
 		enhance: createProductEnhance,
-		message: createProductMessage,
-		validate: createProductValidate
+		message: createProductMessage
 	} = createProduct;
 
 	let DataPrice: number = 0;
 
+	const files = filesProxy(createProduct, 'images');
+
+	// Mettre à jour les IDs de catégories sélectionnées
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
 
-	let images: File[] = [];
-	let imagesMeta: { name: string; size: number; type: string; lastModified: string }[] = [];
+	let images: [File, ...File[]] | [] = [];
 
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
-			images = Array.from(input.files);
-			imagesMeta = images.map((file) => ({
-				name: file.name,
-				size: file.size,
-				type: file.type,
-				lastModified: new Date(file.lastModified).toISOString()
-			}));
+			const newFiles = Array.from(input.files);
+			images = images.length
+				? ([...images, ...newFiles] as [File, ...File[]])
+				: (newFiles as [File, ...File[]]);
 			$createProductData.images = images;
 		}
 	}
 
 	function removeImage(index: number) {
-		images.splice(index, 1);
-		imagesMeta.splice(index, 1);
+		images = images.filter((_, i) => i !== index) as [File, ...File[]] | [];
 		if (images.length) {
 			$createProductData.images = images;
 		} else {
 			delete $createProductData.images;
 		}
 	}
+
+	function handleSubmit(event: Event) {
+		event.preventDefault();
+		const formData = new FormData(event.target as HTMLFormElement);
+		images.forEach((file, index) => {
+			formData.append(`images`, file);
+		});
+
+		// Envoyer formData avec fetch ou une autre méthode
+		fetch(event.target.action, {
+			method: 'POST',
+			body: formData
+		})
+			.then((response) => {
+				// Gérer la réponse du serveur
+				showNotification('Produit créé.', 'success');
+				setTimeout(() => goto('/dashboard/products/'), 0);
+			})
+			.catch((error) => {
+				// Gérer les erreurs
+				console.error(error);
+			});
+	}
+
+	$: console.log(createProductMessage, 'createProductMessage');
 </script>
 
 <div class="ccc">
@@ -91,6 +100,7 @@
 			method="POST"
 			enctype="multipart/form-data"
 			action="?/createProduct"
+			on:submit={handleSubmit}
 			use:createProductEnhance
 			class="space-y-4"
 		>
@@ -161,7 +171,7 @@
 														<span>Upload a file</span>
 													</label>
 												</div>
-												<p class="text-xs text-gray-500">PNG, JPG up to 2MB</p>
+												<p class="text-xs text-gray-500">PNG, JPG up to 100kB</p>
 											</div>
 										</div>
 										<div class="mt-3 flex flex-wrap gap-2 flex-1">
@@ -169,7 +179,7 @@
 												<div class="relative w-[100px] h-[100px]">
 													<img
 														src={URL.createObjectURL(image)}
-														alt="Image preview"
+														alt="Image downloaded from the internet"
 														class="w-full h-full object-cover rounded"
 													/>
 													<button
@@ -227,7 +237,6 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
-			<input type="hidden" name="images" value={JSON.stringify(imagesMeta)} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

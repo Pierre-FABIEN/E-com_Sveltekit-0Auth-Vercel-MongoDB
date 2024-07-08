@@ -5,6 +5,7 @@
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
+	import { Textarea } from '$UITools/shadcn/textarea';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { superForm, filesProxy } from 'sveltekit-superforms';
@@ -12,15 +13,12 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
-	import { Textarea } from '$UITools/shadcn/textarea';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
 		AllCategories: any;
 		AllProducts: any;
 	};
-
-	console.log(data);
 
 	const createProduct = superForm(data.IcreateProductSchema, {
 		validators: zodClient(createProductSchema),
@@ -34,58 +32,39 @@
 	} = createProduct;
 
 	let DataPrice: number = 0;
-
 	const files = filesProxy(createProduct, 'images');
 
-	// Mettre à jour les IDs de catégories sélectionnées
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
 
-	let images: [File, ...File[]] | [] = [];
+	let images: File[] = [];
+	let imagesMeta: { name: string; size: number; type: string; lastModified: string }[] = [];
 
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
-			const newFiles = Array.from(input.files);
-			images = images.length
-				? ([...images, ...newFiles] as [File, ...File[]])
-				: (newFiles as [File, ...File[]]);
+			images = Array.from(input.files);
+			imagesMeta = images.map((file) => ({
+				name: file.name,
+				size: file.size,
+				type: file.type,
+				lastModified: new Date(file.lastModified).toISOString()
+			}));
 			$createProductData.images = images;
 		}
 	}
 
 	function removeImage(index: number) {
-		images = images.filter((_, i) => i !== index) as [File, ...File[]] | [];
+		images.splice(index, 1);
+		imagesMeta.splice(index, 1);
 		if (images.length) {
 			$createProductData.images = images;
 		} else {
 			delete $createProductData.images;
 		}
-	}
-
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-		const formData = new FormData(event.target as HTMLFormElement);
-		images.forEach((file, index) => {
-			formData.append(`images`, file);
-		});
-
-		// Envoyer formData avec fetch ou une autre méthode
-		fetch(event.target.action, {
-			method: 'POST',
-			body: formData
-		})
-			.then((response) => {
-				// Gérer la réponse du serveur
-				console.log(response);
-			})
-			.catch((error) => {
-				// Gérer les erreurs
-				console.error(error);
-			});
 	}
 
 	$: console.log(createProductMessage, 'createProductMessage');
@@ -97,7 +76,6 @@
 			method="POST"
 			enctype="multipart/form-data"
 			action="?/createProduct"
-			on:submit={handleSubmit}
 			use:createProductEnhance
 			class="space-y-4"
 		>
@@ -168,7 +146,7 @@
 														<span>Upload a file</span>
 													</label>
 												</div>
-												<p class="text-xs text-gray-500">PNG, JPG up to 100kB</p>
+												<p class="text-xs text-gray-500">PNG, JPG up to 2MB</p>
 											</div>
 										</div>
 										<div class="mt-3 flex flex-wrap gap-2 flex-1">
@@ -176,7 +154,7 @@
 												<div class="relative w-[100px] h-[100px]">
 													<img
 														src={URL.createObjectURL(image)}
-														alt="Image downloaded from the internet"
+														alt="Image preview"
 														class="w-full h-full object-cover rounded"
 													/>
 													<button
@@ -234,6 +212,7 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$createProductData.categoryId} />
+			<input type="hidden" name="images" value={JSON.stringify(imagesMeta)} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

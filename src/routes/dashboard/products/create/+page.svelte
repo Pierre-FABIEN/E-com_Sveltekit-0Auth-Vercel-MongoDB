@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Toaster, toast } from 'svelte-sonner';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -15,6 +16,7 @@
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
 	import { goto } from '$app/navigation';
+	import { showNotification } from '$stores/Data/notificationStore';
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
@@ -25,12 +27,20 @@
 	const createProduct = superForm(data.IcreateProductSchema, {
 		validators: zodClient(createProductSchema),
 		id: 'createProduct',
-		onResult({ result }) {
+		onResult({ result, formEl, cancel }) {
+			console.log('onResult called'); // Log to confirm onResult is called
+			console.log('Result:', result); // Log the result object
+
 			if (result.type === 'success') {
-				console.log('mlkmlkmlm');
+				showNotification('Produit créé.', 'success');
+				setTimeout(() => goto('/dashboard/products/'), 0);
+			} else {
+				console.log('Result type is not success'); // Log for debugging
 			}
 		}
 	});
+
+	$: console.log($page, 'page');
 
 	const {
 		form: createProductData,

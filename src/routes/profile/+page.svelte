@@ -33,9 +33,9 @@
 				>
 			</Card.Header>
 			<Card.Content class="grid gap-6">
-				<div class="content-basic">
+				<div class="content-basic rcs">
 					<img src={data.session?.user.image} alt="image du compte" />
-					<div class="content-basic-wrapper">
+					<div class="content-basic-wrapper clc">
 						<h1>{data.session?.user.name}</h1>
 						<p>{data.session?.user.email}</p>
 					</div>
@@ -105,8 +105,6 @@
 </div>
 
 <style lang="scss">
-	@import '../styles/utils/flex';
-
 	.card {
 		margin-top: 50px;
 		margin-right: auto;
@@ -115,9 +113,7 @@
 	}
 
 	.content-basic {
-		@include rcs;
 		.content-basic-wrapper {
-			@include clc;
 			margin-left: 20px;
 
 			h1 {

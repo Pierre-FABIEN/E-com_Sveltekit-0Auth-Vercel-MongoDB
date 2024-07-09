@@ -75,20 +75,17 @@
 	}
 </script>
 
-<div class="initalLoader" bind:this={initalLoader}>
+<div class="initalLoader rcc" bind:this={initalLoader}>
 	{#each Array.from('Bienvenue') as letter, i (letter + i)}
 		<span class="letter">{letter}</span>
 	{/each}
 </div>
 
 <style lang="scss">
-	@import '../styles/utils/flex';
-
 	.letter {
 		opacity: 0;
 	}
 	.initalLoader {
-		@include rcc;
 		position: absolute;
 		top: 0;
 		right: 0;

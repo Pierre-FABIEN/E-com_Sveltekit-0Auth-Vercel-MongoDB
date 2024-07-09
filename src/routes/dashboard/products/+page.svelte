@@ -1,7 +1,5 @@
 <script lang="ts">
 	import TableProduct from '$components/product/TableProduct.svelte';
-	import TableCategories from '$components/categories/TableCategories.svelte';
-
 	export let data;
 </script>
 

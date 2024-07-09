@@ -10,9 +10,9 @@
 	console.log('page', $page.data.session?.user.role);
 </script>
 
-<header>
+<header class="rcb">
 	<nav>
-		<ul>
+		<ul class="rcb">
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
@@ -28,7 +28,7 @@
 		</ul>
 	</nav>
 
-	<div class="left-side">
+	<div class="left-side rcc">
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				<img
@@ -76,9 +76,7 @@
 </header>
 
 <style lang="scss">
-	@import '../styles/utils/flex';
 	header {
-		@include rcb;
 		padding: 20px;
 
 		width: 100%;
@@ -89,11 +87,6 @@
 
 		ul {
 			width: 500px;
-			@include rcb;
-		}
-
-		.left-side {
-			@include rcc;
 		}
 	}
 </style>

@@ -10,7 +10,7 @@
 	});
 </script>
 
-<div class="page">
+<div class="page ccc">
 	{#if $page.data.session}
 		<h1>Protected page</h1>
 		<img src={$page.data.session.user.image} alt="logo" />
@@ -26,29 +26,8 @@
 </div>
 
 <style lang="scss">
-	@import '../styles/utils/flex';
 	.page {
-		@include ccc;
 		width: 100%;
 		min-height: calc(100vh - 70px);
-
-		.page-container {
-			@include ccc;
-			padding: 20px;
-			border-radius: 15px;
-			border: 1px solid black;
-
-			form {
-				@include cca;
-
-				input {
-					margin: 5px 0px;
-				}
-			}
-
-			button {
-				margin: 5px;
-			}
-		}
 	}
 </style>

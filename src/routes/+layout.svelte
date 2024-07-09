@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.css';
-	import '../styles/utils/flex.css';
 
 	import { onMount } from 'svelte';
 	import { onNavigate } from '$app/navigation';

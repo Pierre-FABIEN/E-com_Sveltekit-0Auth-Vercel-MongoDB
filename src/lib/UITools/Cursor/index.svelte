@@ -79,6 +79,7 @@
 >
 	<svg
 		viewBox="0 0 100 100"
+		class="ccc"
 		style="
 		transform: scale({$cursorStore.scaleSvg});
 		transition: transform {$cursorStore.transitionDurationSvg}s linear;
@@ -92,8 +93,6 @@
 </div>
 
 <style lang="scss">
-	@import '../styles/utils/flex';
-
 	#Cursor {
 		z-index: 1001;
 		width: 50px;
@@ -102,7 +101,6 @@
 		pointer-events: none;
 
 		svg {
-			@include ccc;
 			position: absolute;
 			transform-origin: center;
 

@@ -9,20 +9,23 @@
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
+	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 
+	import { deleteCategorySchema } from '$lib/ZodSchema/categorySchema';
+	import { showNotification } from '$stores/Data/notificationStore';
 	import CreateCategory from './CreateCategory.svelte';
+	import { Toggle } from '$UITools/shadcn/toggle';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	export let data: any;
 
-	export let createCategoryEnhance;
-	export let createCategory;
-	export let createCategoryData;
+	const deleteCategory = superForm(data.IdeleteCategorySchema, {
+		validators: zodClient(deleteCategorySchema),
+		id: 'deleteCategory'
+	});
 
-	export let deleteCategoryEnhance;
-
-	export let updateCategory;
-	export let updateCategoryData;
-	export let updateCategoryEnhance;
+	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
 	// Nouvelle variable pour le texte de recherche
 	let searchQuery: string = '';
@@ -46,6 +49,12 @@
 	function changePage(page: number) {
 		currentPage = page;
 	}
+
+	$: if ($deleteCategoryMessage)
+		showNotification(
+			$deleteCategoryMessage,
+			$deleteCategoryMessage.includes('success') ? 'success' : 'error'
+		);
 </script>
 
 <div class="border p-2">
@@ -57,12 +66,15 @@
 			class="max-w-xs"
 			bind:value={searchQuery}
 		/>
-		<Sheet.Root>
-			<Sheet.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="outline">Créer un categorie</Button>
-			</Sheet.Trigger>
-			<CreateCategory {createCategoryEnhance} {createCategory} {createCategoryData} />
-		</Sheet.Root>
+		<a
+			href="/dashboard/categories/create"
+			class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+		>
+			<Toggle>
+				<span class="hidden">Creer un produit</span>
+				<PlusCircledIcon class="w-7 h-7" />
+			</Toggle>
+		</a>
 	</div>
 	<div class="border">
 		<Table.Root>
@@ -100,9 +112,7 @@
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
-						</TableCell>
 
-						<TableCell>
 							<Sheet.Root>
 								<Sheet.Trigger asChild let:builder>
 									<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">

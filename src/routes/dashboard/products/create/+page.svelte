@@ -7,7 +7,7 @@
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { superForm, filesProxy } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -36,8 +36,6 @@
 	} = createProduct;
 
 	let DataPrice: number = 0;
-
-	const files = filesProxy(createProduct, 'images');
 
 	// Mettre à jour les IDs de catégories sélectionnées
 	$: $createProductData.categoryId = data.AllCategories.filter(
@@ -93,7 +91,7 @@
 			});
 	}
 
-	$: console.log(createProductMessage, 'createProductMessage');
+	$: console.log('data:', data);
 </script>
 
 <div class="ccc">

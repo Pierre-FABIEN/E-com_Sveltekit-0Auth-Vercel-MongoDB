@@ -5,15 +5,12 @@
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
-
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-
 	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 	import { Textarea } from '$UITools/shadcn/textarea';
 	import { showNotification } from '$stores/Data/notificationStore';
@@ -31,7 +28,7 @@
 		price: number;
 		description: string;
 		categoryId: string[];
-		images: (string | File)[]; // Use string[] for URLs and File[] for new images
+		images: (string | File)[];
 	};
 
 	const updateProduct = superForm(data.IupdateProductSchema, {
@@ -46,45 +43,10 @@
 	} = updateProduct;
 
 	let productId: string;
-	let DataPrice: number = 0;
-
 	productId = $page.params.productId;
-
-	// Stores for product data
-	const productData = writable<Product>({
-		_id: '',
-		name: '',
-		price: 0,
-		description: '',
-		categoryId: [],
-		images: []
-	});
 
 	let images: (string | File)[] = [];
 	let initialImages: string[] = [];
-
-	// Function to initialize the stores with product data
-	const initializeProductData = (productId: string) => {
-		const product = data.AllProducts.find((product: any) => product.id === productId);
-		if (product) {
-			images = product.images;
-			initialImages = product.images.filter((img) => typeof img === 'string') as string[];
-
-			const productInfo: Product = {
-				_id: product.id,
-				name: product.name,
-				price: product.price,
-				description: product.description,
-				categoryId: product.categories.map((category: any) => category.categoryId),
-				images: product.images
-			};
-
-			productData.set(productInfo);
-			updateProductData.set(productInfo);
-		} else {
-			console.error('Product not found for productId:', productId);
-		}
-	};
 
 	function addImage(event: Event) {
 		const input = event.target as HTMLInputElement;
@@ -109,9 +71,9 @@
 
 		images.forEach((image) => {
 			if (typeof image === 'string') {
-				formData.append('images', image); // URL des images existantes
+				formData.append('images', image);
 			} else {
-				formData.append('images', image); // Fichiers des nouvelles images
+				formData.append('images', image);
 			}
 		});
 
@@ -122,7 +84,7 @@
 			body: formData
 		})
 			.then((response) => {
-				showNotification('Produit créé.', 'success');
+				showNotification('Product updated successfully.', 'success');
 				setTimeout(() => goto('/dashboard/products/'), 0);
 			})
 			.catch((error) => {
@@ -131,13 +93,11 @@
 	}
 
 	onMount(() => {
-		if (productId) {
-			initializeProductData(productId);
-		}
+		images = $updateProductData.images;
+		initialImages = images.filter((img) => typeof img === 'string') as string[];
 	});
 
 	$: $updateProductData.price = Number($updateProductData.price);
-	$: console.log('updateProductData:', $updateProductData);
 </script>
 
 <div class="ccc">

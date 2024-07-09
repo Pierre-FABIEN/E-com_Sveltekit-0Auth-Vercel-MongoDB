@@ -15,8 +15,11 @@ const createProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 1_000_000, 'Max 1MB upload size.')
+		.union([
+			z.instanceof(File, { message: 'Please upload a file.' }),
+			z.string().url({ message: 'Please provide a valid URL.' })
+		])
+		.refine((f) => typeof f === 'string' || f.size < 1_000_000, 'Max 1MB upload size.')
 		.array()
 });
 
@@ -32,22 +35,12 @@ const updateProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.array(
-			z.union([
-				z.string().url('Invalid URL format for image'), // Pour les URLs des images existantes
-				z
-					.instanceof(File)
-					.refine(
-						(file) => file.size <= MAX_FILE_SIZE,
-						`Max image size is ${MAX_FILE_SIZE / (1024 * 1024)}MB`
-					)
-					.refine(
-						(file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
-						'Only .jpg, .jpeg, .png and .webp formats are supported.'
-					)
-			])
-		)
-		.min(1, 'At least one image is required')
+		.union([
+			z.instanceof(File, { message: 'Please upload a file.' }),
+			z.string().url({ message: 'Please provide a valid URL.' })
+		])
+		.refine((f) => typeof f === 'string' || f.size < 1_000_000, 'Max 1MB upload size.')
+		.array()
 });
 
 // Schema for deleting a product

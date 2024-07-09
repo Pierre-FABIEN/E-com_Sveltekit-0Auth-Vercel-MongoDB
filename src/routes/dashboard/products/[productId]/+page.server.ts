@@ -6,25 +6,6 @@ import prisma from '$lib/prisma';
 import cloudinary from '$lib/Cloudinary';
 import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 
-function convertFormData(formData: FormData) {
-	const data: any = {};
-	formData.forEach((value, key) => {
-		if (key === 'images' && (typeof value === 'string' || value instanceof File)) {
-			if (!data.images) data.images = [];
-			data.images.push(value);
-		} else if (key === 'deletedImages') {
-			data[key] = JSON.parse(value as string);
-		} else if (key === 'price') {
-			data[key] = parseFloat(value as string);
-		} else if (key === 'categoryId') {
-			data[key] = value.toString().split(',');
-		} else {
-			data[key] = value;
-		}
-	});
-	return data;
-}
-
 function getPublicIdFromUrl(url: string): string | null {
 	const regex = /\/([^/]+)\.[a-z]+$/;
 	const match = url.match(regex);
@@ -32,38 +13,48 @@ function getPublicIdFromUrl(url: string): string | null {
 }
 
 export const load: PageServerLoad = async ({ params }) => {
-	const product = await prisma.product.findUnique({
-		where: { id: params.productId },
-		include: { categories: true }
-	});
+	try {
+		// Charger les données du produit avec ses catégories associées
+		const product = await prisma.product.findUnique({
+			where: { id: params.productId },
+			include: { categories: true }
+		});
 
-	if (!product) {
-		return fail(404, { message: 'Product not found' });
+		// Si le produit n'est pas trouvé, retourner une erreur 404
+		if (!product) {
+			return fail(404, { message: 'Product not found' });
+		}
+
+		// Créer les données initiales à partir des informations du produit
+		const initialData = {
+			_id: product.id,
+			name: product.name,
+			description: product.description,
+			price: product.price,
+			categoryId: product.categories.map((cat) => cat.categoryId) as [string, ...string[]],
+			images: product.images
+		};
+
+		console.log(initialData, 'initialData');
+
+		// Valider les données initiales avec superValidate et zod
+		const IupdateProductSchema = await superValidate(initialData, zod(updateProductSchema));
+
+		// Retourner les données validées
+		return {
+			IupdateProductSchema
+		};
+	} catch (error) {
+		console.error('Error loading product:', error);
+		return fail(500, { message: 'An error occurred while loading the product' });
 	}
-
-	const initialData = {
-		_id: product.id,
-		name: product.name,
-		description: product.description,
-		price: product.price,
-		categoryId: product.categories.map((cat) => cat.categoryId) as [string, ...string[]],
-		images: product.images
-	};
-
-	const IupdateProductSchema = await superValidate(initialData, zod(updateProductSchema));
-	return {
-		IupdateProductSchema
-	};
 };
 
 export const actions: Actions = {
 	updateProduct: async ({ request }) => {
 		const formData = await request.formData();
 
-		const convertedData = convertFormData(formData);
-		console.log('Converted Data:', convertedData);
-
-		const form = await superValidate(convertedData, zod(updateProductSchema));
+		const form = await superValidate(formData, zod(updateProductSchema));
 		console.log('Form Data:', form.data);
 
 		if (!form.valid) {
@@ -73,7 +64,7 @@ export const actions: Actions = {
 
 		const productId = form.data._id;
 		const images = form.data.images;
-		const deletedImages = convertedData.deletedImages || [];
+		const deletedImages = formData.deletedImages || [];
 		const uploadedImageUrls: string[] = [];
 
 		for (const image of images) {

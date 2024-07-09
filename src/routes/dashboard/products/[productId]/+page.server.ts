@@ -46,7 +46,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		name: product.name,
 		description: product.description,
 		price: product.price,
-		categoryId: product.categories.map((cat) => cat.categoryId),
+		categoryId: product.categories.map((cat) => cat.categoryId) as [string, ...string[]],
 		images: product.images
 	};
 

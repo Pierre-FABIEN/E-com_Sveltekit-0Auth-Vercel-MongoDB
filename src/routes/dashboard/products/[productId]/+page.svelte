@@ -1,4 +1,5 @@
 <script lang="ts">
+	// Import necessary modules and components
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
 	import { Button } from '$UITools/shadcn/button';
@@ -16,12 +17,14 @@
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { goto } from '$app/navigation';
 
+	// Define the data type for the input data
 	export let data: {
 		IupdateProductSchema: SuperValidated<Infer<typeof updateProductSchema>>;
 		AllCategories: any[];
 		AllProducts: any[];
 	};
 
+	// Define the Product type
 	type Product = {
 		_id: string;
 		name: string;
@@ -31,6 +34,7 @@
 		images: (string | File)[];
 	};
 
+	// Initialize the form with validation
 	const updateProduct = superForm(data.IupdateProductSchema, {
 		validators: zodClient(updateProductSchema),
 		id: 'updateProduct'
@@ -48,27 +52,32 @@
 	let images: (string | File)[] = [];
 	let initialImages: string[] = [];
 
-	function addImage(event: Event) {
+	// Function to add images
+	const addImage = (event: Event) => {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
 			const newFiles = Array.from(input.files);
 			images = [...images, ...newFiles];
 			$updateProductData.images = images;
 		}
-	}
+	};
 
-	function removeImage(index: number) {
+	// Function to remove images
+	const removeImage = (index: number) => {
 		images = images.filter((_, i) => i !== index);
 		$updateProductData.images = images;
-	}
+	};
 
-	function handleSubmit(event: Event) {
+	// Function to handle form submission
+	const handleSubmit = (event: Event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
 
+		// Filter current images and identify deleted images
 		const currentImages = images.filter((img) => typeof img === 'string') as string[];
 		const deletedImages = initialImages.filter((img) => !currentImages.includes(img));
 
+		// Append images to formData
 		images.forEach((image) => {
 			if (typeof image === 'string') {
 				formData.append('images', image);
@@ -76,28 +85,44 @@
 				formData.append('images', image);
 			}
 		});
-
 		formData.append('deletedImages', JSON.stringify(deletedImages));
 
+		// Append other form fields with correct type conversion
+		formData.append('name', $updateProductData.name);
+		formData.append('price', $updateProductData.price.toString());
+		formData.append('description', $updateProductData.description);
+
+		// Submit the form data
 		fetch(event.target.action, {
 			method: 'POST',
 			body: formData
 		})
 			.then((response) => {
-				showNotification('Product updated successfully.', 'success');
-				setTimeout(() => goto('/dashboard/products/'), 0);
+				console.log(response, 'updateProductResponse');
+				// showNotification('Product updated successfully.', 'success');
+				// setTimeout(() => goto('/dashboard/products/'), 2000);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
-	}
+	};
 
+	// Initialize the component on mount
 	onMount(() => {
 		images = $updateProductData.images;
 		initialImages = images.filter((img) => typeof img === 'string') as string[];
 	});
 
-	$: $updateProductData.price = Number($updateProductData.price);
+	// Handle price change
+	const handlePriceChange = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		updateProductData.update((data) => {
+			data.price = parseFloat(target.value);
+			return data;
+		});
+	};
+
+	$: console.log($updateProductMessage, 'updateProductMessage');
 </script>
 
 <div class="ccc">
@@ -110,8 +135,6 @@
 			class="space-y-4"
 			on:submit={handleSubmit}
 		>
-			<input type="hidden" name="_id" value={$updateProductData._id} />
-
 			<div class="w-[100%]">
 				<Form.Field name="name" form={updateProduct}>
 					<Form.Control let:attrs>
@@ -126,7 +149,12 @@
 				<Form.Field name="price" form={updateProduct}>
 					<Form.Control let:attrs>
 						<Form.Label>Price</Form.Label>
-						<Input {...attrs} type="number" bind:value={$updateProductData.price} />
+						<Input
+							{...attrs}
+							type="number"
+							bind:value={$updateProductData.price}
+							on:input={handlePriceChange}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -186,15 +214,11 @@
 											{#each images as image, index}
 												<div class="relative w-[100px] h-[100px]">
 													{#if typeof image === 'string'}
-														<img
-															src={image}
-															alt="Existing image"
-															class="w-full h-full object-cover rounded"
-														/>
+														<img src={image} alt="" class="w-full h-full object-cover rounded" />
 													{:else}
 														<img
 															src={URL.createObjectURL(image)}
-															alt="New image"
+															alt=""
 															class="w-full h-full object-cover rounded"
 														/>
 													{/if}
@@ -269,7 +293,7 @@
 				</Form.Field>
 			</div>
 			<input type="hidden" name="categoryId" bind:value={$updateProductData.categoryId} />
-
+			<input type="hidden" name="_id" value={$updateProductData._id} />
 			<Button type="submit">Save changes</Button>
 		</form>
 	</div>

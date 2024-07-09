@@ -7,7 +7,7 @@
 	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms';
+	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -22,11 +22,10 @@
 		AllProducts: any;
 	};
 
-	console.log(data);
-
 	const createProduct = superForm(data.IcreateProductSchema, {
 		validators: zodClient(createProductSchema),
-		id: 'createProduct'
+		id: 'createProduct',
+		resetForm: true
 	});
 
 	const {
@@ -36,71 +35,30 @@
 	} = createProduct;
 
 	let DataPrice: number = 0;
+	const files = filesFieldProxy(createProduct, 'images');
+	const { values, valueErrors } = files;
 
-	// Mettre à jour les IDs de catégories sélectionnées
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
 
-	let images: [File, ...File[]] | [] = [];
-
-	function addImage(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if (input.files) {
-			const newFiles = Array.from(input.files);
-			images = images.length
-				? ([...images, ...newFiles] as [File, ...File[]])
-				: (newFiles as [File, ...File[]]);
-			$createProductData.images = images;
-		}
+	$: if ($createProductMessage === 'Product created successfully') {
+		goto('/dashboard/products');
+		showNotification($createProductMessage, 'success');
 	}
 
-	function removeImage(index: number) {
-		images = images.filter((_, i) => i !== index) as [File, ...File[]] | [];
-		if (images.length) {
-			$createProductData.images = images;
-		} else {
-			delete $createProductData.images;
-		}
-	}
-
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-		const formData = new FormData(event.target as HTMLFormElement);
-		images.forEach((file, index) => {
-			formData.append(`images`, file);
-		});
-
-		// Envoyer formData avec fetch ou une autre méthode
-		fetch(event.target.action, {
-			method: 'POST',
-			body: formData
-		})
-			.then((response) => {
-				// Gérer la réponse du serveur
-				showNotification('Produit créé.', 'success');
-				console.log('showNotification');
-
-				setTimeout(() => goto('/dashboard/products/'), 0);
-			})
-			.catch((error) => {
-				// Gérer les erreurs
-				console.error(error);
-			});
-	}
-
-	$: console.log('data:', data);
+	$: console.log($valueErrors, 'valueErrors');
 </script>
 
 <div class="ccc">
 	<div class="m-5 p-5 border w-[400px]">
+		<SuperDebug data={$createProductData} />
 		<form
 			method="POST"
 			enctype="multipart/form-data"
 			action="?/createProduct"
-			on:submit={handleSubmit}
 			use:createProductEnhance
 			class="space-y-4"
 		>
@@ -124,84 +82,63 @@
 				</Form.Field>
 			</div>
 
-			<div class="w-[100%]">
-				<Form.Field name="images" form={createProduct}>
-					<Form.Control let:attrs>
-						<Drawer.Root>
-							<Drawer.Trigger asChild let:builder>
-								<Button builders={[builder]} variant="outline">Manage Photos</Button>
-							</Drawer.Trigger>
-							<Drawer.Content>
-								<div class="mx-auto w-full">
-									<Drawer.Header>
-										<Drawer.Title>Manage Photos</Drawer.Title>
-										<Drawer.Description>Upload and manage your product photos.</Drawer.Description>
-									</Drawer.Header>
-									<div class="p-4 pb-0 flex flex-row w-full space-x-4">
-										<div
-											class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
-										>
-											<input
-												type="file"
-												multiple
-												accept="image/png, image/jpeg"
-												on:change={addImage}
-												class="absolute opacity-0 w-full h-full cursor-pointer z-10"
-											/>
-											<div class="text-center pointer-events-none">
-												<svg
-													class="mx-auto h-12 w-12 text-gray-400"
-													stroke="currentColor"
-													fill="none"
-													viewBox="0 0 48 48"
-													aria-hidden="true"
-												>
-													<path
-														d="M28 8H20v12H8v8h12v12h8V28h12v-8H28V8z"
-														stroke-width="2"
-														stroke-linecap="round"
-														stroke-linejoin="round"
-													></path>
-												</svg>
-												<div class="mt-2 text-sm text-gray-600">
-													<label
-														class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500"
-														for="file-input"
-													>
-														<span>Upload a file</span>
-													</label>
-												</div>
-												<p class="text-xs text-gray-500">PNG, JPG up to 100kB</p>
-											</div>
-										</div>
-										<div class="mt-3 flex flex-wrap gap-2 flex-1">
-											{#each images as image, index}
-												<div class="relative w-[100px] h-[100px]">
-													<img
-														src={URL.createObjectURL(image)}
-														alt="Image downloaded from the internet"
-														class="w-full h-full object-cover rounded"
-													/>
-													<button
-														class="w-[32px] h-[32px] absolute top-0 right-0 p-1 bg-red-500 text-white"
-														on:click={() => removeImage(index)}>X</button
-													>
-												</div>
-											{/each}
-										</div>
-									</div>
-									<Drawer.Footer>
-										<Drawer.Close asChild let:builder>
-											<Button builders={[builder]} variant="outline">Close</Button>
-										</Drawer.Close>
-									</Drawer.Footer>
-								</div>
-							</Drawer.Content>
-						</Drawer.Root>
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
+			<div class="p-4 pb-0 flex flex-row w-full space-x-4">
+				<div
+					class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
+				>
+					<input
+						multiple
+						bind:files={$values}
+						name="images"
+						accept="image/png, image/jpeg"
+						type="file"
+						class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+					/>
+
+					<div class="text-center pointer-events-none">
+						<svg
+							class="mx-auto h-12 w-12 text-gray-400"
+							stroke="currentColor"
+							fill="none"
+							viewBox="0 0 48 48"
+							aria-hidden="true"
+						>
+							<path
+								d="M28 8H20v12H8v8h12v12h8V28h12v-8H28V8z"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+						</svg>
+						<div class="mt-2 text-sm text-gray-600">
+							<label
+								class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500"
+								for="file-input"
+							>
+								<span>Upload a file</span>
+							</label>
+						</div>
+						<p class="text-xs text-gray-500">PNG, JPG up to 100kB</p>
+					</div>
+
+					<div class="mt-3 flex flex-wrap gap-2 flex-1">
+						{#each $values as image, index}
+							<div class="relative w-[100px] h-[100px]">
+								<img
+									src={URL.createObjectURL(image)}
+									alt=""
+									class="w-full h-full object-cover rounded"
+								/>
+							</div>
+						{/each}
+					</div>
+				</div>
 			</div>
+			<ul class="invalid text-red-500">
+				{#each $valueErrors as error, i}
+					{error ? { error } : null}
+				{/each}
+			</ul>
 
 			<div class="w-[100%]">
 				<Form.Field name="description" form={createProduct}>

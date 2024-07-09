@@ -6,29 +6,6 @@ import cloudinary from '$lib/Cloudinary';
 import prisma from '$lib/prisma';
 import { createProductSchema } from '$lib/ZodSchema/productSchema';
 
-// Fonction de conversion de FormData
-function convertFormData(formData: FormData) {
-	const data: any = {};
-	formData.forEach((value, key) => {
-		if (key === 'images' && value instanceof File) {
-			if (!data.images) data.images = [];
-			data.images.push({
-				name: value.name,
-				size: value.size,
-				type: value.type,
-				lastModified: new Date(value.lastModified).toISOString()
-			});
-		} else if (key === 'price') {
-			data[key] = parseFloat(value as string);
-		} else if (key === 'categoryId') {
-			data[key] = [value];
-		} else {
-			data[key] = value;
-		}
-	});
-	return data;
-}
-
 export const load: PageServerLoad = async () => {
 	const IcreateProductSchema = await superValidate(zod(createProductSchema));
 	return {
@@ -41,11 +18,7 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		console.log(formData, 'formData');
 
-		// Convertir FormData en un format compatible
-		const convertedData = convertFormData(formData);
-		console.log(convertedData, 'convertedData');
-
-		const form = await superValidate(convertedData, zod(createProductSchema));
+		const form = await superValidate(formData, zod(createProductSchema));
 		console.log(form, 'form');
 
 		if (!form.valid) {
@@ -54,6 +27,8 @@ export const actions: Actions = {
 		}
 
 		const images = formData.getAll('images') as File[];
+		console.log(images, 'images');
+
 		const uploadedImageUrls: string[] = [];
 
 		for (const image of images) {

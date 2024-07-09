@@ -15,14 +15,9 @@ const createProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.any()
-		.refine((files) => {
-			return files?.[0]?.size <= MAX_FILE_SIZE;
-		}, `Max image size is 2MB.`)
-		.refine(
-			(files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-			'Only .jpg, .jpeg, .png and .webp formats are supported.'
-		)
+		.instanceof(File, { message: 'Please upload a file.' })
+		.refine((f) => f.size < 1_000_000, 'Max 1MB upload size.')
+		.array()
 });
 
 // Schema for updating a product

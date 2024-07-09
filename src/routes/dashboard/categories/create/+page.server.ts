@@ -2,13 +2,13 @@ import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import cloudinary from '$lib/Cloudinary';
 import prisma from '$lib/prisma';
 import { createCategorySchema } from '$lib/ZodSchema/categorySchema';
 
-// Fonction de conversion de FormData
+// Fonction de chargement
 export const load: PageServerLoad = async () => {
 	const IcreateCategorySchema = await superValidate(zod(createCategorySchema));
+	console.log('Load function executed. Schema:', IcreateCategorySchema);
 	return {
 		IcreateCategorySchema
 	};
@@ -16,11 +16,13 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	createCategory: async ({ request }) => {
+		console.log('createCategory action initiated.');
+
 		const formData = await request.formData();
-		console.log(formData, 'formData');
+		console.log('Received form data:', formData);
 
 		const form = await superValidate(formData, zod(createCategorySchema));
-		console.log(form, 'form');
+		console.log('Form validation result:', form);
 
 		if (!form.valid) {
 			console.log('Validation errors:', form.errors);
@@ -28,6 +30,13 @@ export const actions: Actions = {
 		}
 
 		try {
+			console.log('Creating new category with name:', form.data.name);
+			const newCategory = await prisma.category.create({
+				data: {
+					name: form.data.name
+				}
+			});
+			console.log('New category created:', newCategory);
 			return message(form, 'Category created successfully');
 		} catch (error) {
 			console.error('Error creating category:', error);

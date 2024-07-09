@@ -83,6 +83,8 @@
 			.then((response) => {
 				// Gérer la réponse du serveur
 				showNotification('Produit créé.', 'success');
+				console.log('showNotification');
+
 				setTimeout(() => goto('/dashboard/products/'), 0);
 			})
 			.catch((error) => {

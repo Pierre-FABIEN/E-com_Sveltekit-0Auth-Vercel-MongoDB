@@ -21,14 +21,17 @@
 		type = value.type;
 		show = value.show;
 		animationClass = 'animate-slideIn';
+		console.log(`State after update - Message: ${message}, Type: ${type}, Show: ${show}`);
 
 		if (show) {
+			console.log('Notification will be shown');
 			setTimeout(() => {
 				animationClass = 'animate-slideOut';
 				setTimeout(() => {
 					show = false;
-				}, 500);
-			}, 5000);
+					console.log('Notification hidden');
+				}, 500); // Doit être égal à la durée de l'animation de slideOut
+			}, 5000); // Durée d'affichage de la notification avant de disparaître
 		}
 	});
 

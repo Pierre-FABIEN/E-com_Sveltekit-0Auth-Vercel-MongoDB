@@ -143,3 +143,9 @@
 		</div>
 	</div>
 </div>
+
+<style lang="scss">
+	.home {
+		position: absolute;
+	}
+</style>

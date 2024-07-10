@@ -14,9 +14,12 @@ const createProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.array(z.any())
-		.refine((files) => Array.isArray(files) && files.length > 0, 'At least one image is required.')
-		.refine((files) => files.every((file) => file.size <= MAX_FILE_SIZE), `Max image size is 2MB.`)
+		.array(z.instanceof(File))
+		.refine((files) => files.length > 0, 'At least one image is required.')
+		.refine(
+			(files) => files.every((file) => file.size <= MAX_FILE_SIZE),
+			`Max image size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`
+		)
 		.refine(
 			(files) => files.every((file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)),
 			'Only .jpg, .jpeg, .png and .webp formats are supported.'

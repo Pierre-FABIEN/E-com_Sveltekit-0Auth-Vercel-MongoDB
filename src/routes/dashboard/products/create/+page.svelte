@@ -4,11 +4,9 @@
 	import { Button } from '$UITools/shadcn/button';
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
-	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';
@@ -36,7 +34,7 @@
 
 	let DataPrice: number = 0;
 	const files = filesFieldProxy(createProduct, 'images');
-	const { values, valueErrors } = files;
+	const { values } = files;
 
 	$: $createProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
@@ -48,9 +46,6 @@
 		goto('/dashboard/products');
 		showNotification($createProductMessage, 'success');
 	}
-
-	$: console.log($valueErrors, 'valueErrors');
-	$: console.log($createProductMessage, 'createProductMessage');
 </script>
 
 <div class="ccc">
@@ -132,6 +127,7 @@
 										accept="image/png, image/jpeg"
 										type="file"
 										class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+										style="transform: translate(50%, 50%); left: -50%; top: -50%;"
 									/>
 								</Form.Control>
 								<Form.FieldErrors />

@@ -26,11 +26,24 @@ const createProductSchema = z.object({
 
 // Sample data for validation
 const formData = {
-	name: 'aaaaaaaaaaaaaaaa',
+	name: 'aaaaaaaaaaaaaa',
 	price: 111,
-	description: 'aaaaaaaaaaaaaaaa',
-	images: [],
-	categoryId: ['668cec6bcdf5b79cd52ad966', '668cecc7cdf5b79cd52ad96c'],
+	description: 'aaaaaaaaaaaaaaa',
+	images: [
+		{
+			size: 205079,
+			type: 'image/jpeg',
+			name: 'topographic-multicolored-linear-background-abstraction-with-place-for-text-map-line-of-topography-abstract-topographic-map-concept-topographic-multicolored-linear-background-with-copy-space-vector.jpg',
+			lastModified: 1720620538376
+		},
+		{
+			size: 220487,
+			type: 'image/jpeg',
+			name: 'abstract-topographic-map-background-abstract-topographic-map-background-imitation-of-a-geographical-map-geographic-map-conceptual-design-elegant-background-for-presentations-free-vector.jpg',
+			lastModified: 1720620538376
+		}
+	],
+	categoryId: ['668cecc7cdf5b79cd52ad96c'],
 	__superform_id: 'createProduct'
 };
 

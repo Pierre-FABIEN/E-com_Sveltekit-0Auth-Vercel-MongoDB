@@ -33,6 +33,8 @@
 	} = createProduct;
 
 	let DataPrice: number = 0;
+	let DataStock: number = 0;
+
 	const files = filesFieldProxy(createProduct, 'images');
 	const { values } = files;
 
@@ -41,6 +43,7 @@
 	).map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
+	$: $createProductData.stock = Number(DataStock);
 
 	$: if ($createProductMessage === 'Product created successfully') {
 		goto('/dashboard/products');
@@ -74,6 +77,16 @@
 							<Form.Control let:attrs>
 								<Form.Label>Price</Form.Label>
 								<Input {...attrs} type="number" bind:value={DataPrice} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+					</div>
+
+					<div class="w-[100%]">
+						<Form.Field name="stock" form={createProduct}>
+							<Form.Control let:attrs>
+								<Form.Label>Stock</Form.Label>
+								<Input {...attrs} type="number" bind:value={DataStock} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>

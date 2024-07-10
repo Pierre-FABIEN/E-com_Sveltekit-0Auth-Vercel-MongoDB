@@ -29,6 +29,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			name: product.name,
 			description: product.description,
 			price: product.price,
+			stock: product.stock,
 			categoryId: product.categories.map((cat) => cat.categoryId) as [string, ...string[]],
 			images: [],
 			existingImages: product.images
@@ -146,6 +147,7 @@ export const actions: Actions = {
 						name: form.data.name,
 						description: form.data.description,
 						price: form.data.price,
+						stock: form.data.stock,
 						images: uploadedImageUrls.length > 0 ? uploadedImageUrls : existingImages
 					}
 				});

@@ -10,6 +10,7 @@ const createProductSchema = z.object({
 		.string()
 		.min(3, 'Description is required and should be at least 3 characters long'),
 	price: z.number().positive('Price must be a positive number'),
+	stock: z.number().positive('Stock must be a positive number'),
 	categoryId: z
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
@@ -34,6 +35,7 @@ const updateProductSchema = z.object({
 		.string()
 		.min(3, 'Description is required and should be at least 3 characters long'),
 	price: z.number().positive('Price must be a positive number'),
+	stock: z.number().positive('Stock must be a positive number'),
 	categoryId: z
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),

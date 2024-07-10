@@ -36,11 +36,13 @@
 	} = updateProduct;
 
 	let DataPrice: number = data.IupdateProductSchema.data.price;
+	let DataStock: number = data.IupdateProductSchema.data.stock;
 
 	const files = filesFieldProxy(updateProduct, 'images');
 	const { values, valueErrors } = files;
 
 	$: $updateProductData.price = Number(DataPrice);
+	$: $updateProductData.stock = Number(DataStock);
 
 	$: if ($updateProductMessage === 'Product updated successfully') {
 		goto('/dashboard/products');
@@ -94,7 +96,15 @@
 							<Form.FieldErrors />
 						</Form.Field>
 					</div>
-
+					<div class="w-[100%]">
+						<Form.Field name="stock" form={updateProduct}>
+							<Form.Control let:attrs>
+								<Form.Label>Stock</Form.Label>
+								<Input {...attrs} type="number" bind:value={DataStock} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+					</div>
 					<div class="w-[100%]">
 						<Form.Field name="description" form={updateProduct}>
 							<Form.Control let:attrs>

@@ -85,6 +85,7 @@
 							<Table.Head>name</Table.Head>
 							<Table.Head>description</Table.Head>
 							<Table.Head>price</Table.Head>
+							<Table.Head>stock</Table.Head>
 							<Table.Head>catégories</Table.Head>
 							<Table.Head>images</Table.Head>
 						</Table.Row>
@@ -95,6 +96,7 @@
 								<TableCell>{product.name}</TableCell>
 								<TableCell>{product.description.slice(0, 20)}...</TableCell>
 								<TableCell>{product.price}</TableCell>
+								<TableCell>{product.stock}</TableCell>
 								<TableCell>
 									{#each product.categories as category}
 										<Badge class="m-1">

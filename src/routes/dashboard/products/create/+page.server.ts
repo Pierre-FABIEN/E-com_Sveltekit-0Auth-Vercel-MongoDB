@@ -88,6 +88,7 @@ export const actions: Actions = {
 					name: form.data.name,
 					description: form.data.description,
 					price: form.data.price,
+					stock: form.data.stock,
 					images: uploadedImageUrls
 				}
 			});

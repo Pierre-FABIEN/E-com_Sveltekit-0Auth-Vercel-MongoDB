@@ -118,20 +118,15 @@
 						<div
 							class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
 						>
-							<Form.Field name="images" form={createProduct}>
-								<Form.Control let:attrs>
-									<input
-										multiple
-										bind:files={$values}
-										name="images"
-										accept="image/png, image/jpeg"
-										type="file"
-										class="absolute opacity-0 w-full h-full cursor-pointer z-10"
-										style="transform: translate(50%, 50%); left: -50%; top: -50%;"
-									/>
-								</Form.Control>
-								<Form.FieldErrors />
-							</Form.Field>
+							<input
+								multiple
+								bind:files={$values}
+								name="images"
+								accept="image/png, image/jpeg"
+								type="file"
+								class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+								style="transform: translate(50%, 50%); left: -50%; top: -50%;"
+							/>
 							<div class="text-center pointer-events-none">
 								<svg
 									class="mx-auto h-12 w-12 text-gray-400"
@@ -169,6 +164,9 @@
 								</div>
 							{/each}
 						</div>
+						<Form.Field name="images" form={createProduct}>
+							<Form.FieldErrors />
+						</Form.Field>
 					</div>
 				</div>
 			</div>

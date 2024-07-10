@@ -30,7 +30,8 @@ export const load: PageServerLoad = async ({ params }) => {
 			description: product.description,
 			price: product.price,
 			categoryId: product.categories.map((cat) => cat.categoryId) as [string, ...string[]],
-			images: product.images
+			images: [],
+			existingImages: product.images
 		};
 
 		const IupdateProductSchema = await superValidate(initialData, zod(updateProductSchema));

@@ -45,7 +45,7 @@
 		showNotification($updateProductMessage, 'success');
 	}
 
-	let existingImages = data.IupdateProductSchema.data.images;
+	let existingImages = data.IupdateProductSchema.data.existingImages;
 
 	// Fonction réactive pour mettre à jour les catégories
 	$: {
@@ -177,21 +177,17 @@
 						</div>
 					</div>
 					<div class="mt-3 flex flex-wrap gap-2 flex-1 w-[300px] rts">
-						{#each existingImages as imageUrl}
+						<p class="text-sm">Ces images seront suppirmées à la suite d'une modification :</p>
+						{#each $updateProductData.existingImages as imageUrl}
 							<div class="relative w-[65px] h-[65px]">
 								<img src={imageUrl} alt="" class="w-full h-full object-cover rounded" />
 							</div>
 						{/each}
 					</div>
-					{#if $valueErrors.length > 0}
-						<ul class="invalid text-red-500">
-							{#each $valueErrors as error}
-								{#if error}
-									<li>{error}</li>
-								{/if}
-							{/each}
-						</ul>
-					{/if}
+
+					<Form.Field name="images" form={updateProduct}>
+						<Form.FieldErrors />
+					</Form.Field>
 				</div>
 			</div>
 

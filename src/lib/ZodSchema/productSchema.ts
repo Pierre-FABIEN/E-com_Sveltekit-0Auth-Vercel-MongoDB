@@ -40,7 +40,8 @@ const updateProductSchema = z.object({
 			z.string().url({ message: 'Please provide a valid URL.' })
 		])
 		.refine((f) => typeof f === 'string' || f.size < 1_000_000, 'Max 1MB upload size.')
-		.array()
+		.array(),
+	existingImages: z.array(z.string())
 });
 
 // Schema for deleting a product

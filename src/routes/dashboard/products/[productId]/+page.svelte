@@ -1,17 +1,18 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import type { SuperValidated, Infer } from 'sveltekit-superforms';
+
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
 	import { Button } from '$UITools/shadcn/button';
 	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
 	import { Label } from '$UITools/shadcn/label';
-	import * as Drawer from '$UITools/shadcn/drawer/index.js';
 	import { Textarea } from '$UITools/shadcn/textarea';
+
 	import { showNotification } from '$stores/Data/notificationStore';
-	import { goto } from '$app/navigation';
-	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
+
 	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
 
 	export let data: {
@@ -33,12 +34,9 @@
 	} = updateProduct;
 
 	let DataPrice: number = data.IupdateProductSchema.data.price;
+
 	const files = filesFieldProxy(updateProduct, 'images');
 	const { values, valueErrors } = files;
-
-	$: $updateProductData.categoryId = data.AllCategories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
 
 	$: $updateProductData.price = Number(DataPrice);
 
@@ -49,8 +47,13 @@
 
 	let existingImages = data.IupdateProductSchema.data.images;
 
-	function handleImageRemove(imageUrl: string) {
-		existingImages = existingImages.filter((img: string) => img !== imageUrl);
+	// Fonction réactive pour mettre à jour les catégories
+	$: {
+		const productCategoryIds = data.IupdateProductSchema.data.categoryId;
+		data.AllCategories = data.AllCategories.map((category) => ({
+			...category,
+			checked: productCategoryIds.includes(category.id)
+		}));
 	}
 
 	$: console.log($updateProductData, 'updateProductData');
@@ -177,13 +180,6 @@
 						{#each existingImages as imageUrl}
 							<div class="relative w-[65px] h-[65px]">
 								<img src={imageUrl} alt="" class="w-full h-full object-cover rounded" />
-								<button
-									type="button"
-									class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded"
-									on:click={() => handleImageRemove(imageUrl)}
-								>
-									X
-								</button>
 							</div>
 						{/each}
 					</div>
@@ -199,8 +195,9 @@
 				</div>
 			</div>
 
+			<input type="hidden" name="_id" bind:value={$updateProductData._id} />
 			<input type="hidden" name="categoryId" bind:value={$updateProductData.categoryId} />
-			<input type="hidden" name="deletedImages" value={JSON.stringify(existingImages)} />
+			<input type="hidden" name="existingImages" value={JSON.stringify(existingImages)} />
 
 			<Button type="submit">Save changes</Button>
 		</form>

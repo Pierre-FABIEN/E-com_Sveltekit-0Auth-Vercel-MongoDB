@@ -97,6 +97,25 @@ export const actions: Actions = {
 				}
 			}
 
+			if (uploadedImageUrls.length > 0) {
+				for (const imageUrl of existingImages) {
+					const publicId = getPublicIdFromUrl(imageUrl);
+					if (publicId) {
+						try {
+							const result = await cloudinary.uploader.destroy(`products/${publicId}`);
+							console.log('Delete Result image existing to delete:', result);
+							if (result.result !== 'ok' && result.result !== 'not found') {
+								console.error('Error deleting image from Cloudinary:', result);
+								return fail(500, { message: 'Failed to delete image from Cloudinary' });
+							}
+						} catch (error) {
+							console.error('Error deleting image from Cloudinary:', error);
+							return fail(500, { message: 'Failed to delete image from Cloudinary' });
+						}
+					}
+				}
+			}
+
 			// Split the categoryId string into an array of strings
 			const categoryIds = form.data.categoryId[0].split(',').map((id) => id.trim());
 			console.log('Category IDs:', categoryIds);
@@ -118,25 +137,6 @@ export const actions: Actions = {
 				return fail(400, {
 					message: `The following categories do not exist: ${missingCategories.join(', ')}`
 				});
-			}
-
-			if (uploadedImageUrls.length > 0) {
-				for (const imageUrl of existingImages) {
-					const publicId = getPublicIdFromUrl(imageUrl);
-					if (publicId) {
-						try {
-							const result = await cloudinary.uploader.destroy(`products/${publicId}`);
-							console.log('Delete Result:', result);
-							if (result.result !== 'ok' && result.result !== 'not found') {
-								console.error('Error deleting image from Cloudinary:', result);
-								return fail(500, { message: 'Failed to delete image from Cloudinary' });
-							}
-						} catch (error) {
-							console.error('Error deleting image from Cloudinary:', error);
-							return fail(500, { message: 'Failed to delete image from Cloudinary' });
-						}
-					}
-				}
 			}
 
 			try {

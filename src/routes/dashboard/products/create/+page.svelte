@@ -6,7 +6,7 @@
 	import { Label } from '$UITools/shadcn/label';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createProductSchema } from '$lib/ZodSchema/productSchema';

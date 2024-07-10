@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
+	import { writable } from 'svelte/store';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -14,6 +15,7 @@
 	import { showNotification } from '$stores/Data/notificationStore';
 
 	import { updateProductSchema } from '$lib/ZodSchema/productSchema';
+	import { onMount } from 'svelte';
 
 	export let data: {
 		IupdateProductSchema: SuperValidated<Infer<typeof updateProductSchema>>;
@@ -47,16 +49,19 @@
 
 	let existingImages = data.IupdateProductSchema.data.existingImages;
 
-	// Fonction réactive pour mettre à jour les catégories
-	$: {
-		const productCategoryIds = data.IupdateProductSchema.data.categoryId;
-		data.AllCategories = data.AllCategories.map((category) => ({
-			...category,
-			checked: productCategoryIds.includes(category.id)
-		}));
-	}
+	onMount(() => {
+		const productCategories = data.IupdateProductSchema.data.categoryId;
+		data.AllCategories = data.AllCategories.map((category) => {
+			if (productCategories.includes(category.id)) {
+				category.checked = true;
+			}
+			return category;
+		});
+	});
 
-	$: console.log($updateProductData, 'updateProductData');
+	$: $updateProductData.categoryId = data.AllCategories.filter(
+		(category: any) => category.checked
+	).map((category: any) => category.id);
 </script>
 
 <div class="ccc">

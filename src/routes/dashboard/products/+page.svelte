@@ -6,7 +6,7 @@
 	import * as Table from '$UITools/shadcn/table';
 	import TableRow from '$UITools/shadcn/table/table-row.svelte';
 	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
-	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
+	import * as AlertDialog from '$UITools/shadcn/alert-dialog';
 	import { Input } from '$UITools/shadcn/input';
 	import { Badge } from '$UITools/shadcn/badge';
 	import { Toggle } from '$UITools/shadcn/toggle';
@@ -17,6 +17,7 @@
 
 	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
 	export let data: any;
 
@@ -34,22 +35,84 @@
 	let currentPage: number = 1;
 	let itemsPerPage: number = 5;
 
-	// Fonction pour filtrer les produits
-	$: filteredProducts = data.AllProducts.filter((product: any) =>
-		product.name.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+	// Variables pour le tri
+	let sortColumn: string = '';
+	let sortDirection: string = 'asc';
 
-	// Fonction pour paginer les produits
-	$: paginatedProducts = filteredProducts.slice(
-		(currentPage - 1) * itemsPerPage,
-		currentPage * itemsPerPage
-	);
+	// Fonction pour trier les produits
+	const sortProducts = (column: string) => {
+		console.log('sortProducts called with column:', column);
+		if (sortColumn === column) {
+			// Inverser la direction du tri
+			sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+		} else {
+			// Définir la nouvelle colonne de tri
+			sortColumn = column;
+			sortDirection = 'asc';
+		}
+
+		// Trier les produits
+		data.AllProducts.sort((a: any, b: any) => {
+			let aValue = a[column];
+			let bValue = b[column];
+
+			if (typeof aValue === 'string') {
+				aValue = aValue.toLowerCase();
+				bValue = bValue.toLowerCase();
+			}
+
+			if (aValue < bValue) {
+				return sortDirection === 'asc' ? -1 : 1;
+			}
+			if (aValue > bValue) {
+				return sortDirection === 'asc' ? 1 : -1;
+			}
+			return 0;
+		});
+
+		// Mettre à jour les produits filtrés et paginés
+		updateFilteredAndPaginatedProducts();
+
+		console.log('sorted products:', data.AllProducts); // Log pour vérifier le résultat du tri
+	};
+
+	// Fonction pour filtrer et paginer les produits
+	const updateFilteredAndPaginatedProducts = () => {
+		filteredProducts = data.AllProducts.filter((product: any) =>
+			product.name.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+
+		paginatedProducts = filteredProducts.slice(
+			(currentPage - 1) * itemsPerPage,
+			currentPage * itemsPerPage
+		);
+	};
+
+	// Initialisation des produits filtrés et paginés
+	let filteredProducts = [];
+	let paginatedProducts = [];
+
+	// Initialisation des produits filtrés et paginés à partir des données initiales
+	updateFilteredAndPaginatedProducts();
 
 	// Fonction pour changer de page
 	function changePage(page: number) {
 		currentPage = page;
+		updateFilteredAndPaginatedProducts();
 	}
 
+	function formatDate(dateString: string): string {
+		const date = new Date(dateString);
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const year = String(date.getFullYear()).slice(-2);
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+
+		return `${day}/${month}/${year} à ${hours}:${minutes}`;
+	}
+
+	// Réagir aux changements de message de suppression
 	$: if ($deleteProductMessage)
 		showNotification(
 			$deleteProductMessage,
@@ -82,21 +145,92 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head>name</Table.Head>
-							<Table.Head>price</Table.Head>
-							<Table.Head>stock</Table.Head>
-							<Table.Head>catégories</Table.Head>
-							<Table.Head>images</Table.Head>
-							<Table.Head>description</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									stock
+									<button on:click={() => sortProducts('stock')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									name
+									<button on:click={() => sortProducts('name')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									price
+									<button on:click={() => sortProducts('price')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									catégories
+									<button on:click={() => sortProducts('categories')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									images
+									<button on:click={() => sortProducts('images')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									description
+									<button on:click={() => sortProducts('description')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+
+							<Table.Head>
+								<div
+									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+									class="rcb"
+								>
+									date de création
+									<button on:click={() => sortProducts('createdAt')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each paginatedProducts as product, i (i)}
 							<TableRow>
-								<TableCell>{product.name}</TableCell>
-
-								<TableCell>{product.price}</TableCell>
 								<TableCell>{product.stock}</TableCell>
+								<TableCell>{product.name}</TableCell>
+								<TableCell>{product.price}</TableCell>
 								<TableCell>
 									{#each product.categories as category}
 										<Badge class="m-1">
@@ -108,6 +242,8 @@
 									{product.images.length}
 								</TableCell>
 								<TableCell>{product.description.slice(0, 20)}...</TableCell>
+								<TableCell>{formatDate(product.createdAt)}</TableCell>
+
 								<TableCell class="rce">
 									<AlertDialog.Root>
 										<AlertDialog.Trigger asChild let:builder>

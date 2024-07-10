@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-const MAX_FILE_SIZE = 1024 * 1024 * 2;
+const MAX_FILE_SIZE = 1024 * 1024 * 1;
 const ACCEPTED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
 // Schema for creating a product
 const createProductSchema = z.object({
@@ -15,12 +14,13 @@ const createProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.union([
-			z.instanceof(File, { message: 'Please upload a file.' }),
-			z.string().url({ message: 'Please provide a valid URL.' })
-		])
-		.refine((f) => typeof f === 'string' || f.size < 1_000_000, 'Max 1MB upload size.')
-		.array()
+		.array(z.any())
+		.refine((files) => Array.isArray(files) && files.length > 0, 'At least one image is required.')
+		.refine((files) => files.every((file) => file.size <= MAX_FILE_SIZE), `Max image size is 2MB.`)
+		.refine(
+			(files) => files.every((file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)),
+			'Only .jpg, .jpeg, .png and .webp formats are supported.'
+		)
 });
 
 // Schema for updating a product
@@ -35,12 +35,13 @@ const updateProductSchema = z.object({
 		.array(z.string().min(1, 'Category ID must be a non-empty string'))
 		.nonempty('At least one category ID is required'),
 	images: z
-		.union([
-			z.instanceof(File, { message: 'Please upload a file.' }),
-			z.string().url({ message: 'Please provide a valid URL.' })
-		])
-		.refine((f) => typeof f === 'string' || f.size < 1_000_000, 'Max 1MB upload size.')
-		.array(),
+		.array(z.any())
+		.refine((files) => Array.isArray(files) && files.length > 0, 'At least one image is required.')
+		.refine((files) => files.every((file) => file.size <= MAX_FILE_SIZE), `Max image size is 2MB.`)
+		.refine(
+			(files) => files.every((file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)),
+			'Only .jpg, .jpeg, .png and .webp formats are supported.'
+		),
 	existingImages: z.array(z.string())
 });
 

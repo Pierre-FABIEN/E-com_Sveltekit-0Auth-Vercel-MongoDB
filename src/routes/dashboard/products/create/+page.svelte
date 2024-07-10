@@ -50,6 +50,7 @@
 	}
 
 	$: console.log($valueErrors, 'valueErrors');
+	$: console.log($createProductMessage, 'createProductMessage');
 </script>
 
 <div class="ccc">
@@ -122,15 +123,19 @@
 						<div
 							class="ccc w-[300px] h-[300px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg relative"
 						>
-							<input
-								multiple
-								bind:files={$values}
-								name="images"
-								accept="image/png, image/jpeg"
-								type="file"
-								class="absolute opacity-0 w-full h-full cursor-pointer z-10"
-							/>
-
+							<Form.Field name="images" form={createProduct}>
+								<Form.Control let:attrs>
+									<input
+										multiple
+										bind:files={$values}
+										name="images"
+										accept="image/png, image/jpeg"
+										type="file"
+										class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+									/>
+								</Form.Control>
+								<Form.FieldErrors />
+							</Form.Field>
 							<div class="text-center pointer-events-none">
 								<svg
 									class="mx-auto h-12 w-12 text-gray-400"
@@ -169,15 +174,6 @@
 							{/each}
 						</div>
 					</div>
-					{#if $valueErrors.length > 0}
-						<ul class="invalid text-red-500">
-							{#each $valueErrors as error}
-								{#if error}
-									<li>{error}</li>
-								{/if}
-							{/each}
-						</ul>
-					{/if}
 				</div>
 			</div>
 

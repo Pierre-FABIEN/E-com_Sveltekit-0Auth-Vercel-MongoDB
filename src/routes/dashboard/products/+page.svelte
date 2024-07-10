@@ -83,18 +83,18 @@
 					<Table.Header>
 						<Table.Row>
 							<Table.Head>name</Table.Head>
-							<Table.Head>description</Table.Head>
 							<Table.Head>price</Table.Head>
 							<Table.Head>stock</Table.Head>
 							<Table.Head>catégories</Table.Head>
 							<Table.Head>images</Table.Head>
+							<Table.Head>description</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each paginatedProducts as product, i (i)}
 							<TableRow>
 								<TableCell>{product.name}</TableCell>
-								<TableCell>{product.description.slice(0, 20)}...</TableCell>
+
 								<TableCell>{product.price}</TableCell>
 								<TableCell>{product.stock}</TableCell>
 								<TableCell>
@@ -107,6 +107,7 @@
 								<TableCell>
 									{product.images.length}
 								</TableCell>
+								<TableCell>{product.description.slice(0, 20)}...</TableCell>
 								<TableCell class="rce">
 									<AlertDialog.Root>
 										<AlertDialog.Trigger asChild let:builder>

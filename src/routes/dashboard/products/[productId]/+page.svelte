@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import SuperDebug, { filesFieldProxy, superForm } from 'sveltekit-superforms';
+	import { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
-	import { writable } from 'svelte/store';
 
 	import * as Form from '$UITools/shadcn/form';
 	import { Input } from '$UITools/shadcn/input';
@@ -39,15 +38,10 @@
 	let DataStock: number = data.IupdateProductSchema.data.stock;
 
 	const files = filesFieldProxy(updateProduct, 'images');
-	const { values, valueErrors } = files;
+	const { values } = files;
 
 	$: $updateProductData.price = Number(DataPrice);
 	$: $updateProductData.stock = Number(DataStock);
-
-	$: if ($updateProductMessage === 'Product updated successfully') {
-		goto('/dashboard/products');
-		showNotification($updateProductMessage, 'success');
-	}
 
 	let existingImages = data.IupdateProductSchema.data.existingImages;
 
@@ -64,6 +58,11 @@
 	$: $updateProductData.categoryId = data.AllCategories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
+
+	$: if ($updateProductMessage === 'Product updated successfully') {
+		showNotification($updateProductMessage, 'success');
+		$updateProductData.existingImages = data.IupdateProductSchema.data.existingImages;
+	}
 </script>
 
 <div class="ccc">

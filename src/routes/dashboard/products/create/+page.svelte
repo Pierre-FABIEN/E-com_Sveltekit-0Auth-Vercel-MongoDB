@@ -46,7 +46,7 @@
 	$: $createProductData.stock = Number(DataStock);
 
 	$: if ($createProductMessage === 'Product created successfully') {
-		goto('/dashboard/products');
+		goto('/dashboard/products/');
 		showNotification($createProductMessage, 'success');
 	}
 </script>

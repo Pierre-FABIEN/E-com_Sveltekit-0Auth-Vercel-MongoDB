@@ -50,12 +50,12 @@ export const actions: Actions = {
 	updateProduct: async ({ request }) => {
 		try {
 			const formData = await request.formData();
-			console.log('formData:', formData);
+			console.log('Form data received:', formData);
 			const form = await superValidate(formData, zod(updateProductSchema));
-			console.log('Form Data:', form.data);
+			console.log('Validated form data:', form.data);
 
 			if (!form.valid) {
-				console.log('Validation errors:', form.errors);
+				console.error('Validation errors:', form.errors);
 				return fail(400, withFiles({ form }));
 			}
 
@@ -81,7 +81,6 @@ export const actions: Actions = {
 					try {
 						const buffer = await image.arrayBuffer();
 						const base64String = Buffer.from(buffer).toString('base64');
-
 						const uploadResponse = await cloudinary.uploader.upload(
 							`data:${image.type};base64,${base64String}`,
 							{
@@ -104,7 +103,7 @@ export const actions: Actions = {
 					if (publicId) {
 						try {
 							const result = await cloudinary.uploader.destroy(`products/${publicId}`);
-							console.log('Delete Result image existing to delete:', result);
+							console.log('Delete Result:', result);
 							if (result.result !== 'ok' && result.result !== 'not found') {
 								console.error('Error deleting image from Cloudinary:', result);
 								return fail(500, { message: 'Failed to delete image from Cloudinary' });

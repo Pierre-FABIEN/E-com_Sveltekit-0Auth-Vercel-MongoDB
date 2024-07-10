@@ -51,7 +51,7 @@
 
 	onMount(() => {
 		const productCategories = data.IupdateProductSchema.data.categoryId;
-		data.AllCategories = data.AllCategories.map((category) => {
+		data.AllCategories = data.AllCategories.map((category: any) => {
 			if (productCategories.includes(category.id)) {
 				category.checked = true;
 			}

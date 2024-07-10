@@ -60,8 +60,9 @@
 	).map((category: any) => category.id);
 
 	$: if ($updateProductMessage === 'Product updated successfully') {
-		showNotification($updateProductMessage, 'success');
 		$updateProductData.existingImages = data.IupdateProductSchema.data.existingImages;
+		goto('/dashboard/products/');
+		showNotification($updateProductMessage, 'success');
 	}
 </script>
 

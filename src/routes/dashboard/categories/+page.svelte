@@ -1,11 +1,15 @@
 <script lang="ts">
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+
 	import { Button } from '$UITools/shadcn/button';
-	import * as Sheet from '$UITools/shadcn/sheet/index.js';
 	import * as Table from '$UITools/shadcn/table';
 	import TableRow from '$UITools/shadcn/table/table-row.svelte';
 	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
-	import * as AlertDialog from '$UITools/shadcn//alert-dialog';
+	import * as AlertDialog from '$UITools/shadcn/alert-dialog';
 	import { Input } from '$UITools/shadcn/input';
+	import { Toggle } from '$UITools/shadcn/toggle';
+	import * as Select from '$UITools/shadcn/select';
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
@@ -13,10 +17,7 @@
 
 	import { deleteCategorySchema } from '$lib/ZodSchema/categorySchema';
 	import { showNotification } from '$stores/Data/notificationStore';
-
-	import { Toggle } from '$UITools/shadcn/toggle';
-	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
 	export let data: any;
 
@@ -27,76 +28,198 @@
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
 
-	// Nouvelle variable pour le texte de recherche
+	// New variable for search text
 	let searchQuery: string = '';
 
 	// Pagination variables
 	let currentPage: number = 1;
 	let itemsPerPage: number = 5;
 
-	// Fonction pour filtrer les categories
-	$: filteredCategories = data.AllCategories.filter((category: any) =>
-		category.name.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+	const optionPage = [
+		{ label: '5', value: 5 },
+		{ label: '10', value: 10 },
+		{ label: '15', value: 15 },
+		{ label: '20', value: 20 }
+	];
 
-	// Fonction pour paginer les categories
-	$: paginatedCategories = filteredCategories.slice(
-		(currentPage - 1) * itemsPerPage,
-		currentPage * itemsPerPage
-	);
+	// Sorting variables
+	let sortColumn: string = '';
+	let sortDirection: string = 'asc';
 
-	// Fonction pour changer de page
+	// Function to sort categories
+	const sortCategories = (column: string) => {
+		console.log('sortCategories called with column:', column);
+		if (sortColumn === column) {
+			// Toggle sort direction
+			sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+		} else {
+			// Set new sort column
+			sortColumn = column;
+			sortDirection = 'asc';
+		}
+
+		// Sort categories
+		data.AllCategories.sort((a: any, b: any) => {
+			let aValue = a[column];
+			let bValue = b[column];
+
+			if (typeof aValue === 'string') {
+				aValue = aValue.toLowerCase();
+				bValue = bValue.toLowerCase();
+			}
+
+			if (aValue < bValue) {
+				return sortDirection === 'asc' ? -1 : 1;
+			}
+			if (aValue > bValue) {
+				return sortDirection === 'asc' ? 1 : -1;
+			}
+			return 0;
+		});
+
+		// Update filtered and paginated categories
+		updateFilteredAndPaginatedCategories();
+
+		console.log('sorted categories:', data.AllCategories); // Log to check the sorting result
+	};
+
+	// Function to filter and paginate categories
+	const updateFilteredAndPaginatedCategories = () => {
+		filteredCategories = data.AllCategories.filter((category: any) =>
+			category.name.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+
+		paginatedCategories = filteredCategories.slice(
+			(currentPage - 1) * itemsPerPage,
+			currentPage * itemsPerPage
+		);
+	};
+
+	// Initialize filtered and paginated categories
+	let filteredCategories = [];
+	let paginatedCategories = [];
+
+	// Initialize filtered and paginated categories from initial data
+	updateFilteredAndPaginatedCategories();
+
+	// Function to change page
 	function changePage(page: number) {
 		currentPage = page;
+		updateFilteredAndPaginatedCategories();
 	}
 
+	// Function to change items per page
+	function changeItemsPerPage(items: number) {
+		itemsPerPage = items;
+		currentPage = 1; // Reset to first page
+		updateFilteredAndPaginatedCategories();
+	}
+
+	function formatDate(dateString: string): string {
+		const date = new Date(dateString);
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const year = String(date.getFullYear()).slice(-2);
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+
+		return `${day}/${month}/${year} à ${hours}:${minutes}`;
+	}
+
+	// React to delete message changes
 	$: if ($deleteCategoryMessage)
 		showNotification(
 			$deleteCategoryMessage,
 			$deleteCategoryMessage.includes('success') ? 'success' : 'error'
 		);
-
-	$: if ($deleteCategoryMessage) {
-		console.log('showNotification');
-	}
 </script>
 
 <div class="rcs m-5">
 	<div class="w-[100%] m-5">
 		<div class="border p-2">
-			<h1 class="my-5">Category</h1>
+			<h1 class="my-5 text-xl">Produits</h1>
 			<div class="rcb mb-5">
 				<Input
 					type="text"
-					placeholder="Cherchez un categorie"
+					placeholder="Cherchez un produit"
 					class="max-w-xs"
 					bind:value={searchQuery}
 				/>
-				<a
-					href="/dashboard/categories/create"
-					class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
-				>
-					<Toggle>
-						<span class="hidden">Creer un produit</span>
-						<PlusCircledIcon class="w-7 h-7" />
-					</Toggle>
-				</a>
+				<div class="rcc nowrap">
+					<div class="ccc">
+						<Select.Root portal={null}>
+							<Select.Trigger class="w-[150px]">
+								<Select.Value placeholder="Items par page" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Group>
+									<Select.Label>Pages</Select.Label>
+									{#each optionPage as option}
+										<Select.Item
+											value={option.value}
+											on:click={() => changeItemsPerPage(option.value)}>{option.label}</Select.Item
+										>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+							<Select.Input name="itemsPerPage" />
+						</Select.Root>
+					</div>
+
+					<a
+						href="/dashboard/categories/create"
+						class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+					>
+						<Toggle>
+							<span class="hidden">Créer un produit</span>
+							<PlusCircledIcon class="w-7 h-7" />
+						</Toggle>
+					</a>
+				</div>
 			</div>
 			<div class="border">
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head>name</Table.Head>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
+									name
+									<button on:click={() => sortCategories('name')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
+									date de création
+									<button on:click={() => sortCategories('createdAt')}>
+										<ChevronDown class="cursor-pointer" />
+									</button>
+								</div>
+							</Table.Head>
+
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">Edition</div>
+							</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each paginatedCategories as category, i (i)}
 							<TableRow>
 								<TableCell>{category.name}</TableCell>
-								<TableCell>
+								<TableCell>{formatDate(category.createdAt)}</TableCell>
+
+								<TableCell class="rce">
 									<AlertDialog.Root>
 										<AlertDialog.Trigger asChild let:builder>
-											<Button builders={[builder]} variant="outline" class="ml-0 p-1 text-xs">
+											<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
 												<Trash class="h-4 w-8" />
 											</Button>
 										</AlertDialog.Trigger>
@@ -131,7 +254,6 @@
 				</Table.Root>
 			</div>
 
-			<!-- Pagination Controls -->
 			<div class="pagination-controls mt-4 rce">
 				{#if currentPage > 1}
 					<Button on:click={() => changePage(currentPage - 1)}>Previous</Button>

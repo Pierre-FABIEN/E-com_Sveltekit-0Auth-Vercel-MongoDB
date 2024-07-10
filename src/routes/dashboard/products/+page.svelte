@@ -182,66 +182,60 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									stock
 									<button on:click={() => sortProducts('stock')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									name
 									<button on:click={() => sortProducts('name')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									price
 									<button on:click={() => sortProducts('price')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									catégories
 									<button on:click={() => sortProducts('categories')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									images
 									<button on:click={() => sortProducts('images')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									description
 									<button on:click={() => sortProducts('description')}>
 										<ChevronDown class="cursor-pointer" />
@@ -249,16 +243,21 @@
 								</div>
 							</Table.Head>
 
-							<Table.Head>
-								<div
-									style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-									class="rcb"
-								>
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">
 									date de création
 									<button on:click={() => sortProducts('createdAt')}>
 										<ChevronDown class="cursor-pointer" />
 									</button>
 								</div>
+							</Table.Head>
+
+							<Table.Head
+								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+							>
+								<div class="rcb">Edition</div>
 							</Table.Head>
 						</Table.Row>
 					</Table.Header>

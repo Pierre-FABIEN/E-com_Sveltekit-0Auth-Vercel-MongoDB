@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function updateCategory(data: { id: string; name: string }) {
+export const updateCategory = async (data: { id: string; name: string }) => {
 	console.log('Updating category with data:', data);
 
 	try {
@@ -15,13 +15,4 @@ async function updateCategory(data: { id: string; name: string }) {
 		console.error('Error updating category:', error);
 		throw error;
 	}
-}
-
-// Exemple d'utilisation
-updateCategory({ id: 'category-id', name: 'Updated Category Name' })
-	.then((category) => {
-		console.log('Category updated:', category);
-	})
-	.catch((error) => {
-		console.error('Error:', error);
-	});
+};

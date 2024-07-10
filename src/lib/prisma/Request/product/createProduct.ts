@@ -1,22 +1,13 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '$lib/prisma';
 
-async function createProduct(data: {
+export const createProduct = async (productData: {
 	name: string;
 	description: string;
 	price: number;
+	stock: number;
 	images: string[];
-	categoryId: string[];
-}) {
+}) => {
 	return prisma.product.create({
-		data: {
-			name: data.name,
-			description: data.description,
-			price: data.price,
-			images: data.images,
-			categories: {
-				connect: data.categoryId.map((id: string) => ({ id }))
-			}
-		}
+		data: productData
 	});
-}
+};

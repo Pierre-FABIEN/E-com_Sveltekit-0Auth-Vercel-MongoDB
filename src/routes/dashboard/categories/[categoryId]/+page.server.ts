@@ -2,15 +2,15 @@ import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import prisma from '$lib/prisma';
+
 import { updateCategorySchema } from '$lib/ZodSchema/categorySchema';
+import { updateCategory } from '$lib/prisma/Request/categories/updateCategory';
+import { getCategoriesById } from '$lib/prisma/Request/categories/getCategoriesById';
 
 export const load: PageServerLoad = async ({ params }) => {
 	console.log('Loading category data for ID:', params.categoryId);
 
-	const category = await prisma.category.findUnique({
-		where: { id: params.categoryId }
-	});
+	const category = await getCategoriesById(params.categoryId);
 
 	if (!category) {
 		console.log('Category not found');
@@ -47,15 +47,9 @@ export const actions: Actions = {
 
 		try {
 			const categoryId = formData.get('categoryId');
-			console.log('Updating category with ID:', categoryId);
 
-			const updatedCategory = await prisma.category.update({
-				where: { id: categoryId },
-				data: {
-					name: form.data.name
-				}
-			});
-			console.log('Category updated successfully:', updatedCategory);
+			await updateCategory({ id: categoryId as string, name: form.data.name });
+
 			return message(form, 'Category updated successfully');
 		} catch (error) {
 			console.error('Error updating category:', error);

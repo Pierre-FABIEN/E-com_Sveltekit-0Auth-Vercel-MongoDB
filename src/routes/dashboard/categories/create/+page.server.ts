@@ -2,8 +2,9 @@ import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import prisma from '$lib/prisma';
+
 import { createCategorySchema } from '$lib/ZodSchema/categorySchema';
+import { createCategory } from '$lib/prisma/Request/categories/createCategory';
 
 // Fonction de chargement
 export const load: PageServerLoad = async () => {
@@ -31,12 +32,8 @@ export const actions: Actions = {
 
 		try {
 			console.log('Creating new category with name:', form.data.name);
-			const newCategory = await prisma.category.create({
-				data: {
-					name: form.data.name
-				}
-			});
-			console.log('New category created:', newCategory);
+			await createCategory({ name: form.data.name });
+
 			return message(form, 'Category created successfully');
 		} catch (error) {
 			console.error('Error creating category:', error);

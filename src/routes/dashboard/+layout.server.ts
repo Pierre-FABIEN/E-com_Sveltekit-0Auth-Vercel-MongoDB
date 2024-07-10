@@ -21,10 +21,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		throw redirect(302, '/');
 	}
 
-	const allUsers = await getAllUsers();
-
 	return {
-		allUsers,
 		session
 	};
 };

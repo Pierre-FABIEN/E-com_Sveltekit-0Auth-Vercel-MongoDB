@@ -1,17 +1,14 @@
+// +page.server.ts
 import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import cloudinary from '$lib/Cloudinary';
-import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
-import { deleteCategorySchema } from '$lib/ZodSchema/categorySchema';
-import prisma from '$lib/prisma';
 
-function getPublicIdFromUrl(url: string): string | null {
-	const regex = /\/([^/]+)\.[a-z]+$/;
-	const match = url.match(regex);
-	return match ? match[1] : null;
-}
+import { deleteCategorySchema } from '$lib/ZodSchema/categorySchema';
+
+import { getCategoriesById } from '$lib/prisma/Request/categories/getCategoriesById';
+import { deleteProductCategoriesByCategoryId } from '$lib/prisma/Request/categories/deleteProductCategoriesByCategoryId';
+import { deleteCategoryById } from '$lib/prisma/Request/categories/deleteCategoryById';
 
 export const load: PageServerLoad = async () => {
 	const IdeleteCategorySchema = await superValidate(zod(deleteCategorySchema));
@@ -33,9 +30,7 @@ export const actions: Actions = {
 		}
 		try {
 			// Vérifier si la catégorie existe
-			const existingCategory = await prisma.category.findUnique({
-				where: { id: categoryId }
-			});
+			const existingCategory = await getCategoriesById(categoryId);
 			if (!existingCategory) {
 				console.log('Category not found:', categoryId);
 				return fail(400, { message: 'Category not found' });
@@ -43,15 +38,11 @@ export const actions: Actions = {
 			console.log('Category found:', existingCategory);
 
 			// Supprimer les relations de catégorie associées au produit
-			const deletedProductCategories = await prisma.productCategory.deleteMany({
-				where: { categoryId: categoryId }
-			});
+			const deletedProductCategories = await deleteProductCategoriesByCategoryId(categoryId);
 			console.log('Deleted product categories:', deletedProductCategories);
 
 			// Supprimer la catégorie
-			const deletedCategory = await prisma.category.delete({
-				where: { id: categoryId }
-			});
+			const deletedCategory = await deleteCategoryById(categoryId);
 			console.log('Deleted category:', deletedCategory);
 			return message(form, 'Category deleted successfully');
 		} catch (error) {

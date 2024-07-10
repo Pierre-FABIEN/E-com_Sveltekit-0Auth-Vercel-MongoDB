@@ -1,11 +1,13 @@
+// src/routes/your-route/+page.server.ts
 import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
-import prisma from '$lib/prisma';
-
 import { createProductSchema } from '$lib/ZodSchema/productSchema';
+import { createProduct } from '$lib/prisma/Request/product/createProduct';
+import { connectProductToCategories } from '$lib/prisma/Request/product/connectProductToCategories';
+import { getCategoriesByIds } from '$lib/prisma/Request/categories/getCategoriesByIds';
 
 export const load: PageServerLoad = async () => {
 	const IcreateProductSchema = await superValidate(zod(createProductSchema));
@@ -53,21 +55,10 @@ export const actions: Actions = {
 			}
 		}
 
-		// Traiter les categoryId comme un tableau de chaînes
 		const categoryIdsString = formData.get('categoryId') as string;
 		const categoryIds = categoryIdsString.split(',').map((id) => id.trim());
-		console.log(categoryIds, 'categoryIds');
 
-		// Vérifier l'existence des catégories
-		const existingCategories = await prisma.category.findMany({
-			where: {
-				id: { in: categoryIds }
-			},
-			select: {
-				id: true
-			}
-		});
-
+		const existingCategories = await getCategoriesByIds(categoryIds);
 		console.log(existingCategories, 'existingCategories');
 
 		const existingCategoryIds = existingCategories.map((cat) => cat.id);
@@ -82,25 +73,16 @@ export const actions: Actions = {
 			});
 		}
 
-		// Créer un produit dans la base de données avec les URLs des images uploadées
 		try {
-			const product = await prisma.product.create({
-				data: {
-					name: form.data.name,
-					description: form.data.description,
-					price: form.data.price,
-					stock: form.data.stock,
-					images: uploadedImageUrls
-				}
+			const product = await createProduct({
+				name: form.data.name,
+				description: form.data.description,
+				price: form.data.price,
+				stock: form.data.stock,
+				images: uploadedImageUrls
 			});
 
-			// Connecter les catégories au produit via ProductCategory
-			await prisma.productCategory.createMany({
-				data: existingCategoryIds.map((categoryId) => ({
-					productId: product.id,
-					categoryId
-				}))
-			});
+			await connectProductToCategories(product.id, existingCategoryIds);
 
 			return message(form, 'Product created successfully');
 		} catch (error) {

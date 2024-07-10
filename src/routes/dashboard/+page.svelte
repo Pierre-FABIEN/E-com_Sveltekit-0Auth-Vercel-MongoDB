@@ -6,7 +6,8 @@
 </script>
 
 <div class="w-[100vw] rts">
+	<h1>Dashboard</h1>
 	<div class="m-5">
-		<Users Users={data.allUsers} />
+		<!-- <Users Users={data.allUsers} /> -->
 	</div>
 </div>

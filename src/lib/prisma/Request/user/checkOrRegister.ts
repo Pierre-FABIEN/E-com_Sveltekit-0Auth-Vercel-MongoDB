@@ -2,7 +2,7 @@
 
 import prisma from '$lib/prisma';
 
-export const checkAuth = async (session: any) => {
+export const checkOrRegister = async (session: any) => {
 	let user;
 
 	if (session?.user?.email) {
@@ -24,7 +24,7 @@ export const checkAuth = async (session: any) => {
 				});
 			}
 		} catch (error) {
-			console.error('Error fetching user:', error);
+			console.error('Error fetching or creating user:', error);
 		}
 	}
 

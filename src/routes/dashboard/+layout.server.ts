@@ -1,8 +1,8 @@
 import type { LayoutServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
-import { checkAuth } from '$lib/prisma/Request/checkAuth';
-import { getAllUsers } from '$lib/prisma/Request/getAllUsers';
+import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
+import { getAllUsers } from '$lib/prisma/Request/user/getAllUsers';
 
 const allowedRoles = ['admin'];
 
@@ -11,7 +11,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	// Récupérer le rôle de l'utilisateur depuis la session
 	const session = await locals.getSession();
 
-	const user = await checkAuth(session);
+	const user = await checkOrRegister(session);
 
 	if (user && session) {
 		session.user.role = user.role;

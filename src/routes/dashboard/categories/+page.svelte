@@ -181,9 +181,7 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head
-								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-							>
+							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									name
 									<button on:click={() => sortCategories('name')}>
@@ -192,9 +190,7 @@
 								</div>
 							</Table.Head>
 
-							<Table.Head
-								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
-							>
+							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									date de création
 									<button on:click={() => sortCategories('createdAt')}>
@@ -204,7 +200,7 @@
 							</Table.Head>
 
 							<Table.Head
-								style="border-right: 1px solid rgb(30, 41, 59); border-radius: 0px; padding-right: 5px"
+								class="w-[150px] text-center border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
 							>
 								<div class="rcb">Edition</div>
 							</Table.Head>

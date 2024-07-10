@@ -1,8 +1,8 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
-import { checkAuth } from '$lib/prisma/Request/checkAuth';
-import { getAllProducts } from '$lib/prisma/Request/getAllProducts';
-import { getAllCategories } from '$lib/prisma/Request/getAllCategories';
+import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
+import { getAllProducts } from '$lib/prisma/Request/product/getAllProducts';
+import { getAllCategories } from '$lib/prisma/Request/categories/getAllCategories';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;
@@ -12,7 +12,7 @@ export const load: LayoutServerLoad = async (event) => {
 	const AllCategories = await getAllCategories();
 
 	const session = await locals.getSession();
-	const user = await checkAuth(session);
+	const user = await checkOrRegister(session);
 
 	if (user && session) {
 		session.user.role = user.role;

@@ -21,6 +21,8 @@
 	const { form, enhance, message, validate } = formProfil;
 
 	let userId: string = data.session?.user.id;
+
+	console.log(data, 'data');
 </script>
 
 <div class="card">

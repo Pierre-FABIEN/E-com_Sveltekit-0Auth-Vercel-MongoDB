@@ -25,14 +25,14 @@
 	<meta name="description" content="shop this app" />
 </svelte:head>
 
-<div class="shop" in:enter={{ path }} out:exit={{ path }}>
-	<div class="pageShop">
-		<h1 class="mt-0">shop</h1>
-		<div class="rca w-[100vw]">
+<div class="min-h-screen w-[100vw] absolute" in:enter={{ path }} out:exit={{ path }}>
+	<div class="ccc min-w-screen min-h-screen">
+		<h1 class="p-5 w-[80vw]">shop</h1>
+		<div class="rcs w-[80vw]">
 			{#each data.AllProducts as product}
-				<Card class="product-card">
-					<CardHeader>
-						<img src={product.images[0]} alt={product.name} class="product-image" />
+				<Card class="product-card w-[200px] m-5">
+					<CardHeader class="w-[100%]">
+						<img src={product.images[0]} alt={product.name} class="product-image object-cover" />
 					</CardHeader>
 					<CardContent>
 						<CardTitle class="product-name">{product.name}</CardTitle>
@@ -46,24 +46,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	.shop {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 16px;
-		padding: 16px;
-	}
-
-	.product-image {
-		width: 100%;
-		height: 200px;
-		object-fit: cover;
-	}
-
-	.product-price {
-		color: #2ecc71;
-		font-size: 1.1em;
-		margin: 8px 0;
-	}
-</style>

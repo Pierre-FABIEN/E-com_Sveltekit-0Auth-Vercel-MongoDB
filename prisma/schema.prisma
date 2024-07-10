@@ -33,18 +33,52 @@ model Address {
   @@map("addresses")
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  CANCELLED
+}
+
 model Order {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String        @db.ObjectId
-  addressId     String        @db.ObjectId
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String            @db.ObjectId
+  addressId     String?           @db.ObjectId
   total         Float
   transactions  Transaction[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @default(now())
+  status        OrderStatus       @default(PENDING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now())
+  items         OrderItem[]       // Relation avec OrderItem
 
-  user          User          @relation(fields: [userId], references: [id])
-  address       Address       @relation(fields: [addressId], references: [id])
+  user          User              @relation(fields: [userId], references: [id])
+  address       Address?          @relation(fields: [addressId], references: [id])
+  statusHistory OrderStatusHistory[]
+
   @@map("orders")
+}
+
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int
+  price     Float
+
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String      @db.ObjectId
+  status    OrderStatus
+  changedAt DateTime    @default(now())
+
+  order     Order       @relation(fields: [orderId], references: [id])
+  @@map("order_status_histories")
 }
 
 model Product {
@@ -52,9 +86,10 @@ model Product {
   name         String
   description  String
   price        Float
-  stock        Float
+  stock        Int
   images       String[]
   categories   ProductCategory[]
+  orderItems   OrderItem[]   // Relation avec OrderItem
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
   @@map("products")

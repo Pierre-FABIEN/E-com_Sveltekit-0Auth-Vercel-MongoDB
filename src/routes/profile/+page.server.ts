@@ -1,11 +1,11 @@
-import { checkAuth } from '$lib/prisma/Request/checkAuth';
+import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad, Actions } from './$types';
 import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { updateUserData } from '$lib/prisma/Request/updateUserData';
+import { updateUserData } from '$lib/prisma/Request/user/updateUserData';
 
 const allowedRoles = ['user', 'admin'];
 
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (event) => {
 	// Récupérer le rôle de l'utilisateur depuis la session
 	const session: any = await locals.getSession();
 
-	const user = await checkAuth(session);
+	const user = await checkOrRegister(session);
 	if (user && session) {
 		session.user.role = user.role;
 		session.user.id = user.id;

@@ -10,6 +10,7 @@
 	import { Input } from '$UITools/shadcn/input';
 	import { Badge } from '$UITools/shadcn/badge';
 	import { Toggle } from '$UITools/shadcn/toggle';
+	import * as Select from '$UITools/shadcn/select';
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
@@ -28,30 +29,37 @@
 
 	const { enhance: deleteProductEnhance, message: deleteProductMessage } = deleteProduct;
 
-	// Nouvelle variable pour le texte de recherche
+	// New variable for search text
 	let searchQuery: string = '';
 
 	// Pagination variables
 	let currentPage: number = 1;
 	let itemsPerPage: number = 5;
 
-	// Variables pour le tri
+	const optionPage = [
+		{ label: '5', value: 5 },
+		{ label: '10', value: 10 },
+		{ label: '15', value: 15 },
+		{ label: '20', value: 20 }
+	];
+
+	// Sorting variables
 	let sortColumn: string = '';
 	let sortDirection: string = 'asc';
 
-	// Fonction pour trier les produits
+	// Function to sort products
 	const sortProducts = (column: string) => {
 		console.log('sortProducts called with column:', column);
 		if (sortColumn === column) {
-			// Inverser la direction du tri
+			// Toggle sort direction
 			sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
 		} else {
-			// Définir la nouvelle colonne de tri
+			// Set new sort column
 			sortColumn = column;
 			sortDirection = 'asc';
 		}
 
-		// Trier les produits
+		// Sort products
 		data.AllProducts.sort((a: any, b: any) => {
 			let aValue = a[column];
 			let bValue = b[column];
@@ -70,13 +78,13 @@
 			return 0;
 		});
 
-		// Mettre à jour les produits filtrés et paginés
+		// Update filtered and paginated products
 		updateFilteredAndPaginatedProducts();
 
-		console.log('sorted products:', data.AllProducts); // Log pour vérifier le résultat du tri
+		console.log('sorted products:', data.AllProducts); // Log to check the sorting result
 	};
 
-	// Fonction pour filtrer et paginer les produits
+	// Function to filter and paginate products
 	const updateFilteredAndPaginatedProducts = () => {
 		filteredProducts = data.AllProducts.filter((product: any) =>
 			product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,16 +96,23 @@
 		);
 	};
 
-	// Initialisation des produits filtrés et paginés
+	// Initialize filtered and paginated products
 	let filteredProducts = [];
 	let paginatedProducts = [];
 
-	// Initialisation des produits filtrés et paginés à partir des données initiales
+	// Initialize filtered and paginated products from initial data
 	updateFilteredAndPaginatedProducts();
 
-	// Fonction pour changer de page
+	// Function to change page
 	function changePage(page: number) {
 		currentPage = page;
+		updateFilteredAndPaginatedProducts();
+	}
+
+	// Function to change items per page
+	function changeItemsPerPage(items: number) {
+		itemsPerPage = items;
+		currentPage = 1; // Reset to first page
 		updateFilteredAndPaginatedProducts();
 	}
 
@@ -112,7 +127,7 @@
 		return `${day}/${month}/${year} à ${hours}:${minutes}`;
 	}
 
-	// Réagir aux changements de message de suppression
+	// React to delete message changes
 	$: if ($deleteProductMessage)
 		showNotification(
 			$deleteProductMessage,
@@ -131,15 +146,37 @@
 					class="max-w-xs"
 					bind:value={searchQuery}
 				/>
-				<a
-					href="/dashboard/products/create"
-					class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
-				>
-					<Toggle>
-						<span class="hidden">Creer un produit</span>
-						<PlusCircledIcon class="w-7 h-7" />
-					</Toggle>
-				</a>
+				<div class="rcc nowrap">
+					<div class="ccc">
+						<Select.Root portal={null}>
+							<Select.Trigger class="w-[150px]">
+								<Select.Value placeholder="Items par page" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Group>
+									<Select.Label>Pages</Select.Label>
+									{#each optionPage as option}
+										<Select.Item
+											value={option.value}
+											on:click={() => changeItemsPerPage(option.value)}>{option.label}</Select.Item
+										>
+									{/each}
+								</Select.Group>
+							</Select.Content>
+							<Select.Input name="itemsPerPage" />
+						</Select.Root>
+					</div>
+
+					<a
+						href="/dashboard/products/create"
+						class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+					>
+						<Toggle>
+							<span class="hidden">Créer un produit</span>
+							<PlusCircledIcon class="w-7 h-7" />
+						</Toggle>
+					</a>
+				</div>
 			</div>
 			<div class="border">
 				<Table.Root>

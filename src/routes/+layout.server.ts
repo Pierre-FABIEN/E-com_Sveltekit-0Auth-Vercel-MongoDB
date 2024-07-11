@@ -14,6 +14,13 @@ export const load: LayoutServerLoad = async (event) => {
 
 	const session = await locals.getSession();
 	const user = await checkOrRegister(session);
+	let pendingOrder = null;
+
+	if (user && session) {
+		session.user.role = user.role;
+		pendingOrder = await getPendingOrder(user.id);
+		session.user.id = user.id;
+	}
 
 	// Try to get the locale from cookie
 	let locale = (cookies.get('lang') || '').toLowerCase();
@@ -40,6 +47,7 @@ export const load: LayoutServerLoad = async (event) => {
 		AllProducts,
 		AllCategories,
 		session,
+		pendingOrder,
 		i18n: { locale, route: pathname },
 		translations: translations.get() // Return loaded translations
 	};

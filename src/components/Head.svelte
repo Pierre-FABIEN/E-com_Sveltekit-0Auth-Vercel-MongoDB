@@ -31,9 +31,9 @@
 	</nav>
 
 	<div class="left-side rcc">
-		<!-- {#if $page.data.session}
+		{#if $page.data.session?.user.role == 'user'}
 			<Cart {data} />
-		{/if} -->
+		{/if}
 
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>

@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 
 	export let data;
+	let items: OrderItem[];
+	let total;
 
 	type OrderItem = {
 		id: string;
@@ -16,14 +18,15 @@
 		price: number;
 	};
 
-	let items: OrderItem[] = data.session.order.items;
+	if (data.session) {
+		items = data.session.order.items;
+	}
 	let stripe: any;
 
+	if (data.session.order.items) {
+		total = items.reduce((total: number, item: OrderItem) => total + item.price * item.quantity, 0);
+	}
 	// Calculer le total
-	let total = items.reduce(
-		(total: number, item: OrderItem) => total + item.price * item.quantity,
-		0
-	);
 
 	onMount(async () => {
 		//focal = await fetchUsers();
@@ -100,7 +103,9 @@
 				<p class="text-gray-600">Your cart is empty.</p>
 			{/if}
 
-			<button on:click={() => handleCheckout(data.session.order.id)}> Checkout </button>
+			{#if data.session.order.id}
+				<button on:click={() => handleCheckout(data.session.order.id)}> Checkout </button>
+			{/if}
 		</div>
 	</Popover.Content>
 </Popover.Root>

@@ -127,11 +127,13 @@
 	}
 
 	// React to delete message changes
-	$: if ($deleteCategoryMessage)
+	$: if ($deleteCategoryMessage) {
+		updateFilteredAndPaginatedCategories();
 		showNotification(
 			$deleteCategoryMessage,
 			$deleteCategoryMessage.includes('success') ? 'success' : 'error'
 		);
+	}
 </script>
 
 <div class="rcs m-5">
@@ -181,7 +183,7 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									name
 									<button on:click={() => sortCategories('name')}>
@@ -190,7 +192,7 @@
 								</div>
 							</Table.Head>
 
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									date de création
 									<button on:click={() => sortCategories('createdAt')}>
@@ -200,7 +202,7 @@
 							</Table.Head>
 
 							<Table.Head
-								class="w-[150px] text-center border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
+								class="w-[150px] text-center border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
 							>
 								<div class="rcb">Edition</div>
 							</Table.Head>

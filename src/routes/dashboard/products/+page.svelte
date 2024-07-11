@@ -128,11 +128,13 @@
 	}
 
 	// React to delete message changes
-	$: if ($deleteProductMessage)
+	$: if ($deleteProductMessage) {
+		updateFilteredAndPaginatedProducts();
 		showNotification(
 			$deleteProductMessage,
 			$deleteProductMessage.includes('success') ? 'success' : 'error'
 		);
+	}
 </script>
 
 <div class="rcs m-5">
@@ -182,7 +184,7 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									stock
 									<button on:click={() => sortProducts('stock')}>
@@ -190,7 +192,7 @@
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									name
 									<button on:click={() => sortProducts('name')}>
@@ -198,7 +200,7 @@
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									price
 									<button on:click={() => sortProducts('price')}>
@@ -206,7 +208,7 @@
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									catégories
 									<button on:click={() => sortProducts('categories')}>
@@ -214,7 +216,7 @@
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									images
 									<button on:click={() => sortProducts('images')}>
@@ -222,7 +224,7 @@
 									</button>
 								</div>
 							</Table.Head>
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									description
 									<button on:click={() => sortProducts('description')}>
@@ -231,7 +233,7 @@
 								</div>
 							</Table.Head>
 
-							<Table.Head class="border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+							<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
 								<div class="rcb">
 									date de création
 									<button on:click={() => sortProducts('createdAt')}>
@@ -241,7 +243,7 @@
 							</Table.Head>
 
 							<Table.Head
-								class="w-[150px] text-center border-r border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
+								class="w-[150px] text-center border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
 							>
 								<div class="rcb">Edition</div>
 							</Table.Head>

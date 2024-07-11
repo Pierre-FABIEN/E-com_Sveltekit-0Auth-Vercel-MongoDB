@@ -31,7 +31,7 @@
 	</nav>
 
 	<div class="left-side rcc">
-		{#if $page.data.session?.user.role == 'user'}
+		{#if $page.data.session?.user.role === 'user'}
 			<Cart {data} />
 		{/if}
 

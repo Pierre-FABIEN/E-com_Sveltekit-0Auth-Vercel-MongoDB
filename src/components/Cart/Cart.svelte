@@ -4,8 +4,8 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-	let items: OrderItem[];
-	let total;
+	let items: OrderItem[] = []; // Initialiser comme tableau vide
+	let total = 0; // Initialiser à 0
 
 	type OrderItem = {
 		id: string;
@@ -18,18 +18,15 @@
 		price: number;
 	};
 
-	if (data.session) {
+	// Assurer que toutes les propriétés nécessaires existent
+	if (data?.session?.order?.items) {
 		items = data.session.order.items;
+		// Calculer le total seulement si items est défini
+		total = items.reduce((total: number, item: OrderItem) => total + item.price * item.quantity, 0);
 	}
 	let stripe: any;
 
-	if (data.session.order.items) {
-		total = items.reduce((total: number, item: OrderItem) => total + item.price * item.quantity, 0);
-	}
-	// Calculer le total
-
 	onMount(async () => {
-		//focal = await fetchUsers();
 		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 	});
 

@@ -3,6 +3,7 @@ import { locales, loadTranslations, translations, defaultLocale } from '$UITools
 import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
 import { getAllProducts } from '$lib/prisma/Request/product/getAllProducts';
 import { getAllCategories } from '$lib/prisma/Request/categories/getAllCategories';
+import { getPendingOrder } from '$lib/prisma/Request/orders/getPendingOrder';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;
@@ -13,10 +14,6 @@ export const load: LayoutServerLoad = async (event) => {
 
 	const session = await locals.getSession();
 	const user = await checkOrRegister(session);
-
-	if (user && session) {
-		session.user.role = user.role;
-	}
 
 	// Try to get the locale from cookie
 	let locale = (cookies.get('lang') || '').toLowerCase();

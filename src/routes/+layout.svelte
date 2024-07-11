@@ -62,7 +62,7 @@
 		// Détermine le premier chargement de l'application
 		setFirstOpen(true);
 		setRessourceToValide(true);
-		//console.log(data, 'data fron layout');
+		console.log(data, 'data fron layout');
 	});
 </script>
 
@@ -79,7 +79,7 @@
 
 {#if $firstLoadComplete}
 	<NotificationWrapper />
-	<Head />
+	<Head {data} />
 
 	<SmoothScroller>
 		<main>

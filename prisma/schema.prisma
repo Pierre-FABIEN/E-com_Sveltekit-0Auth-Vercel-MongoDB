@@ -43,8 +43,8 @@ enum OrderStatus {
 model Order {
   id            String            @id @default(auto()) @map("_id") @db.ObjectId
   userId        String            @db.ObjectId
-  addressId     String?           @db.ObjectId
-  total         Float
+  addressId     String?           @db.ObjectId  
+  total         Float             @default(0)
   transactions  Transaction[]
   status        OrderStatus       @default(PENDING)
   createdAt     DateTime          @default(now())
@@ -57,6 +57,7 @@ model Order {
 
   @@map("orders")
 }
+
 
 
 model OrderItem {

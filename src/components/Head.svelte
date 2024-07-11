@@ -6,8 +6,10 @@
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import FullScreen from '$UITools/FullScreen/FullScreen.svelte';
 	import Selector from '$UITools/Translations/Selector.svelte';
+	import Cart from './Cart/Cart.svelte';
 
 	console.log('page', $page.data.session?.user.role);
+	export let data;
 </script>
 
 <header class="rcb">
@@ -29,6 +31,8 @@
 	</nav>
 
 	<div class="left-side rcc">
+		<Cart {data} />
+
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				<img

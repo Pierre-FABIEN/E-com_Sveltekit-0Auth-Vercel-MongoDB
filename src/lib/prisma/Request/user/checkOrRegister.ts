@@ -1,9 +1,11 @@
 // src/lib/functions/checkAuth.ts
 
 import prisma from '$lib/prisma';
+import { getPendingOrder } from '../orders/getPendingOrder';
 
 export const checkOrRegister = async (session: any) => {
 	let user;
+	let pendingOrder = null;
 
 	if (session?.user?.email) {
 		try {
@@ -19,10 +21,26 @@ export const checkOrRegister = async (session: any) => {
 						name: session.user.name,
 						email: session.user.email,
 						image: session.user.image,
-						role: 'user'
+						role: 'user',
+						orders: {
+							create: {
+								status: 'PENDING',
+								total: 0,
+								transactions: {
+									create: {
+										stripePaymentId: '', // Empty initially, will be updated after payment
+										amount: 0, // Amount will be updated after payment
+										status: 'PENDING'
+									}
+								}
+							}
+						}
 					}
 				});
 			}
+			session.user.id = user.id;
+			session.user.role = user.role;
+			session.order = await getPendingOrder(user.id);
 		} catch (error) {
 			console.error('Error fetching or creating user:', error);
 		}

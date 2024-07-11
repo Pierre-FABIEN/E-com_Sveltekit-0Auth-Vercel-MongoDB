@@ -18,10 +18,11 @@
 		path = navigation.to?.route.id;
 	});
 
-	const handleAddToCart = (product) => {
+	const handleAddToCart = (product: any) => {
 		const orderItem: OrderItem = {
 			id: product.id,
 			product: {
+				id: product.id,
 				name: product.name,
 				price: product.price,
 				images: product.images

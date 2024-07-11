@@ -1,4 +1,3 @@
-// src/stores/cartStore.ts
 import { writable } from 'svelte/store';
 
 export type OrderItem = {
@@ -14,62 +13,81 @@ export type OrderItem = {
 };
 
 export const cart = writable({
+	id: '',
+	userId: '',
 	items: [] as OrderItem[],
+	total: 0,
 	lastModified: Date.now()
 });
 
-export const setCart = (items: OrderItem[]) => {
+export const setCart = (id: string, userId: string, items: OrderItem[], total: number) => {
+	console.log('Setting cart:', id, userId, items, total);
+
 	cart.set({
+		id,
+		userId,
 		items,
+		total,
 		lastModified: Date.now()
 	});
 };
 
 export const addToCart = (product: OrderItem) => {
 	cart.update((currentCart) => {
+		if (!Array.isArray(currentCart.items)) {
+			currentCart.items = [];
+		}
 		const itemIndex = currentCart.items.findIndex((item) => item.product.id === product.product.id);
 		if (itemIndex !== -1) {
 			currentCart.items[itemIndex].quantity += 1;
 		} else {
 			currentCart.items.push(product);
 		}
+		currentCart.total = currentCart.items.reduce(
+			(sum, item) => sum + item.price * item.quantity,
+			0
+		);
 		currentCart.lastModified = Date.now();
+		console.log('Cart after adding item:', JSON.stringify(currentCart, null, 2));
 		return currentCart;
 	});
 };
 
 export const removeFromCart = (productId: string) => {
-	console.log('Removing product from cart:', productId);
-
 	cart.update((currentCart) => {
-		currentCart.items = currentCart.items.filter((item) => item.product.id !== productId);
-		currentCart.lastModified = Date.now();
-		return currentCart;
-	});
-};
-
-export const updateCartItem = (productId: string, quantity: number) => {
-	cart.update((currentCart) => {
-		const itemIndex = currentCart.items.findIndex((item) => item.product.id === productId);
-		if (itemIndex !== -1) {
-			currentCart.items[itemIndex].quantity = quantity;
+		if (!Array.isArray(currentCart.items)) {
+			currentCart.items = [];
 		}
+		currentCart.items = currentCart.items.filter((item) => item.product.id !== productId);
+		currentCart.total = currentCart.items.reduce(
+			(sum, item) => sum + item.price * item.quantity,
+			0
+		);
 		currentCart.lastModified = Date.now();
+		console.log('Cart after removing item:', JSON.stringify(currentCart, null, 2));
 		return currentCart;
 	});
 };
 
 export const updateCartItemQuantity = (productId: string, quantity: number) => {
 	cart.update((currentCart) => {
+		if (!Array.isArray(currentCart.items)) {
+			currentCart.items = [];
+		}
 		const itemIndex = currentCart.items.findIndex((item) => item.product.id === productId);
 		if (itemIndex !== -1) {
 			currentCart.items[itemIndex].quantity = quantity;
 		}
+		currentCart.total = currentCart.items.reduce(
+			(sum, item) => sum + item.price * item.quantity,
+			0
+		);
 		currentCart.lastModified = Date.now();
+		console.log('Cart after updating item quantity:', JSON.stringify(currentCart, null, 2));
 		return currentCart;
 	});
 };
 
 cart.subscribe((currentCart) => {
-	console.log('Cart updated:', currentCart);
+	console.log('Cart:', currentCart);
 });

@@ -17,6 +17,7 @@
 		setRessourceToValide
 	} from '$stores/UX/initialLoaderStore';
 	import { setCart } from '$stores/Data/cartStore';
+	import { startSync } from '$stores/Data/cartSync';
 
 	export let data;
 
@@ -66,7 +67,9 @@
 		console.log(data, 'data fron layout');
 
 		if (data.session.orders) {
-			setCart(data.session.orders.items);
+			const items = data.session.orders;
+			setCart(items.id, items.userId, items.items, items.total);
+			startSync();
 		}
 	});
 </script>

@@ -1,9 +1,6 @@
 <script lang="ts">
 	import * as Popover from '$UITools/shadcn/popover/index.js';
-	import { loadStripe } from '@stripe/stripe-js';
 	import * as Select from '$UITools/shadcn/select/index.js';
-	import { onMount } from 'svelte';
-
 	import Trash from 'svelte-radix/Trash.svelte';
 
 	import {
@@ -13,23 +10,7 @@
 		removeFromCart,
 		updateCartItemQuantity
 	} from '$stores/Data/cartStore';
-	import { get } from 'svelte/store';
 	import { Badge } from '$UITools/shadcn/badge';
-
-	let items: OrderItem[] = [];
-	let total = 0;
-	let stripe: any;
-
-	// Utilisez $ pour indiquer une déclaration réactive
-	$: {
-		const cartData = get(cart);
-		items = cartData.items || []; // Assurez-vous que items est toujours un tableau
-		total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-	}
-
-	onMount(async () => {
-		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-	});
 
 	function handleRemoveFromCart(productId: string) {
 		removeFromCart(productId);
@@ -61,70 +42,76 @@
 				/>
 			</svg>
 			<Badge class="absolute bottom-5 left-5">
-				{items.length > 0 ? items.length : ''}
+				{#if $cart && $cart.items}
+					{$cart.items.length > 0 ? $cart.items.length : '0'}
+				{:else}
+					0
+				{/if}
 			</Badge>
 		</button>
 	</Popover.Trigger>
 	<Popover.Content class="w-[400px]">
 		<div class="container mx-auto p-4">
 			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-			{#if $cart.items.length > 0}
-				<div class="ccc h-[130px]">
-					{#each $cart.items as item (item.id)}
-						<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%]">
-							{#if item.product.images && item.product.images[0]}
-								<img
-									src={item.product.images[0]}
-									alt={item.product.name}
-									class="w-20 h-20 object-cover mr-4"
-								/>
-							{/if}
-							<div class="flex-1 clb">
-								<h3 class="text-lg font-semibold">{item.product.name}</h3>
-								<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
-								<Select.Root portal={null}>
-									<Select.Trigger class="w-[100px]">
-										<Select.Value placeholder={item.quantity.toString()} />
-									</Select.Trigger>
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Quantité</Select.Label>
-											{#each quantityOptions as option}
-												<Select.Item
-													value={option.value}
-													on:click={() => changeQuantity(item.product.id, option.value)}
-													>{option.label}</Select.Item
-												>
-											{/each}
-										</Select.Group>
-									</Select.Content>
-									<Select.Input name="quantity" />
-								</Select.Root>
+			{#if $cart && $cart.items}
+				{#if $cart.items.length > 0}
+					<div class="ccc h-[130px]">
+						{#each $cart.items as item (item.id)}
+							<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%]">
+								{#if item.product.images && item.product.images[0]}
+									<img
+										src={item.product.images[0]}
+										alt={item.product.name}
+										class="w-20 h-20 object-cover mr-4"
+									/>
+								{/if}
+								<div class="flex-1 clb">
+									<h3 class="text-lg font-semibold">{item.product.name}</h3>
+									<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
+									<Select.Root portal={null}>
+										<Select.Trigger class="w-[100px]">
+											<Select.Value placeholder={item.quantity.toString()} />
+										</Select.Trigger>
+										<Select.Content>
+											<Select.Group>
+												<Select.Label>Quantité</Select.Label>
+												{#each quantityOptions as option}
+													<Select.Item
+														value={option.value}
+														on:click={() => changeQuantity(item.product.id, option.value)}
+														>{option.label}</Select.Item
+													>
+												{/each}
+											</Select.Group>
+										</Select.Content>
+										<Select.Input name="quantity" />
+									</Select.Root>
+								</div>
+								<div class="text-right crb items-end h-[100%]">
+									<p class="text-lg font-semibold">
+										{(item.price * item.quantity).toFixed(1)}€
+									</p>
+									<button
+										on:click={() => handleRemoveFromCart(item.product.id)}
+										class="text-red-600 hover:text-red-800 mt-2"
+									>
+										<Trash />
+									</button>
+								</div>
 							</div>
-							<div class="text-right crb items-end h-[100%]">
-								<p class="text-lg font-semibold">
-									{(item.price * item.quantity).toFixed(1)}€
-								</p>
-								<button
-									on:click={() => handleRemoveFromCart(item.product.id)}
-									class="text-red-600 hover:text-red-800 mt-2"
-								>
-									<Trash />
-								</button>
-							</div>
-						</div>
-					{/each}
-				</div>
-				<div class="mt-4 p-4 border-t rounded-none">
-					<div class="flex justify-between items-center">
-						<span class="text-xl font-semibold">Total:</span>
-						<span class="text-xl font-semibold">
-							${$cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(1)}€
-						</span>
+						{/each}
 					</div>
-				</div>
-			{:else}
-				<p class="text-gray-600">Your cart is empty.</p>
+					<div class="mt-4 p-4 border-t rounded-none">
+						<div class="flex justify-between items-center">
+							<span class="text-xl font-semibold">Total:</span>
+							<span class="text-xl font-semibold">
+								{$cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(1)}€
+							</span>
+						</div>
+					</div>
+				{:else}
+					<p class="text-gray-600">Your cart is empty.</p>
+				{/if}
 			{/if}
 		</div>
 	</Popover.Content>

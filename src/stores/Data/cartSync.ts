@@ -6,6 +6,9 @@ let lastSynced = Date.now();
 
 const syncCart = async () => {
 	const currentCart = get(cart);
+
+	console.log(currentCart);
+
 	if (currentCart.lastModified > lastSynced) {
 		try {
 			await fetch('/api/save-cart', {
@@ -22,4 +25,8 @@ const syncCart = async () => {
 	}
 };
 
-setInterval(syncCart, 30000); // Sync every minute
+const startSync = () => {
+	setInterval(syncCart, 30000); // Sync every 30 seconds
+};
+
+export { startSync };

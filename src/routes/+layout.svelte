@@ -16,6 +16,7 @@
 		setFirstOpen,
 		setRessourceToValide
 	} from '$stores/UX/initialLoaderStore';
+	import { setCart } from '$stores/Data/cartStore';
 
 	export let data;
 
@@ -63,6 +64,10 @@
 		setFirstOpen(true);
 		setRessourceToValide(true);
 		console.log(data, 'data fron layout');
+
+		if (data.session.orders) {
+			setCart(data.session.orders.items);
+		}
 	});
 </script>
 

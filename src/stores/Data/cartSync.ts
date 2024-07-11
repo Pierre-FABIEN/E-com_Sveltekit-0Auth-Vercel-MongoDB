@@ -1,0 +1,25 @@
+// src/stores/cartSync.ts
+import { cart } from './cartStore';
+import { get } from 'svelte/store';
+
+let lastSynced = Date.now();
+
+const syncCart = async () => {
+	const currentCart = get(cart);
+	if (currentCart.lastModified > lastSynced) {
+		try {
+			await fetch('/api/save-cart', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(currentCart)
+			});
+			lastSynced = Date.now();
+		} catch (error) {
+			console.error('Failed to sync cart:', error);
+		}
+	}
+};
+
+setInterval(syncCart, 30000); // Sync every minute

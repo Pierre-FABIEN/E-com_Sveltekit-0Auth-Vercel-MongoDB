@@ -40,9 +40,14 @@ You can instantly deploy this example to [Vercel](https://vercel.com?utm_source=
 
 
 
-allez bien au bon des gestion de cart en optimisant les req
+allez bien au fond des gestion de cart en optimisant les req
 gerer les stripe
-revoir la sécurité
+revoir la sécurité sur les données
+commencer le blog
+
+faire attention a ce que pour le order il y est bien une adresse associée (une commande ne peut pas passer sans adresse)
+faire attention quand une commande passe enlever les unité dans les stock
+Faire une page destinée au panier pour mettre tout au clair et passer au paiement
 
 
 Cartes de test Stripe

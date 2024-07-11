@@ -9,6 +9,7 @@
 		CardTitle
 	} from '$UITools/shadcn/card/index.js';
 	import { Button } from '$UITools/shadcn/button';
+	import { addToCart, type OrderItem } from '$stores/Data/cartStore';
 
 	let path: string | undefined | null;
 	export let data;
@@ -17,22 +18,18 @@
 		path = navigation.to?.route.id;
 	});
 
-	const handleAddToCart = async (productId: string) => {
-		try {
-			const response = await fetch('/api/add-to-cart', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ userId: data.session.user.id, productId })
-			});
-			if (!response.ok) {
-				throw new Error('Failed to add to cart');
-			}
-			console.log('Product added to cart');
-		} catch (error) {
-			console.error(error);
-		}
+	const handleAddToCart = (product) => {
+		const orderItem: OrderItem = {
+			id: product.id,
+			product: {
+				name: product.name,
+				price: product.price,
+				images: product.images
+			},
+			quantity: 1,
+			price: product.price
+		};
+		addToCart(orderItem);
 	};
 </script>
 
@@ -55,7 +52,7 @@
 						<p class="product-price">${product.price}</p>
 					</CardContent>
 					<CardFooter>
-						<Button class="add-to-cart-button" on:click={() => handleAddToCart(product.id)}>
+						<Button class="add-to-cart-button" on:click={() => handleAddToCart(product)}>
 							Add to Cart
 						</Button>
 					</CardFooter>

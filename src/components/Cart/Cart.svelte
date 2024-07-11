@@ -1,5 +1,7 @@
 <script lang="ts">
 	import * as Popover from '$UITools/shadcn/popover/index.js';
+	import { loadStripe } from '@stripe/stripe-js';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -15,12 +17,38 @@
 	};
 
 	let items: OrderItem[] = data.session.order.items;
+	let stripe: any;
 
 	// Calculer le total
 	let total = items.reduce(
 		(total: number, item: OrderItem) => total + item.price * item.quantity,
 		0
 	);
+
+	onMount(async () => {
+		//focal = await fetchUsers();
+		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+	});
+
+	async function handleCheckout(orderId: string) {
+		const response = await fetch('/api/create-checkout-session', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ orderId })
+		});
+
+		const { id } = await response.json();
+
+		const { error } = await stripe.redirectToCheckout({
+			sessionId: id
+		});
+
+		if (error) {
+			console.error(error);
+		}
+	}
 </script>
 
 <Popover.Root>
@@ -58,55 +86,11 @@
 							</div>
 							<div class="text-right flex flex-col items-end">
 								<p class="text-lg font-semibold">${(item.price * item.quantity).toFixed(1)}</p>
-
-								<div class="p-4">
-									<button
-										class="flex items-center text-gray-600 mb-2"
-										on:click={() => console.log(`Edit ${item.product.name}`)}
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 mr-2"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9" />
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M16.5 3.5a2.121 2.121 0 113 3L7.5 18H4v-3.5L16.5 3.5z"
-											/>
-										</svg>
-										Edit
-									</button>
-									<button
-										class="flex items-center text-gray-600"
-										on:click={() => console.log(`Delete ${item.product.name}`)}
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 mr-2"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M6 18L18 6M6 6l12 12"
-											/>
-										</svg>
-										Delete
-									</button>
-								</div>
 							</div>
 						</div>
 					{/each}
 				</div>
-				<div class="mt-4 p-4 border-t">
+				<div class="mt-4 p-4 border-t rounded-none">
 					<div class="flex justify-between items-center">
 						<span class="text-xl font-semibold">Total:</span>
 						<span class="text-xl font-semibold">${total.toFixed(1)}</span>
@@ -115,6 +99,8 @@
 			{:else}
 				<p class="text-gray-600">Your cart is empty.</p>
 			{/if}
+
+			<button on:click={() => handleCheckout(data.session.order.id)}> Checkout </button>
 		</div>
 	</Popover.Content>
 </Popover.Root>

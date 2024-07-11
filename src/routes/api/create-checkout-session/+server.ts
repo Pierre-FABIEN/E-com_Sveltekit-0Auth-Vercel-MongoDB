@@ -1,4 +1,5 @@
-// src/routes/api/create-checkout-session.ts
+// src/routes/api/create-checkout-session/+server.ts
+
 import { json } from '@sveltejs/kit';
 import Stripe from 'stripe';
 import { PrismaClient } from '@prisma/client';
@@ -7,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-	apiVersion: '2022-11-15'
+	apiVersion: '2024-06-20'
 });
 
 const prisma = new PrismaClient();
@@ -17,22 +18,28 @@ export async function POST({ request }) {
 
 	const order = await prisma.order.findUnique({
 		where: { id: orderId },
-		include: { products: true }
+		include: {
+			items: {
+				include: {
+					product: true
+				}
+			}
+		}
 	});
 
 	if (!order) {
 		return json({ error: 'Order not found' }, { status: 404 });
 	}
 
-	const lineItems = order.products.map((product) => ({
+	const lineItems = order.items.map((item) => ({
 		price_data: {
 			currency: 'usd',
 			product_data: {
-				name: product.name
+				name: item.product.name
 			},
-			unit_amount: product.price * 100
+			unit_amount: item.price * 100
 		},
-		quantity: 1
+		quantity: item.quantity
 	}));
 
 	const session = await stripe.checkout.sessions.create({

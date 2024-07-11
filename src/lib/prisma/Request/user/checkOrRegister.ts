@@ -5,7 +5,6 @@ import { getPendingOrder } from '../orders/getPendingOrder';
 
 export const checkOrRegister = async (session: any) => {
 	let user;
-	let pendingOrder = null;
 
 	if (session?.user?.email) {
 		try {
@@ -37,10 +36,11 @@ export const checkOrRegister = async (session: any) => {
 						}
 					}
 				});
+
+				session.user.id = user.id;
+				session.user.role = user.role;
+				session.order = await getPendingOrder(user.id);
 			}
-			session.user.id = user.id;
-			session.user.role = user.role;
-			session.order = await getPendingOrder(user.id);
 		} catch (error) {
 			console.error('Error fetching or creating user:', error);
 		}

@@ -2,13 +2,10 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 
 	import * as Card from '$UITools/shadcn/card';
 	import { Button } from '$UITools/shadcn/button';
-	import { Input } from '$UITools/shadcn/input';
-	import * as Form from '$UITools/shadcn/form';
 
 	import { profileSchema } from '$lib/ZodSchema/profileSchema';
 
@@ -27,82 +24,46 @@
 
 <div class="card">
 	<Card.Root class="w-full">
-		<form method="POST" action="?/create" use:enhance class="space-y-4">
-			<Card.Header>
-				<Card.Title>Information sur votre profil</Card.Title>
-				<Card.Description
-					>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
-				>
-			</Card.Header>
-			<Card.Content class="grid gap-6">
-				<div class="content-basic rcs">
-					<img src={data.session?.user.image} alt="image du compte" />
-					<div class="content-basic-wrapper clc">
-						<h1>{data.session?.user.name}</h1>
-						<p>{data.session?.user.email}</p>
-					</div>
-				</div>
+		<Card.Header>
+			<Card.Title>Information sur votre profil</Card.Title>
+			<Card.Description
+				>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
+			>
 
-				<div>
-					<Form.Field name="address" form={formProfil}>
-						<Form.Control let:attrs>
-							<Form.Label>Address</Form.Label>
-							<Input
-								{...attrs}
-								type="text"
-								placeholder={data.user?.address}
-								bind:value={$form.address}
-							/>
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
+			<div class="content-basic rcs mt-5">
+				<img src={data.session?.user.image} alt="image du compte" />
+				<div class="content-basic-wrapper clc">
+					<h1>{data.session?.user.name}</h1>
+					<p>{data.session?.user.email}</p>
 				</div>
+			</div>
+		</Card.Header>
+		<div class="clc m-5">
+			<h2>Adresses</h2>
+			{#if data.addresses && data.addresses.length > 0}
+				{#each data.addresses as address}
+					<p class="text-sm text-muted-foreground">{address.state}</p>
+					<p class="text-sm text-muted-foreground">{address.city}</p>
+				{/each}
+			{:else}
+				<p class="text-gray-600">Aucune adresse présente.</p>
+			{/if}
+			<Button class="mt-4">
+				<a href="/profile/address"> creer une adresse </a>
+			</Button>
+		</div>
 
-				<div>
-					<Form.Field name="city" form={formProfil}>
-						<Form.Control let:attrs>
-							<Form.Label>City</Form.Label>
-							<Input {...attrs} type="text" placeholder={data.user?.city} bind:value={$form.city} />
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-				</div>
-
-				<div>
-					<Form.Field name="postalCode" form={formProfil}>
-						<Form.Control let:attrs>
-							<Form.Label>Postal Code</Form.Label>
-							<Input
-								{...attrs}
-								type="text"
-								placeholder={data.user?.postalCode}
-								bind:value={$form.postalCode}
-							/>
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-				</div>
-
-				<div>
-					<Form.Field name="phoneNumber" form={formProfil}>
-						<Form.Control let:attrs>
-							<Form.Label>Phone</Form.Label>
-							<Input
-								{...attrs}
-								type="phone"
-								placeholder={data.user?.phoneNumber}
-								bind:value={$form.phoneNumber}
-							/>
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-				</div>
-			</Card.Content>
-			<input type="hidden" name="id" value={userId} />
-			<Card.Footer class="justify-end space-x-2">
-				<Button type="submit" variant="outline">Submit</Button>
-			</Card.Footer>
-		</form>
+		<div class="clc m-5">
+			<h2>Orders</h2>
+			{#if data.orders && data.orders.length > 0}
+				{#each data.orders as address}
+					<p class="text-sm text-muted-foreground">{address.state}</p>
+					<p class="text-sm text-muted-foreground">{address.city}</p>
+				{/each}
+			{:else}
+				<p class="text-gray-600">Aucune commande présente.</p>
+			{/if}
+		</div>
 	</Card.Root>
 </div>
 

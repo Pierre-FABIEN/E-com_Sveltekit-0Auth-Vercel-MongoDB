@@ -6,6 +6,7 @@ import { redirect } from '@sveltejs/kit';
 import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { updateUserData } from '$lib/prisma/Request/user/updateUserData';
+import { getUserDetails } from '$lib/prisma/Request/user/getUserDetails';
 
 const allowedRoles = ['user', 'admin'];
 
@@ -27,10 +28,12 @@ export const load: PageServerLoad = async (event) => {
 		throw redirect(302, '/');
 	}
 
+	const userDetails = await getUserDetails(user.id);
+
 	const formProfil = await superValidate(zod(profileSchema));
 
 	return {
-		user,
+		userDetails,
 		formProfil,
 		session
 	};

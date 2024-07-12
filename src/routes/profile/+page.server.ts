@@ -8,6 +8,8 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { checkOrRegister } from '$requests/user/checkOrRegister';
 import { updateUserData } from '$requests/user/updateUserData';
 import { getUserDetails } from '$requests/user/getUserDetails';
+import { deleteAddressSchema } from '$zod/addressSchema';
+import { deleteAddress } from '$requests/address/deleteAddress';
 
 const allowedRoles = ['user', 'admin'];
 
@@ -33,39 +35,31 @@ export const load: PageServerLoad = async (event) => {
 
 	const formProfil = await superValidate(zod(profileSchema));
 
+	const IdeleteAddressSchema = await superValidate(zod(deleteAddressSchema));
+
 	return {
 		userDetails,
-		formProfil,
-		session
+		session,
+		IdeleteAddressSchema
 	};
 };
 
 export const actions: Actions = {
-	create: async ({ request }) => {
+	deleteAddress: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, zod(profileSchema));
+		console.log(formData, 'form data');
 
+		const form = await superValidate(formData, zod(deleteAddressSchema));
+
+		console.log(form, 'form');
 		if (!form.valid) return fail(400, { form });
-
 		try {
-			const userData: ProfileSchema = {
-				...form.data,
-				id: formData.get('id') as string,
-				address: formData.get('address') as string,
-				city: formData.get('city') as string,
-				postalCode: formData.get('postalCode') as string,
-				phoneNumber: formData.get('phoneNumber') as string
-			};
-
-			await updateUserData(userData);
-
-			return message(form, 'User created successfully');
+			const addressId = formData.get('id') as string;
+			await deleteAddress(addressId);
+			return message(form, 'Address deleted successfully');
 		} catch (error: any) {
-			console.error('Error creating user:', error);
-			if (error.message === 'One or more workspaces do not exist') {
-				return fail(400, { form, error: error.message });
-			}
-			return fail(500, { form, error: 'An error occurred while creating the user' });
+			console.error('Error deleting address:', error);
+			return fail(500, { form, error: 'An error occurred while deleting the address' });
 		}
 	}
 };

@@ -42,17 +42,72 @@
 	onMount(async () => {
 		$createAddressData.userId = data.session.user.id;
 	});
+
+	let addressSuggestions: string[] = [];
+	let timeoutId: ReturnType<typeof setTimeout>;
+
+	async function fetchAddressSuggestions(query: string) {
+		if (query.length < 3) {
+			addressSuggestions = [];
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/open-cage?q=${encodeURIComponent(query)}`);
+			const data = await response.json();
+			addressSuggestions = data.suggestions;
+		} catch (error) {
+			console.error('Error fetching address suggestions:', error);
+		}
+	}
+
+	function handleInput(event: Event) {
+		const input = event.target as HTMLInputElement;
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
+			fetchAddressSuggestions(input.value);
+		}, 1000);
+	}
+	$: console.log(addressSuggestions, 'addressSuggestions');
+
+	function selectSuggestion(suggestion) {
+		const { house_number, road, city, town, village, state, postcode, country } =
+			suggestion.components;
+		$createAddressData.street = `${house_number || ''} ${road || ''}`.trim();
+		$createAddressData.city = city || town || village || '';
+		$createAddressData.state = state || '';
+		$createAddressData.zip = postcode || '';
+		$createAddressData.country = country || '';
+		addressSuggestions = [];
+	}
 </script>
 
 <div class="container mx-auto p-6">
 	<div class="max-w-xl border mx-auto rounded-md p-6">
 		<h2 class="text-2xl font-semibold mb-4">Create Address</h2>
+
+		{#if addressSuggestions.length > 0}
+			<h2>Suggestions:</h2>
+			<ul class="rounded border p-2">
+				{#each addressSuggestions as suggestion}
+					<li class="cursor-pointer" on:click={() => selectSuggestion(suggestion)}>
+						{suggestion.formatted}
+					</li>
+				{/each}
+			</ul>
+		{/if}
+
 		<form method="POST" action="?/createAddress" use:createAddressEnhance class="space-y-4">
 			<div class="space-y-2">
 				<Form.Field name="street" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Rue</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createAddressData.street} />
+						<Input
+							{...attrs}
+							type="text"
+							on:input={handleInput}
+							bind:value={$createAddressData.street}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -71,7 +126,7 @@
 			<div class="space-y-2">
 				<Form.Field name="state" form={createAddress}>
 					<Form.Control let:attrs>
-						<Form.Label>Etat</Form.Label>
+						<Form.Label>Région:</Form.Label>
 						<Input {...attrs} type="text" bind:value={$createAddressData.state} />
 					</Form.Control>
 					<Form.FieldErrors />

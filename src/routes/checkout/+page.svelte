@@ -66,11 +66,16 @@
 
 			<h2 class="text-2xl font-bold mb-4 mt-5">Vos adresses</h2>
 
-			<div class="ccc">
-				{#if data.addresses && data.addresses.length > 0}
-					{#each data.addresses as address}
-						<p class="text-sm text-muted-foreground">{address.state}</p>
-						<p class="text-sm text-muted-foreground">{address.city}</p>
+			<div class="clc">
+				{#if data.addresses.addresses && data.addresses.addresses.length > 0}
+					{#each data.addresses.addresses as address}
+						<div class="border rounded p-2 m-2 min-w-[400px] rcb">
+							<div class="">
+								<p class="text-sm text-muted-foreground">Rue: {address.street}</p>
+								<p class="text-sm text-muted-foreground">Ville: {address.city}</p>
+								<p class="text-sm text-muted-foreground">Pays: {address.country}</p>
+							</div>
+						</div>
 					{/each}
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>

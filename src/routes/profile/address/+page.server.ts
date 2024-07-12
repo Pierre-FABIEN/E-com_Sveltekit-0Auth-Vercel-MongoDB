@@ -21,13 +21,26 @@ export const actions: Actions = {
 		const form = await superValidate(formData, zod(createAddressSchema));
 		console.log('Form:', form);
 
-		// Create the address in the database
+		if (!form.valid) {
+			return fail(400, { message: 'Validation failed', form });
+		}
+
+		const { street, city, state, zip, country, userId } = form.data;
+
 		try {
-			const address = await createAddress(form.data);
+			await createAddress({
+				street,
+				city,
+				state,
+				zip,
+				country,
+				userId
+			});
+
 			return message(form, 'Address created successfully');
 		} catch (error) {
-			console.error('Error creating product:', error);
-			return fail(500, { message: 'Product creation failed' });
+			console.error('Error creating address:', error);
+			return fail(500, { message: 'Address creation failed' });
 		}
 	}
 };

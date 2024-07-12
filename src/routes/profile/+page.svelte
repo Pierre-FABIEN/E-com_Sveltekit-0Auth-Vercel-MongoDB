@@ -2,22 +2,25 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
+	import Trash from 'svelte-radix/Trash.svelte';
+
 	import type { PageData } from './$types';
 
 	import * as Card from '$shadcn/card';
 	import { Button } from '$shadcn/button';
+	import * as AlertDialog from '$shadcn/alert-dialog';
 
-	import { profileSchema } from '$zod/profileSchema';
+	import { deleteAddressSchema } from '$zod/addressSchema';
 
 	export let data: PageData;
 
-	const formProfil = superForm(data.formProfil, {
-		validators: zodClient(profileSchema)
+	const deleteAddress = superForm(data.IdeleteAddressSchema, {
+		validators: zodClient(deleteAddressSchema),
+		id: 'deleteAddress'
 	});
 
-	const { form, enhance, message, validate } = formProfil;
-
-	let userId: string = data.session?.user.id;
+	const { enhance: deleteAddressEnhance, message: deleteAddressMessage } = deleteAddress;
 
 	console.log(data, 'data');
 </script>
@@ -41,14 +44,53 @@
 		<Card.Content>
 			<div class="clc m-5">
 				<h2>Adresses</h2>
-				{#if data.addresses && data.addresses.length > 0}
-					{#each data.addresses as address}
-						<p class="text-sm text-muted-foreground">{address.state}</p>
-						<p class="text-sm text-muted-foreground">{address.city}</p>
+
+				{#if data.userDetails?.addresses && data.userDetails?.addresses.length > 0}
+					{#each data.userDetails?.addresses as address}
+						<div class="border rounded p-2 m-2 min-w-[400px] rcb">
+							<div class="">
+								<p class="text-sm text-muted-foreground">Rue: {address.street}</p>
+								<p class="text-sm text-muted-foreground">Ville: {address.city}</p>
+								<p class="text-sm text-muted-foreground">Pays: {address.country}</p>
+							</div>
+							<div class="w-[50px]">
+								<AlertDialog.Root form={deleteAddress}>
+									<AlertDialog.Trigger asChild let:builder>
+										<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
+											<Trash class="h-4 w-8" />
+										</Button>
+									</AlertDialog.Trigger>
+
+									<AlertDialog.Content>
+										<AlertDialog.Header>
+											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+											<AlertDialog.Description>
+												This action cannot be undone. This will permanently delete your account and
+												remove your data from our servers.
+											</AlertDialog.Description>
+										</AlertDialog.Header>
+										<AlertDialog.Footer>
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+											<form method="POST" action="?/deleteAddress" use:deleteAddressEnhance>
+												<input type="hidden" name="id" value={address.id} />
+												<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+											</form>
+										</AlertDialog.Footer>
+									</AlertDialog.Content>
+								</AlertDialog.Root>
+
+								<Button class="m-1 p-1 text-xs">
+									<a href="/dashboard/address/{address.id}">
+										<PencilIcon class="h-4 w-8" />
+									</a>
+								</Button>
+							</div>
+						</div>
 					{/each}
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
+
 				<Button class="mt-4">
 					<a href="/profile/address"> creer une adresse </a>
 				</Button>
@@ -68,26 +110,3 @@
 		</Card.Content>
 	</Card.Root>
 </div>
-
-<style lang="scss">
-	.card {
-		margin-top: 50px;
-		margin-right: auto;
-		margin-left: auto;
-		width: 80vw;
-	}
-
-	.content-basic {
-		.content-basic-wrapper {
-			margin-left: 20px;
-
-			h1 {
-				font-size: 20px;
-			}
-
-			p {
-				opacity: 0.5;
-			}
-		}
-	}
-</style>

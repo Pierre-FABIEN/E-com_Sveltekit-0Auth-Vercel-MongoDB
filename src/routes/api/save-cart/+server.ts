@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export const POST = async ({ request }) => {
 	const cartData = await request.json();
-	console.log(cartData, 'cartData');
 
 	// Vérifiez que les champs nécessaires sont présents et valides
 	if (

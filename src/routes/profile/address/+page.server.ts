@@ -25,10 +25,11 @@ export const actions: Actions = {
 			return fail(400, { message: 'Validation failed', form });
 		}
 
-		const { street, city, state, zip, country, userId } = form.data;
+		const { recipient, street, city, state, zip, country, userId } = form.data;
 
 		try {
 			await createAddress({
+				recipient,
 				street,
 				city,
 				state,

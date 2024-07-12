@@ -1,6 +1,4 @@
-// src/lib/functions/checkAuth.ts
-
-import prisma from "$requests";
+import prisma from '$requests';
 
 export const updateUserData = async (userData: any) => {
 	console.log(userData, 'userData');

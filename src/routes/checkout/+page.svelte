@@ -9,10 +9,28 @@
 
 	import { loadStripe } from '@stripe/stripe-js';
 	import { onMount } from 'svelte';
+	import { paymentSchema } from '$zod/paymentSchema.js';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+
+	import { showNotification } from '$stores/Data/notificationStore.js';
 	const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
 	let stripe;
 	export let data;
+	let selectedAddressId: string | null = null;
+
+	const createPayment = superForm(data.IpaymentSchema, {
+		validators: zodClient(paymentSchema),
+		id: 'createPayment',
+		resetForm: true
+	});
+
+	const {
+		form: createPaymentData,
+		enhance: createPaymentEnhance,
+		message: createPaymentMessage
+	} = createPayment;
 
 	onMount(async () => {
 		stripe = await loadStripe(stripePublishableKey);
@@ -31,27 +49,19 @@
 		label: value.toString()
 	}));
 
-	console.log(data, 'uoihsrdfgisurfghiuh');
+	function selectAddress(addressId: string) {
+		selectedAddressId = addressId;
+	}
 
-	async function handleCheckout(orderId) {
-		const response = await fetch('/api/create-checkout-session', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ orderId })
-		});
-
-		const { id } = await response.json();
-
-		const { error } = await stripe.redirectToCheckout({
-			sessionId: id
-		});
-
-		if (error) {
-			console.error(error);
+	function handleCheckout() {
+		if (!selectedAddressId) {
+			showNotification('Veuillez sélectionner une adresse', 'error');
 		}
 	}
+	$: console.log(data);
+
+	$: $createPaymentData.orderId = data.session.orders.id;
+	$: $createPaymentData.addressId = selectedAddressId;
 </script>
 
 <div class="ccc">
@@ -69,19 +79,27 @@
 			<div class="clc">
 				{#if data.addresses.addresses && data.addresses.addresses.length > 0}
 					{#each data.addresses.addresses as address}
-						<div class="border rounded p-2 m-2 min-w-[400px] rcb">
-							<div class="">
+						<button
+							class="cursor-pointer border rounded p-2 m-2 min-w-[400px] rcb {selectedAddressId ===
+							address.id
+								? 'border-green-400'
+								: ''}"
+							on:click={() => selectAddress(address.id)}
+						>
+							<div class="clc">
+								<p class="text-sm text-muted-foreground">Destinataire: {address.recipient}</p>
 								<p class="text-sm text-muted-foreground">Rue: {address.street}</p>
 								<p class="text-sm text-muted-foreground">Ville: {address.city}</p>
+								<p class="text-sm text-muted-foreground">Code postal: {address.zip}</p>
 								<p class="text-sm text-muted-foreground">Pays: {address.country}</p>
 							</div>
-						</div>
+						</button>
 					{/each}
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
 				<Button class="mt-4">
-					<a href="/profile"> creer une adresse </a>
+					<a href="/profile/address"> creer une adresse </a>
 				</Button>
 			</div>
 		</div>
@@ -150,8 +168,13 @@
 					<p class="text-gray-600">Your cart is empty.</p>
 				{/if}
 			{/if}
-			<div class="crc w-[100%] mt-5">
-				<Button on:click={() => handleCheckout('order-id-from-your-database')}>Payer</Button>
+
+			<div class="crc w-[100%]">
+				<form method="POST" action="?/checkout" use:createPaymentEnhance on:submit={handleCheckout}>
+					<input type="hidden" name="orderId" bind:value={$createPaymentData.orderId} />
+					<input type="hidden" name="addressId" bind:value={$createPaymentData.addressId} />
+					<Button type="submit">Payer</Button>
+				</form>
 			</div>
 		</div>
 	</div>

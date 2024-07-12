@@ -1,7 +1,24 @@
 import { error, json, redirect } from '@sveltejs/kit';
 import { getUserAddresses } from '$requests/user/getUserAddresses';
 import type { Actions, PageServerLoad } from './$types';
+
 import { checkOrRegister } from '$requests/user/checkOrRegister';
+
+import { paymentSchema } from '$zod/paymentSchema';
+import { zod } from 'sveltekit-superforms/adapters';
+import { superValidate } from 'sveltekit-superforms';
+
+import { getOrderById } from '$requests/orders/getOrderById';
+
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
+import { createTransaction } from '$requests/transaction/createtransaction';
+
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+	apiVersion: '2024-06-20'
+});
 
 const allowedRoles = ['user'];
 
@@ -25,10 +42,49 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	}
 
-	return { addresses };
+	const IpaymentSchema = await superValidate(zod(paymentSchema));
+
+	return { addresses, IpaymentSchema };
 };
 
 // Tu peux également ajouter des actions pour gérer d'autres fonctionnalités comme la modification ou la suppression d'adresses
 export const actions: Actions = {
-	// Exemple d'action pour mettre à jour une adresse
+	checkout: async ({ request }) => {
+		const formData = await request.formData();
+
+		const form = await superValidate(formData, zod(paymentSchema));
+		const orderId = form.data.orderId;
+
+		const order = await getOrderById(orderId);
+
+		if (!order) {
+			return json({ error: 'Order not found' }, { status: 404 });
+		}
+
+		const lineItems = order.items.map((item) => ({
+			price_data: {
+				currency: 'eur', // Changer 'usd' en 'eur' pour utiliser les euros
+				product_data: {
+					name: item.product.name
+				},
+				unit_amount: item.price * 100 // Stripe s'attend à des montants en centimes
+			},
+			quantity: item.quantity
+		}));
+
+		const session = await stripe.checkout.sessions.create({
+			payment_method_types: ['card'],
+			line_items: lineItems,
+			mode: 'payment',
+			success_url: `${request.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${request.headers.get('origin')}/cancel`,
+			metadata: {
+				order_id: orderId
+			}
+		});
+
+		const transaction = await createTransaction(session.id, order.id, order.total);
+
+		throw redirect(303, session.url);
+	}
 };

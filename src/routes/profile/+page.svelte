@@ -31,8 +31,8 @@
 	}
 </script>
 
-<div class="card">
-	<Card.Root class="w-full">
+<div class="ccc">
+	<Card.Root class="w-[80vw]">
 		<Card.Header>
 			<Card.Title>Information sur votre profil</Card.Title>
 			<Card.Description
@@ -41,7 +41,7 @@
 
 			<div class="content-basic rcs mt-5">
 				<img src={data.session?.user.image} alt="image du compte" />
-				<div class="content-basic-wrapper clc">
+				<div class="content-basic-wrapper clc ml-5">
 					<h1>{data.session?.user.name}</h1>
 					<p>{data.session?.user.email}</p>
 				</div>
@@ -55,12 +55,14 @@
 					{#each data.userDetails?.addresses as address}
 						<div class="border rounded p-2 m-2 min-w-[400px] rcb">
 							<div class="">
+								<p class="text-sm text-muted-foreground">Destinataire: {address.recipient}</p>
 								<p class="text-sm text-muted-foreground">Rue: {address.street}</p>
 								<p class="text-sm text-muted-foreground">Ville: {address.city}</p>
+								<p class="text-sm text-muted-foreground">Code postal: {address.zip}</p>
 								<p class="text-sm text-muted-foreground">Pays: {address.country}</p>
 							</div>
 							<div class="w-[50px]">
-								<AlertDialog.Root form={deleteAddress}>
+								<AlertDialog.Root>
 									<AlertDialog.Trigger asChild let:builder>
 										<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
 											<Trash class="h-4 w-8" />
@@ -84,12 +86,6 @@
 										</AlertDialog.Footer>
 									</AlertDialog.Content>
 								</AlertDialog.Root>
-
-								<Button class="m-1 p-1 text-xs">
-									<a href="/dashboard/address/{address.id}">
-										<PencilIcon class="h-4 w-8" />
-									</a>
-								</Button>
 							</div>
 						</div>
 					{/each}

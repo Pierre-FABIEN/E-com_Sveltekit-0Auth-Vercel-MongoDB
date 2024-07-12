@@ -10,7 +10,8 @@
 
 	import Loader from '$UITools/InitialLoader/index.svelte';
 	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
-	import NotificationWrapper from '$UITools/Notifications/NotificationWrapper.svelte';
+	import Notification from '$components/notfication/Notification.svelte';
+
 	import {
 		firstLoadComplete,
 		setFirstOpen,
@@ -86,7 +87,7 @@
 {/if}
 
 {#if $firstLoadComplete}
-	<NotificationWrapper />
+	<Notification />
 	<Head {data} />
 
 	<SmoothScroller>

@@ -99,6 +99,16 @@
 
 		<form method="POST" action="?/createAddress" use:createAddressEnhance class="space-y-4">
 			<div class="space-y-2">
+				<Form.Field name="recipient" form={createAddress}>
+					<Form.Control let:attrs>
+						<Form.Label>Destinataire</Form.Label>
+						<Input {...attrs} type="text" bind:value={$createAddressData.recipient} />
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+
+			<div class="space-y-2">
 				<Form.Field name="street" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Rue</Form.Label>

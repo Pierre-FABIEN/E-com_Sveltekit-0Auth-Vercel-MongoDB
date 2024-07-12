@@ -1,13 +1,22 @@
 <script lang="ts">
 	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
 
-	import * as Popover from '$UITools/shadcn/popover/index.js';
 	import * as Select from '$UITools/shadcn/select/index.js';
 	import Trash from 'svelte-radix/Trash.svelte';
 
 	import { cart, removeFromCart, updateCartItemQuantity } from '$stores/Data/cartStore';
-	import { Badge } from '$UITools/shadcn/badge';
 	import Button from '$UITools/shadcn/button/button.svelte';
+
+	import { loadStripe } from '@stripe/stripe-js';
+	import { onMount } from 'svelte';
+	const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+
+	let stripe;
+	export let data;
+
+	onMount(async () => {
+		stripe = await loadStripe(stripePublishableKey);
+	});
 
 	function handleRemoveFromCart(productId: string) {
 		removeFromCart(productId);
@@ -21,38 +30,62 @@
 		value,
 		label: value.toString()
 	}));
+
+	console.log(data, 'uoihsrdfgisurfghiuh');
+
+	async function handleCheckout(orderId) {
+		const response = await fetch('/api/create-checkout-session', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ orderId })
+		});
+
+		const { id } = await response.json();
+
+		const { error } = await stripe.redirectToCheckout({
+			sessionId: id
+		});
+
+		if (error) {
+			console.error(error);
+		}
+	}
 </script>
 
-<Popover.Root>
-	<Popover.Trigger>
-		<button class="m-5 text-gray-600 relative">
-			<svg
-				class="h-8 w-8"
-				xmlns="http://www.w3.org/2000/svg"
-				width="1em"
-				height="1em"
-				viewBox="0 0 24 24"
-			>
-				<path
-					fill="currentColor"
-					d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1m-9-1a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1M18 6H4.27l2.55 6H15c.33 0 .62-.16.8-.4l3-4c.13-.17.2-.38.2-.6a1 1 0 0 0-1-1m-3 7H6.87l-.77 1.56L6 15a1 1 0 0 0 1 1h11v1H7a2 2 0 0 1-2-2a2 2 0 0 1 .25-.97l.72-1.47L2.34 4H1V3h2l.85 2H18a2 2 0 0 1 2 2c0 .5-.17.92-.45 1.26l-2.91 3.89c-.36.51-.96.85-1.64.85"
-				/>
-			</svg>
-			<Badge class="absolute bottom-5 left-5">
-				{#if $cart && $cart.items}
-					{$cart.items.length > 0 ? $cart.items.length : '0'}
+<div class="ccc">
+	<div class="rtc w-[80vw]">
+		<div class="container mx-auto p-4 cart w-[50%]">
+			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem numquam est repellendus odit
+				cumque, soluta expedita magni, non vel neque rerum? At voluptatum in iure aliquam beatae
+				vero accusamus ex.
+			</p>
+
+			<h2 class="text-2xl font-bold mb-4 mt-5">Vos adresses</h2>
+
+			<div class="ccc">
+				{#if data.addresses && data.addresses.length > 0}
+					{#each data.addresses as address}
+						<p class="text-sm text-muted-foreground">{address.state}</p>
+						<p class="text-sm text-muted-foreground">{address.city}</p>
+					{/each}
 				{:else}
-					0
+					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
-			</Badge>
-		</button>
-	</Popover.Trigger>
-	<Popover.Content class="w-[400px]">
-		<div class="container mx-auto p-4 cart">
+				<Button class="mt-4">
+					<a href="/profile"> creer une adresse </a>
+				</Button>
+			</div>
+		</div>
+
+		<div class="container mx-auto p-4 cart w-[50%]">
 			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
 			{#if $cart && $cart.items}
 				{#if $cart.items.length > 0}
-					<div class="ccc max-h-[500px]">
+					<div class="ccc max-h-[80vh]">
 						<SmoothScroller>
 							{#each $cart.items as item (item.id)}
 								<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%] mb-2">
@@ -108,15 +141,13 @@
 							</span>
 						</div>
 					</div>
-					<div class="crc w-[100%]">
-						<Button>
-							<a href="/checkout"> Checkout </a>
-						</Button>
-					</div>
 				{:else}
 					<p class="text-gray-600">Your cart is empty.</p>
 				{/if}
 			{/if}
+			<div class="crc w-[100%] mt-5">
+				<Button on:click={() => handleCheckout('order-id-from-your-database')}>Payer</Button>
+			</div>
 		</div>
-	</Popover.Content>
-</Popover.Root>
+	</div>
+</div>

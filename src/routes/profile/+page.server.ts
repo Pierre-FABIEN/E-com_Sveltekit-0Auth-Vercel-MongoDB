@@ -1,12 +1,13 @@
-import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad, Actions } from './$types';
 import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import { profileSchema, type ProfileSchema } from '$lib/ZodSchema/profileSchema';
+import { profileSchema, type ProfileSchema } from '$zod/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { updateUserData } from '$lib/prisma/Request/user/updateUserData';
-import { getUserDetails } from '$lib/prisma/Request/user/getUserDetails';
+
+import { checkOrRegister } from '$requests/user/checkOrRegister';
+import { updateUserData } from '$requests/user/updateUserData';
+import { getUserDetails } from '$requests/user/getUserDetails';
 
 const allowedRoles = ['user', 'admin'];
 

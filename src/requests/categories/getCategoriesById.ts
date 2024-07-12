@@ -1,6 +1,6 @@
 // $lib/prismaOperations.ts
 
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 // Function to find a category by ID
 export async function getCategoriesById(categoryId: string) {

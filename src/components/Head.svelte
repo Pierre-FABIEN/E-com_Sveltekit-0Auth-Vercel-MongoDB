@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import DarkMode from '$UITools/DarkMode/index.svelte';
-	import * as DropdownMenu from '$UITools/shadcn/dropdown-menu';
+	import * as DropdownMenu from '$shadcn/dropdown-menu';
 
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import FullScreen from '$UITools/FullScreen/FullScreen.svelte';

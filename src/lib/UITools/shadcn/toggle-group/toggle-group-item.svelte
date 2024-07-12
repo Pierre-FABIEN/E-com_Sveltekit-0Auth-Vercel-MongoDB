@@ -2,7 +2,7 @@
 	import { ToggleGroup as ToggleGroupPrimitive } from 'bits-ui';
 	import { type ToggleVariants, getToggleGroupCtx } from './index.js';
 	import { cn } from '$lib/utils/TailwindUtils.js';
-	import { toggleVariants } from '$UITools/shadcn/toggle/index.js';
+	import { toggleVariants } from '$shadcn/toggle/index.js';
 
 	type $$Props = ToggleGroupPrimitive.ItemProps & ToggleVariants;
 

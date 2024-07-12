@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-	import Button from '$UITools/shadcn/button/button.svelte';
+	import Button from '$shadcn/button/button.svelte';
 	import { Expand } from 'lucide-svelte';
 	import { Shrink } from 'lucide-svelte';
 

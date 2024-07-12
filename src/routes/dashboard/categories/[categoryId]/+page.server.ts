@@ -3,9 +3,9 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateCategorySchema } from '$lib/ZodSchema/categorySchema';
-import { updateCategory } from '$lib/prisma/Request/categories/updateCategory';
-import { getCategoriesById } from '$lib/prisma/Request/categories/getCategoriesById';
+import { updateCategorySchema } from '$zod/categorySchema';
+import { updateCategory } from '$requests/categories/updateCategory';
+import { getCategoriesById } from '$requests/categories/getCategoriesById';
 
 export const load: PageServerLoad = async ({ params }) => {
 	console.log('Loading category data for ID:', params.categoryId);

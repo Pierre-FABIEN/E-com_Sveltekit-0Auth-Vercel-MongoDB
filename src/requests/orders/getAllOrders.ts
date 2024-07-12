@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma';
+import prisma from '$requests';
 
 export const getAllOrders = async () => {
 	try {
@@ -7,7 +7,7 @@ export const getAllOrders = async () => {
 		const ordersWithUsers = await Promise.all(
 			orders.map(async (order) => {
 				const user = await prisma.user.findUnique({
-					where: { id: order.userId }					
+					where: { id: order.userId }
 				});
 				return { ...order, user };
 			})

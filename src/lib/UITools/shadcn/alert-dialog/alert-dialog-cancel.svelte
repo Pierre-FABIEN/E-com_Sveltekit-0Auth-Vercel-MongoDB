@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AlertDialog as AlertDialogPrimitive } from 'bits-ui';
-	import { buttonVariants } from '$UITools/shadcn/button/index.js';
+	import { buttonVariants } from '$shadcn/button/index.js';
 	import { cn } from '$lib/utils/TailwindUtils.js';
 
 	type $$Props = AlertDialogPrimitive.CancelProps;

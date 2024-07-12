@@ -4,10 +4,10 @@
 
 	import type { PageData } from './$types';
 
-	import * as Card from '$UITools/shadcn/card';
-	import { Button } from '$UITools/shadcn/button';
+	import * as Card from '$shadcn/card';
+	import { Button } from '$shadcn/button';
 
-	import { profileSchema } from '$lib/ZodSchema/profileSchema';
+	import { profileSchema } from '$zod/profileSchema';
 
 	export let data: PageData;
 

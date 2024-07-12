@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { writable, derived } from 'svelte/store';
 	import { ChevronDown, Search } from 'lucide-svelte';
-	import * as Avatar from '$UITools/shadcn/avatar';
-	import { Button } from '$UITools/shadcn/button';
-	import * as Card from '$UITools/shadcn/card';
-	import * as Command from '$UITools/shadcn/command';
-	import * as Popover from '$UITools/shadcn/popover';
-	import { Input } from '$UITools/shadcn/input';
-	import Separator from '$UITools/shadcn/separator/separator.svelte';
+	import * as Avatar from '$shadcn/avatar';
+	import { Button } from '$shadcn/button';
+	import * as Card from '$shadcn/card';
+	import * as Command from '$shadcn/command';
+	import * as Popover from '$shadcn/popover';
+	import { Input } from '$shadcn/input';
+	import Separator from '$shadcn/separator/separator.svelte';
 
 	export let Users: App.User[] = [];
 

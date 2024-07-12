@@ -5,13 +5,13 @@ import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
 
-import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
-import { deleteCategorySchema } from '$lib/ZodSchema/categorySchema';
-import { getProductById } from '$lib/prisma/Request/product/getProductById';
-import { deleteProductCategories } from '$lib/prisma/Request/product/deleteProductCategories';
-import { deleteProductById } from '$lib/prisma/Request/product/deleteProductById';
-import { getCategoriesById } from '$lib/prisma/Request/categories/getCategoriesById';
-import { deleteCategoryById } from '$lib/prisma/Request/categories/deleteCategoryById';
+import { deleteProductSchema } from '$zod/productSchema';
+import { deleteCategorySchema } from '$zod/categorySchema';
+import { getProductById } from '$requests/product/getProductById';
+import { deleteProductCategories } from '$requests/product/deleteProductCategories';
+import { deleteProductById } from '$requests/product/deleteProductById';
+import { getCategoriesById } from '$requests/categories/getCategoriesById';
+import { deleteCategoryById } from '$requests/categories/deleteCategoryById';
 import { getPublicIdFromUrl } from '$lib/utils/getPublicIdFromUrl';
 
 export const load: PageServerLoad = async () => {

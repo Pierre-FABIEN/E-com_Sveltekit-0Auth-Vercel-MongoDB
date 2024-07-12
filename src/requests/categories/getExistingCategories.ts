@@ -1,5 +1,5 @@
 // $lib/prisma/Request/categories/getExistingCategories.ts
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 export const getExistingCategories = async (categoryIds: string[]) => {
 	return await prisma.category.findMany({

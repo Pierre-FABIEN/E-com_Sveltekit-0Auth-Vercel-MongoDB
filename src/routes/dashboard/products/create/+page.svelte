@@ -1,16 +1,16 @@
 <script lang="ts">
-	import * as Form from '$UITools/shadcn/form';
-	import { Input } from '$UITools/shadcn/input';
-	import { Button } from '$UITools/shadcn/button';
-	import Checkbox from '$UITools/shadcn/checkbox/checkbox.svelte';
-	import { Label } from '$UITools/shadcn/label';
+	import * as Form from '$shadcn/form';
+	import { Input } from '$shadcn/input';
+	import { Button } from '$shadcn/button';
+	import Checkbox from '$shadcn/checkbox/checkbox.svelte';
+	import { Label } from '$shadcn/label';
 
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import SuperDebug, { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { createProductSchema } from '$lib/ZodSchema/productSchema';
-	import { Textarea } from '$UITools/shadcn/textarea';
+	import { createProductSchema } from '$zod/productSchema';
+	import { Textarea } from '$shadcn/textarea';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { goto } from '$app/navigation';
 

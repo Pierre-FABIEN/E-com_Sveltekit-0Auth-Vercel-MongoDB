@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 export const getAllCategories = async () => {
 	try {

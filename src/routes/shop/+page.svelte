@@ -7,8 +7,8 @@
 		CardFooter,
 		CardHeader,
 		CardTitle
-	} from '$UITools/shadcn/card/index.js';
-	import { Button } from '$UITools/shadcn/button';
+	} from '$shadcn/card/index.js';
+	import { Button } from '$shadcn/button';
 	import { addToCart, type OrderItem } from '$stores/Data/cartStore';
 
 	let path: string | undefined | null;

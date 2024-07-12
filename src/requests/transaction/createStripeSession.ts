@@ -1,7 +1,7 @@
 // src/lib/functions/createStripeSession.ts
 
 import Stripe from 'stripe';
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 import dotenv from 'dotenv';
 
 dotenv.config();

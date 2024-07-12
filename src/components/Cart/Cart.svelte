@@ -1,13 +1,13 @@
 <script lang="ts">
 	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
 
-	import * as Popover from '$UITools/shadcn/popover/index.js';
-	import * as Select from '$UITools/shadcn/select/index.js';
+	import * as Popover from '$shadcn/popover/index.js';
+	import * as Select from '$shadcn/select/index.js';
 	import Trash from 'svelte-radix/Trash.svelte';
 
 	import { cart, removeFromCart, updateCartItemQuantity } from '$stores/Data/cartStore';
-	import { Badge } from '$UITools/shadcn/badge';
-	import Button from '$UITools/shadcn/button/button.svelte';
+	import { Badge } from '$shadcn/badge';
+	import Button from '$shadcn/button/button.svelte';
 
 	function handleRemoveFromCart(productId: string) {
 		removeFromCart(productId);

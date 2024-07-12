@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t, locale, locales, setLocale } from '$UITools/Translations/index';
-	import * as Select from '$UITools/shadcn/select';
+	import * as Select from '$shadcn/select';
 	import { onMount } from 'svelte';
 
 	let selectedLangue: string | null = null;

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import * as Form from '$UITools/shadcn/form';
-	import { Input } from '$UITools/shadcn/input';
-	import { Button } from '$UITools/shadcn/button';
-	import * as Sheet from '$UITools/shadcn/sheet/index.js';
+	import * as Form from '$shadcn/form';
+	import { Input } from '$shadcn/input';
+	import { Button } from '$shadcn/button';
+	import * as Sheet from '$shadcn/sheet/index.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { createCategorySchema } from '$lib/ZodSchema/categorySchema';
+	import { createCategorySchema } from '$zod/categorySchema';
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
 

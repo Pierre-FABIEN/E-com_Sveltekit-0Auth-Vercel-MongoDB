@@ -1,7 +1,7 @@
 // src/routes/api/add-to-cart/+server.ts
 
 import type { RequestHandler } from '@sveltejs/kit';
-import { addToCart } from '$lib/prisma/Request/orders/addToCart';
+import { addToCart } from '$requests/orders/addToCart';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { productId, userId } = await request.json();

@@ -2,21 +2,21 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { Button } from '$UITools/shadcn/button';
-	import * as Table from '$UITools/shadcn/table';
-	import TableRow from '$UITools/shadcn/table/table-row.svelte';
-	import TableCell from '$UITools/shadcn/table/table-cell.svelte';
-	import * as AlertDialog from '$UITools/shadcn/alert-dialog';
-	import { Input } from '$UITools/shadcn/input';
-	import { Badge } from '$UITools/shadcn/badge';
-	import { Toggle } from '$UITools/shadcn/toggle';
-	import * as Select from '$UITools/shadcn/select';
+	import { Button } from '$shadcn/button';
+	import * as Table from '$shadcn/table';
+	import TableRow from '$shadcn/table/table-row.svelte';
+	import TableCell from '$shadcn/table/table-cell.svelte';
+	import * as AlertDialog from '$shadcn/alert-dialog';
+	import { Input } from '$shadcn/input';
+	import { Badge } from '$shadcn/badge';
+	import { Toggle } from '$shadcn/toggle';
+	import * as Select from '$shadcn/select';
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 
-	import { deleteProductSchema } from '$lib/ZodSchema/productSchema';
+	import { deleteProductSchema } from '$zod/productSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 

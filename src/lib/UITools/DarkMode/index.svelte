@@ -5,7 +5,7 @@
 	import Sun from 'lucide-svelte/icons/sun';
 	import Moon from 'lucide-svelte/icons/moon';
 
-	import Button from '$UITools/shadcn/button/button.svelte';
+	import Button from '$shadcn/button/button.svelte';
 
 	const darkMode = localStorageStore('darkMode', false);
 

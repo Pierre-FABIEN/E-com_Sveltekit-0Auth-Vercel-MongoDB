@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { hoverable } from '$UITools/Cursor/cursorHelpers';
 	import { t } from '$UITools/Translations/index';
-	import * as Table from '$UITools/shadcn/table';
+	import * as Table from '$shadcn/table';
 
 	import Box from './../components/three/Box.svelte';
 	import Slider from '$components/Slider/Slider.svelte';

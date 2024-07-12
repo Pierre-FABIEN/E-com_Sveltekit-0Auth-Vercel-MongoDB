@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Button from '$UITools/shadcn/button/index.js';
+	import * as Button from '$shadcn/button/index.js';
 
 	type $$Props = Button.Props;
 	type $$Events = Button.Events;

@@ -2,7 +2,7 @@
 	import type { Label as LabelPrimitive } from 'bits-ui';
 	import { getFormControl } from 'formsnap';
 	import { cn } from '$lib/utils/TailwindUtils.js';
-	import { Label } from '$UITools/shadcn/label/index.js';
+	import { Label } from '$shadcn/label/index.js';
 
 	type $$Props = LabelPrimitive.Props;
 

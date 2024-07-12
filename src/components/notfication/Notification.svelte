@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { notification } from '$stores/Data/notificationStore';
-	import * as Alert from '$UITools/shadcn/alert';
+	import * as Alert from '$shadcn/alert';
 	import { onDestroy } from 'svelte';
 	import type { Unsubscriber } from 'svelte/store';
 

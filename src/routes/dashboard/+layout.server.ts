@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
-import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
+import { checkOrRegister } from '$requests/user/checkOrRegister';
 
 const allowedRoles = ['admin'];
 

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
 
-	import * as Select from '$UITools/shadcn/select/index.js';
+	import * as Select from '$shadcn/select/index.js';
 	import Trash from 'svelte-radix/Trash.svelte';
 
 	import { cart, removeFromCart, updateCartItemQuantity } from '$stores/Data/cartStore';
-	import Button from '$UITools/shadcn/button/button.svelte';
+	import Button from '$shadcn/button/button.svelte';
 
 	import { loadStripe } from '@stripe/stripe-js';
 	import { onMount } from 'svelte';

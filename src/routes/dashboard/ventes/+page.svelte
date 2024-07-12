@@ -3,11 +3,11 @@
 
 	import { ChevronDown, Search } from 'lucide-svelte';
 
-	import { Button } from '$UITools/shadcn/button';
-	import * as Card from '$UITools/shadcn/card';
-	import * as Command from '$UITools/shadcn/command';
-	import * as Popover from '$UITools/shadcn/popover';
-	import { Input } from '$UITools/shadcn/input';
+	import { Button } from '$shadcn/button';
+	import * as Card from '$shadcn/card';
+	import * as Command from '$shadcn/command';
+	import * as Popover from '$shadcn/popover';
+	import { Input } from '$shadcn/input';
 
 	export let data: App.PageData;
 

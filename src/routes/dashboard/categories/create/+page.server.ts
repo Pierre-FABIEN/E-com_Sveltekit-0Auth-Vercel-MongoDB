@@ -3,8 +3,8 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { createCategorySchema } from '$lib/ZodSchema/categorySchema';
-import { createCategory } from '$lib/prisma/Request/categories/createCategory';
+import { createCategorySchema } from '$zod/categorySchema';
+import { createCategory } from '$requests/categories/createCategory';
 
 // Fonction de chargement
 export const load: PageServerLoad = async () => {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RangeCalendar as RangeCalendarPrimitive } from 'bits-ui';
-	import { buttonVariants } from '$UITools/shadcn/button/index.js';
+	import { buttonVariants } from '$shadcn/button/index.js';
 	import { cn } from '$lib/utils/TailwindUtils.js';
 
 	type $$Props = RangeCalendarPrimitive.DayProps;

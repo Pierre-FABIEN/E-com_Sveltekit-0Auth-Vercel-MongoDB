@@ -1,7 +1,7 @@
 import { error, json, redirect } from '@sveltejs/kit';
-import { getUserAddresses } from '$lib/prisma/Request/user/getUserAddresses';
+import { getUserAddresses } from '$requests/user/getUserAddresses';
 import type { Actions, PageServerLoad } from './$types';
-import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
+import { checkOrRegister } from '$requests/user/checkOrRegister';
 
 const allowedRoles = ['user'];
 

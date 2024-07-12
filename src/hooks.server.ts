@@ -2,7 +2,7 @@
 
 import { handle as authHandle } from './auth';
 import { sequence } from '@sveltejs/kit/hooks';
-import { getUserByEmail } from '$lib/prisma/Request/user/getUserByEmail';
+import { getUserByEmail } from '$requests/user/getUserByEmail';
 
 export const handle = sequence(authHandle, async ({ event, resolve }) => {
 	const session = await event.locals.getSession();

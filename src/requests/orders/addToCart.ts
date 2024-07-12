@@ -1,6 +1,6 @@
 // src/lib/prisma/Request/order/addToCart.ts
 
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 export const addToCart = async (userId: string, productId: string, quantity: number = 1) => {
 	const pendingOrder = await prisma.order.findFirst({

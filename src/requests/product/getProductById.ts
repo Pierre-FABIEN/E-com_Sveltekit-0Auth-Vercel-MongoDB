@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 export async function getProductById(productId: string) {
 	return await prisma.product.findUnique({

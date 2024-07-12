@@ -49,19 +49,16 @@ export default defineConfig({
 		adapter: vercel(),
 		alias: {
 			// this will match a file
-			$db: 'src/db',
+			$lib: 'src/lib',
+			$routes: 'src/routes',
+			$zod: 'src/zod',
 			$components: 'src/components',
-			$modelNotifications: 'src/api/modelNotifications',
-			$utils: 'src/utils',
+			$requests: 'src/requests',
+			$utils: 'src/lib/utils',
 			$stores: 'src/stores',
 			$UITools: 'src/lib/UITools',
-			$language: 'src/language',
+			$shadcn: 'src/lib/UITools/shadcn',
 			$three: 'src/lib/components/three',
-			$services: 'src/services',
-			$lib: 'src/lib',
-			$api: 'src/api',
-			$routes: 'src/routes',
-			'@/*': 'src/lib/UITools'
 		}
 	}
 });

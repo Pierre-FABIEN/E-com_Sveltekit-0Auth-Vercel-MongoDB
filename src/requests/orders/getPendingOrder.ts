@@ -1,6 +1,6 @@
 // src/lib/prisma/Request/order/getPendingOrder.ts
 
-import prisma from '$lib/prisma';
+import prisma from "$requests";
 
 export const getPendingOrder = async (userId: string) => {
 	return await prisma.order.findFirst({

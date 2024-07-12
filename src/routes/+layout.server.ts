@@ -1,9 +1,10 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
-import { checkOrRegister } from '$lib/prisma/Request/user/checkOrRegister';
-import { getAllProducts } from '$lib/prisma/Request/product/getAllProducts';
-import { getAllCategories } from '$lib/prisma/Request/categories/getAllCategories';
-import { getPendingOrder } from '$lib/prisma/Request/orders/getPendingOrder';
+
+import { checkOrRegister } from '$requests/user/checkOrRegister';
+import { getAllProducts } from '$requests/product/getAllProducts';
+import { getAllCategories } from '$requests/categories/getAllCategories';
+import { getPendingOrder } from '$requests/orders/getPendingOrder';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;

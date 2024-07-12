@@ -12,7 +12,7 @@ export const createAddressSchema = z.object({
 
 // Schema for updating an Address
 export const updateAddressSchema = z.object({
-	id: z.string().min(1, 'id is required'),
+	id: z.string(),
 	street: z.string().min(1, 'Street is required').optional(),
 	city: z.string().min(1, 'City is required').optional(),
 	state: z.string().min(1, 'State is required').optional(),
@@ -23,7 +23,7 @@ export const updateAddressSchema = z.object({
 
 // Schema for deleting an Address
 export const deleteAddressSchema = z.object({
-	id: z.string().min(1, 'id is required')
+	id: z.string()
 });
 
 export type CreateAddressSchema = z.infer<typeof createAddressSchema>;

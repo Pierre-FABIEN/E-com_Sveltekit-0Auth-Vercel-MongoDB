@@ -12,6 +12,7 @@
 	import * as AlertDialog from '$shadcn/alert-dialog';
 
 	import { deleteAddressSchema } from '$zod/addressSchema';
+	import { showNotification } from '$stores/Data/notificationStore';
 
 	export let data: PageData;
 
@@ -22,7 +23,12 @@
 
 	const { enhance: deleteAddressEnhance, message: deleteAddressMessage } = deleteAddress;
 
-	console.log(data, 'data');
+	$: if ($deleteAddressMessage) {
+		showNotification(
+			$deleteAddressMessage,
+			$deleteAddressMessage.includes('success') ? 'success' : 'error'
+		);
+	}
 </script>
 
 <div class="card">

@@ -1,15 +1,11 @@
 <script lang="ts">
+	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
+
 	import * as Popover from '$UITools/shadcn/popover/index.js';
 	import * as Select from '$UITools/shadcn/select/index.js';
 	import Trash from 'svelte-radix/Trash.svelte';
 
-	import {
-		cart,
-		type OrderItem,
-		addToCart,
-		removeFromCart,
-		updateCartItemQuantity
-	} from '$stores/Data/cartStore';
+	import { cart, removeFromCart, updateCartItemQuantity } from '$stores/Data/cartStore';
 	import { Badge } from '$UITools/shadcn/badge';
 
 	function handleRemoveFromCart(productId: string) {
@@ -51,55 +47,57 @@
 		</button>
 	</Popover.Trigger>
 	<Popover.Content class="w-[400px]">
-		<div class="container mx-auto p-4">
+		<div class="container mx-auto p-4 cart">
 			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
 			{#if $cart && $cart.items}
 				{#if $cart.items.length > 0}
-					<div class="ccc h-[130px]">
-						{#each $cart.items as item (item.id)}
-							<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%]">
-								{#if item.product.images && item.product.images[0]}
-									<img
-										src={item.product.images[0]}
-										alt={item.product.name}
-										class="w-20 h-20 object-cover mr-4"
-									/>
-								{/if}
-								<div class="flex-1 clb">
-									<h3 class="text-lg font-semibold">{item.product.name}</h3>
-									<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
-									<Select.Root portal={null}>
-										<Select.Trigger class="w-[100px]">
-											<Select.Value placeholder={item.quantity.toString()} />
-										</Select.Trigger>
-										<Select.Content>
-											<Select.Group>
-												<Select.Label>Quantité</Select.Label>
-												{#each quantityOptions as option}
-													<Select.Item
-														value={option.value}
-														on:click={() => changeQuantity(item.product.id, option.value)}
-														>{option.label}</Select.Item
-													>
-												{/each}
-											</Select.Group>
-										</Select.Content>
-										<Select.Input name="quantity" />
-									</Select.Root>
+					<div class="ccc max-h-[500px]">
+						<SmoothScroller>
+							{#each $cart.items as item (item.id)}
+								<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%] mb-2">
+									{#if item.product.images && item.product.images[0]}
+										<img
+											src={item.product.images[0]}
+											alt={item.product.name}
+											class="w-20 h-20 object-cover mr-4"
+										/>
+									{/if}
+									<div class="flex-1 clb">
+										<h3 class="text-lg font-semibold">{item.product.name}</h3>
+										<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
+										<Select.Root portal={null}>
+											<Select.Trigger class="w-[100px]">
+												<Select.Value placeholder={item.quantity.toString()} />
+											</Select.Trigger>
+											<Select.Content>
+												<Select.Group>
+													<Select.Label>Quantité</Select.Label>
+													{#each quantityOptions as option}
+														<Select.Item
+															value={option.value}
+															on:click={() => changeQuantity(item.product.id, option.value)}
+															>{option.label}</Select.Item
+														>
+													{/each}
+												</Select.Group>
+											</Select.Content>
+											<Select.Input name="quantity" />
+										</Select.Root>
+									</div>
+									<div class="text-right crb items-end h-[100%]">
+										<p class="text-lg font-semibold">
+											{(item.price * item.quantity).toFixed(1)}€
+										</p>
+										<button
+											on:click={() => handleRemoveFromCart(item.product.id)}
+											class="text-red-600 hover:text-red-800 mt-2"
+										>
+											<Trash />
+										</button>
+									</div>
 								</div>
-								<div class="text-right crb items-end h-[100%]">
-									<p class="text-lg font-semibold">
-										{(item.price * item.quantity).toFixed(1)}€
-									</p>
-									<button
-										on:click={() => handleRemoveFromCart(item.product.id)}
-										class="text-red-600 hover:text-red-800 mt-2"
-									>
-										<Trash />
-									</button>
-								</div>
-							</div>
-						{/each}
+							{/each}
+						</SmoothScroller>
 					</div>
 					<div class="mt-4 p-4 border-t rounded-none">
 						<div class="flex justify-between items-center">

@@ -14,6 +14,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
 	if (user && session) {
 		session.user.role = user.role;
+		session.user.id = user.id;
 	}
 
 	if (!allowedRoles.includes(user?.role as string)) {

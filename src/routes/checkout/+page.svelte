@@ -76,7 +76,7 @@
 					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
 				<Button class="mt-4">
-					<a href="/profile/address"> creer une adresse </a>
+					<a href="/profile"> creer une adresse </a>
 				</Button>
 			</div>
 		</div>

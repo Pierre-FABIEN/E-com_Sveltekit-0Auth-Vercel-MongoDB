@@ -13,9 +13,9 @@ export const notification = writable<Notification>({
 	show: false
 });
 
-notification.subscribe((value) => {
-	console.log('Notification store updated:', value);
-});
+// notification.subscribe((value) => {
+// 	console.log('Notification store updated:', value);
+// });
 
 export function showNotification(message: string, type: 'info' | 'success' | 'error' = 'info') {
 	console.log('showNotification called with:', { message, type });

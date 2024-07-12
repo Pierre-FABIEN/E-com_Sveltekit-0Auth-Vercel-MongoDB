@@ -21,8 +21,6 @@ export const cart = writable({
 });
 
 export const setCart = (id: string, userId: string, items: OrderItem[], total: number) => {
-	console.log('Setting cart:', id, userId, items, total);
-
 	cart.set({
 		id,
 		userId,
@@ -88,6 +86,6 @@ export const updateCartItemQuantity = (productId: string, quantity: number) => {
 	});
 };
 
-cart.subscribe((currentCart) => {
-	console.log('Cart:', currentCart);
-});
+// cart.subscribe((currentCart) => {
+// 	console.log('Cart:', currentCart);
+// });

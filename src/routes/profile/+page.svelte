@@ -38,32 +38,34 @@
 				</div>
 			</div>
 		</Card.Header>
-		<div class="clc m-5">
-			<h2>Adresses</h2>
-			{#if data.addresses && data.addresses.length > 0}
-				{#each data.addresses as address}
-					<p class="text-sm text-muted-foreground">{address.state}</p>
-					<p class="text-sm text-muted-foreground">{address.city}</p>
-				{/each}
-			{:else}
-				<p class="text-gray-600">Aucune adresse présente.</p>
-			{/if}
-			<Button class="mt-4">
-				<a href="/profile/address"> creer une adresse </a>
-			</Button>
-		</div>
+		<Card.Content>
+			<div class="clc m-5">
+				<h2>Adresses</h2>
+				{#if data.addresses && data.addresses.length > 0}
+					{#each data.addresses as address}
+						<p class="text-sm text-muted-foreground">{address.state}</p>
+						<p class="text-sm text-muted-foreground">{address.city}</p>
+					{/each}
+				{:else}
+					<p class="text-gray-600">Aucune adresse présente.</p>
+				{/if}
+				<Button class="mt-4">
+					<a href="/profile/address"> creer une adresse </a>
+				</Button>
+			</div>
 
-		<div class="clc m-5">
-			<h2>Orders</h2>
-			{#if data.orders && data.orders.length > 0}
-				{#each data.orders as address}
-					<p class="text-sm text-muted-foreground">{address.state}</p>
-					<p class="text-sm text-muted-foreground">{address.city}</p>
-				{/each}
-			{:else}
-				<p class="text-gray-600">Aucune commande présente.</p>
-			{/if}
-		</div>
+			<div class="clc m-5">
+				<h2>Orders</h2>
+				{#if data.orders && data.orders.length > 0}
+					{#each data.orders as address}
+						<p class="text-sm text-muted-foreground">{address.state}</p>
+						<p class="text-sm text-muted-foreground">{address.city}</p>
+					{/each}
+				{:else}
+					<p class="text-gray-600">Aucune commande présente.</p>
+				{/if}
+			</div>
+		</Card.Content>
 	</Card.Root>
 </div>
 

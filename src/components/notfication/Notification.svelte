@@ -16,12 +16,10 @@
 	let animationClass: string = 'animate-slideIn';
 
 	const unsubscribe: Unsubscriber = notification.subscribe((value: Notification) => {
-		console.log('Notification component received update:', value);
 		message = value.message;
 		type = value.type;
 		show = value.show;
 		animationClass = 'animate-slideIn';
-		console.log(`State after update - Message: ${message}, Type: ${type}, Show: ${show}`);
 
 		if (show) {
 			console.log('Notification will be shown');

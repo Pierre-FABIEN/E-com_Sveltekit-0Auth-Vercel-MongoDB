@@ -3,6 +3,7 @@ import { getUserAddresses } from '$requests/user/getUserAddresses';
 import type { Actions, PageServerLoad } from './$types';
 
 import { checkOrRegister } from '$requests/user/checkOrRegister';
+import { updateOrder } from '$requests/orders/updateOrder';
 
 import { paymentSchema } from '$zod/paymentSchema';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -54,12 +55,15 @@ export const actions: Actions = {
 
 		const form = await superValidate(formData, zod(paymentSchema));
 		const orderId = form.data.orderId;
+		const addressId = form.data.addressId;
 
 		const order = await getOrderById(orderId);
 
 		if (!order) {
 			return json({ error: 'Order not found' }, { status: 404 });
 		}
+
+		await updateOrder(orderId, addressId);
 
 		const lineItems = order.items.map((item) => ({
 			price_data: {

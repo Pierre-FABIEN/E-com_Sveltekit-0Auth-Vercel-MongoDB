@@ -16,16 +16,16 @@
 	<nav>
 		<ul class="rcb">
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
+				<a  data-sveltekit-preload-data href="/">Home</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/shop' ? 'page' : undefined}>
-				<a href="/shop">shop</a>
+				<a  data-sveltekit-preload-data href="/shop">shop</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/transitionAPI' ? 'page' : undefined}>
-				<a href="/transitionAPI">transitionAPI</a>
+				<a  data-sveltekit-preload-data href="/transitionAPI">transitionAPI</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/protected' ? 'page' : undefined}>
-				<a href="/protected">Protected</a>
+				<a  data-sveltekit-preload-data href="/protected">Protected</a>
 			</li>
 		</ul>
 	</nav>
@@ -61,12 +61,12 @@
 					{#if $page.data.session?.user}
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
-							<a href="/profile" class="w-[100%]">Profile</a>
+							<a  data-sveltekit-preload-data href="/profile" class="w-[100%]">Profile</a>
 						</DropdownMenu.Item>
 					{/if}
 					{#if $page.data.session?.user.role === 'admin'}
 						<DropdownMenu.Item>
-							<a href="/dashboard" class="w-[100%]">Dashboard</a>
+							<a  data-sveltekit-preload-data href="/dashboard" class="w-[100%]">Dashboard</a>
 						</DropdownMenu.Item>
 					{/if}
 				</DropdownMenu.Group>

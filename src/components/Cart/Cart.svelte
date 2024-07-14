@@ -110,7 +110,7 @@
 					</div>
 					<div class="crc w-[100%]">
 						<Button>
-							<a href="/checkout"> Checkout </a>
+							<a  data-sveltekit-preload-data href="/checkout"> Checkout </a>
 						</Button>
 					</div>
 				{:else}

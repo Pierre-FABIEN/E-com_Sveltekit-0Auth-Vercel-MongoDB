@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 export const POST = async ({ request }) => {
 	const cartData = await request.json();
 
+	console.log('Received cart data:', cartData);
+
 	// Vérifiez que les champs nécessaires sont présents et valides
 	if (
 		!cartData.id ||
@@ -16,6 +18,7 @@ export const POST = async ({ request }) => {
 		cartData.total === undefined ||
 		typeof cartData.total !== 'number'
 	) {
+		console.error('Invalid cart data:', cartData);
 		return json({ error: 'Invalid cart data' }, { status: 400 });
 	}
 
@@ -36,6 +39,7 @@ export const POST = async ({ request }) => {
 			item.price === undefined ||
 			typeof item.price !== 'number'
 		) {
+			console.error('Invalid item data in cart:', item);
 			return json({ error: 'Invalid item data in cart' }, { status: 400 });
 		}
 	}
@@ -49,27 +53,54 @@ export const POST = async ({ request }) => {
 			price: item.price
 		}));
 
-		// Sauvegarde ou mise à jour des données du panier dans la base de données
-		await prisma.order.upsert({
-			where: { id: cartData.id },
-			update: {
-				items: {
-					deleteMany: {}, // Delete existing items
-					create: formattedItems // Create new items
-				},
-				total: cartData.total,
-				updatedAt: new Date()
-			},
-			create: {
-				id: cartData.id,
-				userId: cartData.userId,
-				items: {
-					create: formattedItems
-				},
-				total: cartData.total,
-				status: 'PENDING',
-				createdAt: new Date(),
-				updatedAt: new Date()
+		console.log('Formatted items:', formattedItems);
+
+		// Start a transaction
+		await prisma.$transaction(async (prisma) => {
+			const existingOrder = await prisma.order.findUnique({
+				where: { id: cartData.id }
+			});
+
+			console.log('Existing order:', existingOrder);
+
+			if (existingOrder) {
+				// If the order exists, update it
+				await prisma.order.update({
+					where: { id: cartData.id },
+					data: {
+						items: {
+							deleteMany: {} // Supprimez les items existants
+						},
+						total: cartData.total,
+						updatedAt: new Date()
+					}
+				});
+				// Ajoutez les nouveaux items après suppression des anciens
+				await prisma.order.update({
+					where: { id: cartData.id },
+					data: {
+						items: {
+							create: formattedItems // Créez de nouveaux items
+						}
+					}
+				});
+				console.log('Order updated:', cartData.id);
+			} else {
+				// If the order does not exist, create it
+				await prisma.order.create({
+					data: {
+						id: cartData.id,
+						userId: cartData.userId,
+						items: {
+							create: formattedItems
+						},
+						total: cartData.total,
+						status: 'PENDING',
+						createdAt: new Date(),
+						updatedAt: new Date()
+					}
+				});
+				console.log('Order created:', cartData.id);
 			}
 		});
 

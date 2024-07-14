@@ -5,16 +5,16 @@
 
 <footer>
 	<div>
-		<a href="https://sveltekit.authjs.dev">Documentation <ExternalIcon /></a>
-		<a href="https://www.npmjs.com/package/next-auth"> NPM <ExternalIcon /> </a>
-		<a href="https://github.com/nextauthjs/next-auth/tree/main/apps/examples/sveltekit">
+		<a  data-sveltekit-preload-data href="https://sveltekit.authjs.dev">Documentation <ExternalIcon /></a>
+		<a  data-sveltekit-preload-data href="https://www.npmjs.com/package/next-auth"> NPM <ExternalIcon /> </a>
+		<a  data-sveltekit-preload-data href="https://github.com/nextauthjs/next-auth/tree/main/apps/examples/sveltekit">
 			Source on GitHub <ExternalIcon />
 		</a>
 		<a class="no-underline" href="/policy">Policy</a>
 	</div>
 	<div>
 		<img src="https://authjs.dev/img/logo-sm.png" alt="Auth.js Logo" />
-		<a href="https://www.npmjs.com/package/@auth/sveltekit">
+		<a  data-sveltekit-preload-data href="https://www.npmjs.com/package/@auth/sveltekit">
 			@auth/sveltekit@{packageJSON.version}
 			<ExternalIcon />
 		</a>

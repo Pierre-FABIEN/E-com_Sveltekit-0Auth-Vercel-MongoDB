@@ -94,14 +94,14 @@
 				{/if}
 
 				<Button class="mt-4">
-					<a href="/profile/address"> creer une adresse </a>
+					<a  data-sveltekit-preload-data href="/profile/address"> creer une adresse </a>
 				</Button>
 			</div>
 
 			<div class="clc m-5">
 				<h2>Orders</h2>
-				{#if data.orders && data.orders.length > 0}
-					{#each data.orders as address}
+				{#if data.paidOrders && data.paidOrders.length > 0}
+					{#each data.paidOrders as address}
 						<p class="text-sm text-muted-foreground">{address.state}</p>
 						<p class="text-sm text-muted-foreground">{address.city}</p>
 					{/each}

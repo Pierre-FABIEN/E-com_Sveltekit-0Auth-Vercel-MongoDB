@@ -1,4 +1,3 @@
-// src/stores/cartSync.ts
 import { cart } from './cartStore';
 import { get } from 'svelte/store';
 
@@ -8,14 +7,20 @@ const syncCart = async () => {
 	const currentCart = get(cart);
 
 	if (currentCart.lastModified > lastSynced) {
+		console.log(currentCart, 'currentCart');
 		try {
-			await fetch('/api/save-cart', {
+			const response = await fetch('/api/save-cart', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(currentCart)
 			});
+
+			if (!response.ok) {
+				throw new Error('Failed to save cart');
+			}
+
 			lastSynced = Date.now();
 		} catch (error) {
 			console.error('Failed to sync cart:', error);
@@ -24,7 +29,7 @@ const syncCart = async () => {
 };
 
 const startSync = () => {
-	setInterval(syncCart, 30000); // Sync every 30 seconds
+	setInterval(syncCart, 2000); // Sync every 2 seconds
 };
 
 export { startSync };

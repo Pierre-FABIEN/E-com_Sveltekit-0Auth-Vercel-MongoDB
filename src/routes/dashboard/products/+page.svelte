@@ -295,7 +295,7 @@
 									</AlertDialog.Root>
 
 									<Button variant="outline" class="m-1 p-1 text-xs">
-										<a href="/dashboard/products/{product.id}">
+										<a  data-sveltekit-preload-data href="/dashboard/products/{product.id}">
 											<PencilIcon class="h-4 w-8" />
 										</a>
 									</Button>

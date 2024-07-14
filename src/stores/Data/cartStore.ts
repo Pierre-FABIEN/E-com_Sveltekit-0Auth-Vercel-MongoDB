@@ -86,6 +86,6 @@ export const updateCartItemQuantity = (productId: string, quantity: number) => {
 	});
 };
 
-// cart.subscribe((currentCart) => {
-// 	console.log('Cart:', currentCart);
-// });
+cart.subscribe((currentCart) => {
+	console.log('Cart:', currentCart);
+});

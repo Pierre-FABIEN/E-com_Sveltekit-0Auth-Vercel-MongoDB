@@ -37,7 +37,7 @@
 		<h1 bind:this={title}>{$t('general.home-title')}</h1>
 
 		<div class="linkhome">
-			<a href="/shop" use:hoverable={'first'}>{$t('general.home-link')}</a>
+			<a  data-sveltekit-preload-data href="/shop" use:hoverable={'first'}>{$t('general.home-link')}</a>
 		</div>
 
 		<Slider />

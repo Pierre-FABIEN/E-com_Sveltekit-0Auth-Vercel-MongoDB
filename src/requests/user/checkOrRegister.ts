@@ -1,6 +1,6 @@
 // src/lib/functions/checkAuth.ts
 
-import prisma from "$requests";
+import prisma from '$requests';
 import { getPendingOrder } from '../orders/getPendingOrder';
 
 export const checkOrRegister = async (session: any) => {
@@ -24,14 +24,7 @@ export const checkOrRegister = async (session: any) => {
 						orders: {
 							create: {
 								status: 'PENDING',
-								total: 0,
-								transactions: {
-									create: {
-										stripePaymentId: '', // Empty initially, will be updated after payment
-										amount: 0, // Amount will be updated after payment
-										status: 'PENDING'
-									}
-								}
+								total: 0
 							}
 						}
 					}

@@ -20,6 +20,8 @@ export const load: LayoutServerLoad = async (event) => {
 	if (user && session) {
 		session.user.role = user.role;
 		pendingOrder = await getPendingOrder(user.id);
+		console.log('pendingOrder:', pendingOrder);
+		
 		session.user.id = user.id;
 		session.orders = pendingOrder;
 	}

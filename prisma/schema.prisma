@@ -115,7 +115,7 @@ model Transaction {
 
   customer_details_email        String
   customer_details_name        String
-  customer_details_phone        String
+  customer_details_phone        String?
 
   status          String
   customerEmail   String?

@@ -85,26 +85,13 @@ async function handleCheckoutSession(session) {
 		}
 
 		console.log(`✅ Order ${orderId} has been marked as paid and stock has been updated.`);
-
-		// Create a new pending order
-		const newOrder = await prisma.order.create({
-			data: {
-				userId: userId,
-				status: 'PENDING',
-				total: 0,
-				addressId: null,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			}
-		});
-		console.log(`✅ New pending order created with ID: ${newOrder.id}`);
 	} catch (error) {
 		console.error(`⚠️ Error processing order ${orderId}:`, error);
 	}
 }
 
 async function createTransaction(session, userId, orderId) {
-	console.log(`✅ Processing transaction ${session} for order ${orderId}`);
+	console.log(`✅ Processing transaction ${session.id} for order ${orderId}`);
 
 	const transactionData = {
 		stripePaymentId: session.id,

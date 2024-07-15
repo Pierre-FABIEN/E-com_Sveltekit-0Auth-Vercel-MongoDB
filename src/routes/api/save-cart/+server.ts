@@ -25,7 +25,6 @@ export const POST = async ({ request }) => {
 	// Assurez-vous que chaque item dans le panier a les champs nécessaires
 	for (const item of cartData.items) {
 		if (
-			!item.id ||
 			!item.product ||
 			!item.product.id ||
 			typeof item.product.id !== 'string' ||
@@ -47,7 +46,6 @@ export const POST = async ({ request }) => {
 	try {
 		// Convert cart items to the expected format for Prisma
 		const formattedItems = cartData.items.map((item) => ({
-			id: item.id,
 			productId: item.product.id,
 			quantity: item.quantity,
 			price: item.price

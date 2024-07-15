@@ -13,6 +13,7 @@ import { getOrderById } from '$requests/orders/getOrderById';
 
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
+import { createTransaction } from '$requests/transaction/createtransaction';
 
 dotenv.config();
 
@@ -66,7 +67,7 @@ export const actions: Actions = {
 
 		const lineItems = order.items.map((item) => ({
 			price_data: {
-				currency: 'eur',
+				currency: 'eur', // Changer 'usd' en 'eur' pour utiliser les euros
 				product_data: {
 					name: item.product.name
 				},
@@ -75,22 +76,17 @@ export const actions: Actions = {
 			quantity: item.quantity
 		}));
 
-		try {
-			const session = await stripe.checkout.sessions.create({
-				payment_method_types: ['card'],
-				line_items: lineItems,
-				mode: 'payment',
-				success_url: `${request.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
-				cancel_url: `${request.headers.get('origin')}/cancel`,
-				metadata: {
-					order_id: orderId
-				}
-			});
+		const session = await stripe.checkout.sessions.create({
+			payment_method_types: ['card'],
+			line_items: lineItems,
+			mode: 'payment',
+			success_url: `${request.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${request.headers.get('origin')}/cancel`,
+			metadata: {
+				order_id: orderId
+			}
+		});
 
-			return json({ id: session.id });
-		} catch (error) {
-			console.error('Error creating Stripe checkout session:', error);
-			return json({ error: 'Failed to create Stripe checkout session' }, { status: 500 });
-		}
+		throw redirect(303, session.url);
 	}
 };

@@ -104,6 +104,8 @@ async function handleCheckoutSession(session) {
 }
 
 async function createTransaction(session, userId, orderId) {
+	console.log(`✅ Processing transaction ${session} for order ${orderId}`);
+
 	const transactionData = {
 		stripePaymentId: session.id,
 		amount: session.amount_total / 100,

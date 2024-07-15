@@ -1,6 +1,7 @@
 import prisma from '$requests';
 
 export const createTransaction = async (sessionId, orderId, orderTotal) => {
+	console.log(`✅ Processing srghresdgdsrgreds ${sessionId} for order ${orderId}`);
 	try {
 		// Mise à jour des données de l'utilisateur dans la base de données        // await prisma.transaction.create({
 		const updatedTransaction = await prisma.transaction.create({

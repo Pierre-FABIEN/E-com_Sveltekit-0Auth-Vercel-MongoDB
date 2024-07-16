@@ -7,9 +7,16 @@
 	import * as Select from '$shadcn/select';
 
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
+	import Trash from 'svelte-radix/Trash.svelte';
+	import * as AlertDialog from '$shadcn/alert-dialog';
 
 	export let columns: Array<{ key: string; label: string }>;
 	export let data: any = [];
+	export let hasActions: boolean = false;
+	export let deleteActionUrl: string = '';
+	export let editActionUrl: string = '';
+	export let enhance: (form: HTMLFormElement) => void = () => {};
 
 	// Variable for search text
 	let searchQuery: string = '';
@@ -141,6 +148,13 @@
 									</div>
 								</Table.Head>
 							{/each}
+							{#if editActionUrl || deleteActionUrl}
+								<Table.Head
+									class="w-[150px] text-center border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
+								>
+									Actions
+								</Table.Head>
+							{/if}
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
@@ -149,6 +163,42 @@
 								{#each columns as column}
 									<TableCell>{item[column.key]}</TableCell>
 								{/each}
+								{#if editActionUrl || deleteActionUrl}
+									<TableCell class="rce">
+										{#if editActionUrl}
+											<Button variant="outline" class="m-1 p-1 text-xs">
+												<a href={editActionUrl}>
+													<PencilIcon class="h-4 w-8" />
+												</a>
+											</Button>
+										{/if}
+										{#if deleteActionUrl}
+											<AlertDialog.Root>
+												<AlertDialog.Trigger asChild let:builder>
+													<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
+														<Trash class="h-4 w-8" />
+													</Button>
+												</AlertDialog.Trigger>
+
+												<AlertDialog.Content>
+													<AlertDialog.Header>
+														<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+														<AlertDialog.Description>
+															This action cannot be undone. This will permanently delete the item.
+														</AlertDialog.Description>
+													</AlertDialog.Header>
+													<AlertDialog.Footer>
+														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+														<form method="POST" action={deleteActionUrl} use:enhance>
+															<input type="hidden" name="id" value={item.id} />
+															<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+														</form>
+													</AlertDialog.Footer>
+												</AlertDialog.Content>
+											</AlertDialog.Root>
+										{/if}
+									</TableCell>
+								{/if}
 							</TableRow>
 						{/each}
 					</Table.Body>

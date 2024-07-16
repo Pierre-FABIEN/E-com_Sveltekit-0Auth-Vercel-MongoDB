@@ -2,9 +2,6 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import PencilIcon from 'svelte-radix/Pencil1.svelte';
-	import Trash from 'svelte-radix/Trash.svelte';
-
 	import type { PageData } from './$types';
 
 	import * as Card from '$shadcn/card';
@@ -72,7 +69,13 @@
 			<div class="clc w-[100%]">
 				<h2>Adresses</h2>
 				{#if data.userDetails?.addresses && data.userDetails?.addresses.length > 0}
-					<Table columns={addressColumns} data={data.userDetails.addresses} />
+					<Table
+						columns={addressColumns}
+						data={data.userDetails.addresses}
+						hasActions={true}
+						deleteActionUrl="?/deleteAddress"
+						enhance={deleteAddressEnhance}
+					/>
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
@@ -85,7 +88,12 @@
 			<div class="clc w-[100%]">
 				<h2>Orders</h2>
 				{#if data.orders && data.orders.length > 0}
-					<Table columns={orderColumns} data={data.orders} />
+					<Table
+						columns={orderColumns}
+						data={data.orders}
+						hasActions={false}
+						enhance={deleteAddressEnhance}
+					/>
 				{:else}
 					<p class="text-gray-600">Aucune commande présente.</p>
 				{/if}
@@ -94,7 +102,7 @@
 			<div class="clc w-[100%]">
 				<h2>Transactions</h2>
 				{#if data.transactions && data.transactions.length > 0}
-					<Table columns={transactionColumns} data={data.transactions} />
+					<Table columns={transactionColumns} data={data.transactions} hasActions={false} />
 				{:else}
 					<p class="text-gray-600">Aucune transaction présente.</p>
 				{/if}

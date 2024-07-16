@@ -1,6 +1,4 @@
 <script lang="ts">
-	import SmoothScroller from '$UITools/SmoothScroller/index.svelte';
-
 	import * as Select from '$shadcn/select/index.js';
 	import Trash from 'svelte-radix/Trash.svelte';
 
@@ -108,52 +106,50 @@
 			{#if $cart && $cart.items}
 				{#if $cart.items.length > 0}
 					<div class="ccc max-h-[80vh]">
-						<SmoothScroller>
-							{#each $cart.items as item (item.id)}
-								<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%] mb-2">
-									{#if item.product.images && item.product.images[0]}
-										<img
-											src={item.product.images[0]}
-											alt={item.product.name}
-											class="w-20 h-20 object-cover mr-4"
-										/>
-									{/if}
-									<div class="flex-1 clb">
-										<h3 class="text-lg font-semibold">{item.product.name}</h3>
-										<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
-										<Select.Root portal={null}>
-											<Select.Trigger class="w-[100px]">
-												<Select.Value placeholder={item.quantity.toString()} />
-											</Select.Trigger>
-											<Select.Content>
-												<Select.Group>
-													<Select.Label>Quantité</Select.Label>
-													{#each quantityOptions as option}
-														<Select.Item
-															value={option.value}
-															on:click={() => changeQuantity(item.product.id, option.value)}
-															>{option.label}</Select.Item
-														>
-													{/each}
-												</Select.Group>
-											</Select.Content>
-											<Select.Input name="quantity" />
-										</Select.Root>
-									</div>
-									<div class="text-right crb items-end h-[100%]">
-										<p class="text-lg font-semibold">
-											{(item.price * item.quantity).toFixed(1)}€
-										</p>
-										<button
-											on:click={() => handleRemoveFromCart(item.product.id)}
-											class="text-red-600 hover:text-red-800 mt-2"
-										>
-											<Trash />
-										</button>
-									</div>
+						{#each $cart.items as item (item.id)}
+							<div class="p-4 border rounded-lg shadow-sm flex rcb w-[100%] mb-2">
+								{#if item.product.images && item.product.images[0]}
+									<img
+										src={item.product.images[0]}
+										alt={item.product.name}
+										class="w-20 h-20 object-cover mr-4"
+									/>
+								{/if}
+								<div class="flex-1 clb">
+									<h3 class="text-lg font-semibold">{item.product.name}</h3>
+									<p class="text-gray-600">${item.product.price.toFixed(1)}€</p>
+									<Select.Root portal={null}>
+										<Select.Trigger class="w-[100px]">
+											<Select.Value placeholder={item.quantity.toString()} />
+										</Select.Trigger>
+										<Select.Content>
+											<Select.Group>
+												<Select.Label>Quantité</Select.Label>
+												{#each quantityOptions as option}
+													<Select.Item
+														value={option.value}
+														on:click={() => changeQuantity(item.product.id, option.value)}
+														>{option.label}</Select.Item
+													>
+												{/each}
+											</Select.Group>
+										</Select.Content>
+										<Select.Input name="quantity" />
+									</Select.Root>
 								</div>
-							{/each}
-						</SmoothScroller>
+								<div class="text-right crb items-end h-[100%]">
+									<p class="text-lg font-semibold">
+										{(item.price * item.quantity).toFixed(1)}€
+									</p>
+									<button
+										on:click={() => handleRemoveFromCart(item.product.id)}
+										class="text-red-600 hover:text-red-800 mt-2"
+									>
+										<Trash />
+									</button>
+								</div>
+							</div>
+						{/each}
 					</div>
 					<div class="mt-4 p-4 border-t rounded-none">
 						<div class="flex justify-between items-center">

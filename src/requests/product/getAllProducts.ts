@@ -1,6 +1,6 @@
 import prisma from "$requests";
 
-export const getAllProducts = async () => {
+export const getproducts = async () => {
 	try {
 		const products = await prisma.product.findMany({
 			include: {

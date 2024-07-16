@@ -16,8 +16,8 @@
 
 	export let data: {
 		IcreateProductSchema: SuperValidated<Infer<typeof createProductSchema>>;
-		AllCategories: any;
-		AllProducts: any;
+		categories: any;
+		products: any;
 	};
 
 	const createProduct = superForm(data.IcreateProductSchema, {
@@ -38,7 +38,7 @@
 	const files = filesFieldProxy(createProduct, 'images');
 	const { values } = files;
 
-	$: $createProductData.categoryId = data.AllCategories.filter(
+	$: $createProductData.categoryId = data.categories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
 
@@ -106,8 +106,8 @@
 						<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
 						<Form.Field name="categoryId" form={createProduct}>
 							<Form.Control let:attrs>
-								{#if data.AllCategories.length > 0}
-									{#each data.AllCategories as category (category.id)}
+								{#if data.categories.length > 0}
+									{#each data.categories as category (category.id)}
 										<div class="my-3 flex items-center space-x-2">
 											<Checkbox id={category.id} bind:checked={category.checked} />
 											<Label

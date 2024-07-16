@@ -15,8 +15,8 @@
 
 	export let data: {
 		IcreateAddressSchema: SuperValidated<Infer<typeof createAddressSchema>>;
-		AllCategories: any;
-		AllProducts: any;
+		categories: any;
+		products: any;
 	};
 
 	const createAddress = superForm(data.IcreateAddressSchema, {

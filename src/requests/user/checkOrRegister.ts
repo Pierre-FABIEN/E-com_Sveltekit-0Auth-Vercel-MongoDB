@@ -39,9 +39,8 @@ export const checkOrRegister = async (session: Session): Promise<User | null> =>
 				}
 			});
 
-			session.user.id = user.id;
-			session.user.role = user.role;
-			session.order = await getPendingOrder(user.id);
+			session.user.id = user?.id;
+			session.user.role = user?.role;
 		} else if (user.role !== 'admin' && user.orders.length === 0) {
 			await prisma.order.create({
 				data: {

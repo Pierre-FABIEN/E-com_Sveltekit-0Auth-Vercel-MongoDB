@@ -62,7 +62,7 @@ export const removeFromCart = (productId: string) => {
 			0
 		);
 		currentCart.lastModified = Date.now();
-		console.log('Cart after removing item:', JSON.stringify(currentCart, null, 2));
+		//console.log('Cart after removing item:', JSON.stringify(currentCart, null, 2));
 		return currentCart;
 	});
 };
@@ -81,7 +81,7 @@ export const updateCartItemQuantity = (productId: string, quantity: number) => {
 			0
 		);
 		currentCart.lastModified = Date.now();
-		console.log('Cart after updating item quantity:', JSON.stringify(currentCart, null, 2));
+		//console.log('Cart after updating item quantity:', JSON.stringify(currentCart, null, 2));
 		return currentCart;
 	});
 };

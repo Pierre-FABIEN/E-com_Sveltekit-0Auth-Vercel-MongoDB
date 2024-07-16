@@ -43,7 +43,7 @@
 	<div class="ccs min-w-screen min-h-screen">
 		<h1 class="p-5 w-[80vw]">shop</h1>
 		<div class="rcs w-[80vw]">
-			{#each data.AllProducts as product}
+			{#each data.products as product}
 				<Card class="product-card w-[200px] m-5">
 					<CardHeader class="w-[100%]">
 						<img src={product.images[0]} alt={product.name} class="product-image object-cover" />

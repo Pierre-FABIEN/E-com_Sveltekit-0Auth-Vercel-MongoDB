@@ -18,8 +18,8 @@
 
 	export let data: {
 		IupdateProductSchema: SuperValidated<Infer<typeof updateProductSchema>>;
-		AllCategories: any;
-		AllProducts: any;
+		categories: any;
+		products: any;
 	};
 
 	const updateProduct = superForm(data.IupdateProductSchema, {
@@ -47,7 +47,7 @@
 
 	onMount(() => {
 		const productCategories = data.IupdateProductSchema.data.categoryId;
-		data.AllCategories = data.AllCategories.map((category: any) => {
+		data.categories = data.categories.map((category: any) => {
 			if (productCategories.includes(category.id)) {
 				category.checked = true;
 			}
@@ -55,7 +55,7 @@
 		});
 	});
 
-	$: $updateProductData.categoryId = data.AllCategories.filter(
+	$: $updateProductData.categoryId = data.categories.filter(
 		(category: any) => category.checked
 	).map((category: any) => category.id);
 
@@ -119,8 +119,8 @@
 						<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
 						<Form.Field name="categoryId" form={updateProduct}>
 							<Form.Control let:attrs>
-								{#if data.AllCategories.length > 0}
-									{#each data.AllCategories as category (category.id)}
+								{#if data.categories.length > 0}
+									{#each data.categories as category (category.id)}
 										<div class="my-3 flex items-center space-x-2">
 											<Checkbox id={category.id} bind:checked={category.checked} />
 											<Label

@@ -60,7 +60,7 @@
 		}
 
 		// Sort products
-		data.AllProducts.sort((a: any, b: any) => {
+		data.products.sort((a: any, b: any) => {
 			let aValue = a[column];
 			let bValue = b[column];
 
@@ -81,12 +81,12 @@
 		// Update filtered and paginated products
 		updateFilteredAndPaginatedProducts();
 
-		console.log('sorted products:', data.AllProducts); // Log to check the sorting result
+		console.log('sorted products:', data.products); // Log to check the sorting result
 	};
 
 	// Function to filter and paginate products
 	const updateFilteredAndPaginatedProducts = () => {
-		filteredProducts = data.AllProducts.filter((product: any) =>
+		filteredProducts = data.products.filter((product: any) =>
 			product.name.toLowerCase().includes(searchQuery.toLowerCase())
 		);
 

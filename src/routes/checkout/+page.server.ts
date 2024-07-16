@@ -13,7 +13,6 @@ import { getOrderById } from '$requests/orders/getOrderById';
 
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
-import { createTransaction } from '$requests/transaction/createtransaction';
 
 dotenv.config();
 
@@ -59,11 +58,17 @@ export const actions: Actions = {
 
 		const order = await getOrderById(orderId);
 
+		const userId = order.userId;
+
+		console.log(order, 'order');
+
 		if (!order) {
 			return json({ error: 'Order not found' }, { status: 404 });
 		}
 
 		await updateOrder(orderId, addressId);
+
+		console.log(orderId, 'rolsdghdlkrgjh');
 
 		const lineItems = order.items.map((item) => ({
 			price_data: {
@@ -84,6 +89,12 @@ export const actions: Actions = {
 			cancel_url: `${request.headers.get('origin')}/cancel`,
 			metadata: {
 				order_id: orderId
+			},
+			payment_intent_data: {
+				metadata: {
+					user_id: userId,
+					order_id: orderId
+				}
 			}
 		});
 

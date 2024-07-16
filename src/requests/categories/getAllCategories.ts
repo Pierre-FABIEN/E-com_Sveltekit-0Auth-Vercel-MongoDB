@@ -1,6 +1,6 @@
-import prisma from "$requests";
+import prisma from '$requests';
 
-export const getAllCategories = async () => {
+export const getcategories = async () => {
 	try {
 		const categories = await prisma.category.findMany();
 		return categories;

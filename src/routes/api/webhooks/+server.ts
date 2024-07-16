@@ -1,9 +1,10 @@
-// src/routes/api/webhooks/stripe.ts
 import { json } from '@sveltejs/kit';
 import Stripe from 'stripe';
 import prisma from '$requests';
 import dotenv from 'dotenv';
 import { getUserIdByOrderId } from '$requests/user/getUserIdByOrderId';
+import { createTransactionValidated } from '$requests/transaction/createTransactionValidated';
+import { createTransactionInvalidated } from '$requests/transaction/createTransactionInvalidated';
 
 dotenv.config();
 
@@ -37,6 +38,15 @@ export async function POST({ request }) {
 				console.error('⚠️ Error handling checkout session:', error);
 			}
 			break;
+		case 'charge.failed':
+			const charge = event.data.object;
+			console.log('⚠️ Charge Failed:', charge);
+			try {
+				await handleChargeFailed(charge);
+			} catch (error) {
+				console.error('⚠️ Error handling charge failed:', error);
+			}
+			break;
 		default:
 			console.warn(`Unhandled event type ${event.type}`);
 	}
@@ -46,6 +56,12 @@ export async function POST({ request }) {
 
 async function handleCheckoutSession(session) {
 	const orderId = session.metadata.order_id;
+
+	if (!orderId) {
+		console.error('⚠️ Order ID is missing in the session metadata');
+		return;
+	}
+
 	const user = await getUserIdByOrderId(orderId);
 
 	if (!user || !user.userId) {
@@ -57,7 +73,7 @@ async function handleCheckoutSession(session) {
 
 	try {
 		// Create the transaction in the database
-		await createTransaction(session, userId, orderId);
+		await createTransactionValidated(session, userId, orderId);
 
 		// Retrieve the order items
 		const orderItems = await prisma.orderItem.findMany({
@@ -90,27 +106,46 @@ async function handleCheckoutSession(session) {
 	}
 }
 
-async function createTransaction(session, userId, orderId) {
-	console.log(`✅ Processing transaction ${session.id} for order ${orderId}`);
+async function handleChargeFailed(charge) {
+	const paymentIntentId = charge.payment_intent;
 
-	const transactionData = {
-		stripePaymentId: session.id,
-		amount: session.amount_total / 100,
-		currency: session.currency,
-		customer_details_email: session.customer_details.email,
-		customer_details_name: session.customer_details.name,
-		customer_details_phone: session.customer_details.phone,
-		status: session.payment_status,
+	const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+	const amount = paymentIntent.amount;
+
+	const currency = paymentIntent.currency;
+
+	const status = charge.status;
+
+	const stripePaymentId = paymentIntent.id;
+
+	const createdAt = paymentIntent.created;
+
+	const userId = paymentIntent.metadata.user_id;
+
+	const orderId = paymentIntent.metadata.order_id;
+
+	const dataTransaction = {
+		stripePaymentId: stripePaymentId,
+		amount: amount,
+		currency: currency,
+		customer_details_email: null,
+		customer_details_name: null,
+		customer_details_phone: null,
+		status: status,
 		orderId: orderId,
 		userId: userId,
-		customerEmail: session.customer_details.email,
-		createdAt: new Date(session.created * 1000)
+		createdAt: createdAt
 	};
 
 	try {
-		await prisma.transaction.create({ data: transactionData });
-		console.log(`✅ Transaction ${session.id} recorded successfully.`);
+		// Log the failed payment attempt
+		await createTransactionInvalidated(dataTransaction, userId, orderId);
+
+		console.log(
+			`⚠️ Payment failed for paymentIdfthdfthdfthdfthdthfntent ${paymentIntent} has been logged.`
+		);
 	} catch (error) {
-		console.error(`⚠️ Failed to record transaction ${session.id}:`, error);
+		console.error(`⚠️ Error handling payment intent failed for order ${orderId}:`, error);
 	}
 }

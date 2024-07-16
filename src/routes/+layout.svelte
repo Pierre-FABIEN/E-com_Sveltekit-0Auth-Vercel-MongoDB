@@ -69,6 +69,8 @@
 
 		if (data.session.orders) {
 			const items = data.session.orders;
+			console.log(items, 'items fron layout');
+
 			setCart(items.id, items.userId, items.items, items.total);
 			startSync();
 		}

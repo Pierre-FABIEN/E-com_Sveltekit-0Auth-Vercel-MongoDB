@@ -2,16 +2,19 @@ import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
 
 import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { getAllProducts } from '$requests/product/getAllProducts';
-import { getAllCategories } from '$requests/categories/getAllCategories';
+
 import { getPendingOrder } from '$requests/orders/getPendingOrder';
+import { getproductsAndCategories } from '$requests/LayoutData/getproductsAndCategories';
+import { getUserDetails } from '$requests/user/getUserDetails';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;
 	const { pathname } = url;
 
-	const AllProducts = await getAllProducts();
-	const AllCategories = await getAllCategories();
+	const { products, categories } = await getproductsAndCategories();
+
+	console.log('products:', products);
+	console.log('categories:', categories);
 
 	const session = await locals.getSession();
 	const user = await checkOrRegister(session);
@@ -20,8 +23,7 @@ export const load: LayoutServerLoad = async (event) => {
 	if (user && session) {
 		session.user.role = user.role;
 		pendingOrder = await getPendingOrder(user.id);
-		console.log('pendingOrder:', pendingOrder);
-		
+
 		session.user.id = user.id;
 		session.orders = pendingOrder;
 	}
@@ -48,8 +50,8 @@ export const load: LayoutServerLoad = async (event) => {
 	await loadTranslations(locale, pathname); // Load translations for the current locale and path
 
 	return {
-		AllProducts,
-		AllCategories,
+		products,
+		categories,
 		session,
 		i18n: { locale, route: pathname },
 		translations: translations.get() // Return loaded translations

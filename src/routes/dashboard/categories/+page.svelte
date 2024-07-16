@@ -59,7 +59,7 @@
 		}
 
 		// Sort categories
-		data.AllCategories.sort((a: any, b: any) => {
+		data.categories.sort((a: any, b: any) => {
 			let aValue = a[column];
 			let bValue = b[column];
 
@@ -80,12 +80,12 @@
 		// Update filtered and paginated categories
 		updateFilteredAndPaginatedCategories();
 
-		console.log('sorted categories:', data.AllCategories); // Log to check the sorting result
+		console.log('sorted categories:', data.categories); // Log to check the sorting result
 	};
 
 	// Function to filter and paginate categories
 	const updateFilteredAndPaginatedCategories = () => {
-		filteredCategories = data.AllCategories.filter((category: any) =>
+		filteredCategories = data.categories.filter((category: any) =>
 			category.name.toLowerCase().includes(searchQuery.toLowerCase())
 		);
 

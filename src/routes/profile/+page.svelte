@@ -13,6 +13,7 @@
 
 	import { deleteAddressSchema } from '$zod/addressSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
+	import Table from '$components/Table.svelte';
 
 	export let data: PageData;
 
@@ -29,6 +30,26 @@
 			$deleteAddressMessage.includes('success') ? 'success' : 'error'
 		);
 	}
+
+	const addressColumns = [
+		{ key: 'recipient', label: 'Destinataire' },
+		{ key: 'street', label: 'Rue' },
+		{ key: 'city', label: 'Ville' },
+		{ key: 'zip', label: 'Code postal' },
+		{ key: 'country', label: 'Pays' }
+	];
+
+	const orderColumns = [
+		{ key: 'updatedAt', label: 'Date de mise à jour' },
+		{ key: 'status', label: 'Statut' },
+		{ key: 'total', label: 'Total' }
+	];
+
+	const transactionColumns = [
+		{ key: 'updatedAt', label: 'Date de mise à jour' },
+		{ key: 'status', label: 'Statut' },
+		{ key: 'amount', label: 'Montant' }
+	];
 </script>
 
 <div class="ccc">
@@ -48,65 +69,34 @@
 			</div>
 		</Card.Header>
 		<Card.Content>
-			<div class="clc m-5">
+			<div class="clc w-[100%]">
 				<h2>Adresses</h2>
-
 				{#if data.userDetails?.addresses && data.userDetails?.addresses.length > 0}
-					{#each data.userDetails?.addresses as address}
-						<div class="border rounded p-2 m-2 min-w-[400px] rcb">
-							<div class="">
-								<p class="text-sm text-muted-foreground">Destinataire: {address.recipient}</p>
-								<p class="text-sm text-muted-foreground">Rue: {address.street}</p>
-								<p class="text-sm text-muted-foreground">Ville: {address.city}</p>
-								<p class="text-sm text-muted-foreground">Code postal: {address.zip}</p>
-								<p class="text-sm text-muted-foreground">Pays: {address.country}</p>
-							</div>
-							<div class="w-[50px]">
-								<AlertDialog.Root>
-									<AlertDialog.Trigger asChild let:builder>
-										<Button builders={[builder]} variant="outline" class="m-1 p-1 text-xs">
-											<Trash class="h-4 w-8" />
-										</Button>
-									</AlertDialog.Trigger>
-
-									<AlertDialog.Content>
-										<AlertDialog.Header>
-											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-											<AlertDialog.Description>
-												This action cannot be undone. This will permanently delete your account and
-												remove your data from our servers.
-											</AlertDialog.Description>
-										</AlertDialog.Header>
-										<AlertDialog.Footer>
-											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-											<form method="POST" action="?/deleteAddress" use:deleteAddressEnhance>
-												<input type="hidden" name="id" value={address.id} />
-												<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-											</form>
-										</AlertDialog.Footer>
-									</AlertDialog.Content>
-								</AlertDialog.Root>
-							</div>
-						</div>
-					{/each}
+					<Table columns={addressColumns} data={data.userDetails.addresses} />
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>
 				{/if}
 
 				<Button class="mt-4">
-					<a  data-sveltekit-preload-data href="/profile/address"> creer une adresse </a>
+					<a data-sveltekit-preload-data href="/profile/address">Créer une adresse</a>
 				</Button>
 			</div>
 
-			<div class="clc m-5">
+			<div class="clc w-[100%]">
 				<h2>Orders</h2>
-				{#if data.paidOrders && data.paidOrders.length > 0}
-					{#each data.paidOrders as address}
-						<p class="text-sm text-muted-foreground">{address.state}</p>
-						<p class="text-sm text-muted-foreground">{address.city}</p>
-					{/each}
+				{#if data.orders && data.orders.length > 0}
+					<Table columns={orderColumns} data={data.orders} />
 				{:else}
 					<p class="text-gray-600">Aucune commande présente.</p>
+				{/if}
+			</div>
+
+			<div class="clc w-[100%]">
+				<h2>Transactions</h2>
+				{#if data.transactions && data.transactions.length > 0}
+					<Table columns={transactionColumns} data={data.transactions} />
+				{:else}
+					<p class="text-gray-600">Aucune transaction présente.</p>
 				{/if}
 			</div>
 		</Card.Content>

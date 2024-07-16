@@ -65,8 +65,8 @@
 </script>
 
 <div class="ccc">
-	<div class="rtc w-[80vw]">
-		<div class="container mx-auto p-4 cart w-[50%]">
+	<div class="ctc w-[80vw]">
+		<div class="container mx-auto p-4 cart w-[100%]">
 			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
 			<p>
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem numquam est repellendus odit
@@ -104,8 +104,7 @@
 			</div>
 		</div>
 
-		<div class="container mx-auto p-4 cart w-[50%]">
-			<h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+		<div class="container mx-auto p-4 cart w-[100%]">
 			{#if $cart && $cart.items}
 				{#if $cart.items.length > 0}
 					<div class="ccc max-h-[80vh]">

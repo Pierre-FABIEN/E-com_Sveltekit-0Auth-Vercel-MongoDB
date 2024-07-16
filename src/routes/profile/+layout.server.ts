@@ -2,7 +2,8 @@ import type { LayoutServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { getPaidOrdersByUserId } from '$requests/orders/getPaidOrdersByUserId';
+import { getAllOrdersByUserId } from '$requests/orders/getAllOrdersByUserId';
+import { getTransactionsbyUserId } from '$requests/transaction/getTransactionsbyUserId';
 
 const allowedRoles = ['user'];
 
@@ -22,9 +23,11 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		throw redirect(302, '/');
 	}
 
-	const paidOrders = await getPaidOrdersByUserId(user.id);
+	const orders = await getAllOrdersByUserId(user.id);
+	const transactions = await getTransactionsbyUserId(user.id);
 	return {
 		session,
-		paidOrders
+		orders,
+		transactions
 	};
 };

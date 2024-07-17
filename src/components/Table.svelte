@@ -147,7 +147,7 @@
 						<a
 							data-sveltekit-preload-data
 							href={newActionUrl}
-							class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+							class="group relative inline-flex items-center mx-5 space-x-2 border border-transparent text-sm font-medium rounded-md"
 						>
 							<Toggle>
 								<span class="hidden">Créer un produit</span>

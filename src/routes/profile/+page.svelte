@@ -20,6 +20,7 @@
 	});
 
 	const { enhance: deleteAddressEnhance, message: deleteAddressMessage } = deleteAddress;
+	const formattedData = formatProductData(data.userDetails?.transactions);
 
 	$: if ($deleteAddressMessage) {
 		showNotification(
@@ -37,12 +38,30 @@
 	];
 
 	const transactionColumns = [
-		{ key: 'updatedAt', label: 'Date de mise à jour' },
 		{ key: 'status', label: 'Statut' },
-		{ key: 'amount', label: 'Montant' }
+		{ key: 'amount', label: 'Montant' },
+		{ key: 'createdAt', label: 'Date de mise à jour' }
 	];
 
-	console.log(data, 'data from +page.svelte');
+	function formatDate(dateString: string): string {
+		const date = new Date(dateString);
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const year = date.getFullYear();
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+
+		return `${day}/${month}/${year} à ${hours}:${minutes}`;
+	}
+
+	function formatProductData(items: any[]) {
+		return items.map((item) => ({
+			...item,
+			createdAt: formatDate(item.createdAt)
+		}));
+	}
+
+	console.log(formattedData, 'data from +page.svelte');
 </script>
 
 <div class="ccc">
@@ -75,11 +94,7 @@
 			</div>
 
 			<div class="clc w-[100%] my-5">
-				<Table
-					name="Transactions"
-					columns={transactionColumns}
-					data={data.userDetails?.transactions}
-				/>
+				<Table name="Transactions" columns={transactionColumns} data={formattedData} />
 			</div>
 		</Card.Content>
 	</Card.Root>

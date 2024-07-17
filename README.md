@@ -77,7 +77,7 @@ stripe listen --forward-to localhost:1000/api/webhooks
 
 669296107a754adae2043066
 
-
+rendre le produit invisible si aucun stock
 faire le admin ventes
 gestion des utilisateurs
 sur le dashboard montrer les dernières ventes et tout

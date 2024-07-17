@@ -44,6 +44,8 @@
 			startSync();
 		}
 	});
+
+	console.log(data, 'data from +page.svelte');
 </script>
 
 <svelte:head>

@@ -59,8 +59,6 @@
 			createdAt: formatDate(item.createdAt)
 		}));
 	}
-
-	console.log(formattedData, 'data from +page.svelte');
 </script>
 
 <div class="ccc">

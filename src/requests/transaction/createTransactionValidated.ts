@@ -1,7 +1,7 @@
 import prisma from '$requests';
 
-export const createTransactionValidated = async (session, userId, orderId) => {
-	console.log(`✅ Processing transaction ${session.id} for order ${orderId}`);
+export const createTransactionValidated = async (transactionValidated, userId, orderId) => {
+	console.log(`✅ Processing transaction ${transactionValidated.id} for order ${orderId}`);
 
 	// Fetch order and user details
 	const order = await prisma.order.findUnique({
@@ -26,16 +26,16 @@ export const createTransactionValidated = async (session, userId, orderId) => {
 	}
 
 	const transactionData = {
-		stripePaymentId: session.id,
-		amount: session.amount_total / 100,
-		currency: session.currency,
-		customer_details_email: session.customer_details.email,
-		customer_details_name: session.customer_details.name,
-		customer_details_phone: session.customer_details.phone,
-		status: session.payment_status,
+		stripePaymentId: transactionValidated.id,
+		amount: transactionValidated.amount_total / 100,
+		currency: transactionValidated.currency,
+		customer_details_email: transactionValidated.customer_details.email,
+		customer_details_name: transactionValidated.customer_details.name,
+		customer_details_phone: transactionValidated.customer_details.phone,
+		status: transactionValidated.payment_status,
 		orderId: orderId,
 		userId: userId,
-		createdAt: new Date(session.created * 1000),
+		createdAt: new Date(transactionValidated.created * 1000),
 		app_user_name: order.user.name,
 		app_user_email: order.user.email,
 		app_user_recipient: order.address.recipient,
@@ -57,7 +57,7 @@ export const createTransactionValidated = async (session, userId, orderId) => {
 		await prisma.$transaction(async (prisma) => {
 			// Create the transaction record
 			await prisma.transaction.create({ data: transactionData });
-			console.log(`✅ Transaction ${session.id} recorded successfully.`);
+			console.log(`✅ Transaction ${transactionValidated.id} recorded successfully.`);
 
 			// Deduct the quantities from the products in stock
 			for (const item of order.items) {
@@ -85,6 +85,6 @@ export const createTransactionValidated = async (session, userId, orderId) => {
 			console.log(`✅ Order ${orderId} deleted successfully.`);
 		});
 	} catch (error) {
-		console.error(`⚠️ Failed to process transaction ${session.id}:`, error);
+		console.error(`⚠️ Failed to process transaction ${transactionValidated.id}:`, error);
 	}
 };

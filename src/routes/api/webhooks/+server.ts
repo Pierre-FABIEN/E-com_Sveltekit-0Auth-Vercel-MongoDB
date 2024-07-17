@@ -91,6 +91,10 @@ async function handleCheckoutSession(session) {
 				throw new Error(`Order ${orderId} not found`);
 			}
 
+			if (!order.address) {
+				throw new Error(`Order ${orderId} has no associated address`);
+			}
+
 			const transactionData = {
 				stripePaymentId: session.id,
 				amount: session.amount_total / 100,
@@ -104,12 +108,12 @@ async function handleCheckoutSession(session) {
 				createdAt: new Date(session.created * 1000),
 				app_user_name: order.user.name,
 				app_user_email: order.user.email,
-				app_user_recipient: order.address ? order.address.recipient : '',
-				app_user_street: order.address ? order.address.street : '',
-				app_user_city: order.address ? order.address.city : '',
-				app_user_state: order.address ? order.address.state : '',
-				app_user_zip: order.address ? order.address.zip : '',
-				app_user_country: order.address ? order.address.country : '',
+				app_user_recipient: order.address.recipient,
+				app_user_street: order.address.street,
+				app_user_city: order.address.city,
+				app_user_state: order.address.state,
+				app_user_zip: order.address.zip,
+				app_user_country: order.address.country,
 				products: order.items.map((item) => ({
 					id: item.productId,
 					name: item.product.name,
@@ -156,6 +160,7 @@ async function handleChargeFailed(charge) {
 	const paymentIntentId = charge.payment_intent;
 
 	const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+	console.log('⚠️ Payment Intent:', paymentIntent);
 
 	const amount = paymentIntent.amount;
 
@@ -165,23 +170,56 @@ async function handleChargeFailed(charge) {
 
 	const stripePaymentId = paymentIntent.id;
 
-	const createdAt = paymentIntent.created;
-
 	const userId = paymentIntent.metadata.user_id;
 
 	const orderId = paymentIntent.metadata.order_id;
+
+	const order = await prisma.order.findUnique({
+		where: { id: orderId },
+		include: {
+			user: true,
+			address: true,
+			items: {
+				include: {
+					product: true
+				}
+			}
+		}
+	});
+
+	if (!order) {
+		throw new Error(`Order ${orderId} not found`);
+	}
+
+	if (!order.address) {
+		throw new Error(`Order ${orderId} has no associated address`);
+	}
 
 	const dataTransaction = {
 		stripePaymentId: stripePaymentId,
 		amount: amount,
 		currency: currency,
-		customer_details_email: '',
-		customer_details_name: '',
-		customer_details_phone: '',
+		customer_details_email: charge.billing_details.email,
+		customer_details_name: charge.billing_details.name,
+		customer_details_phone: charge.billing_details.phone,
 		status: status,
 		orderId: orderId,
 		userId: userId,
-		createdAt: createdAt
+		createdAt: Date.now(),
+		app_user_name: order.user.name,
+		app_user_email: order.user.email,
+		app_user_recipient: order.address.recipient,
+		app_user_street: order.address.street,
+		app_user_city: order.address.city,
+		app_user_state: order.address.state,
+		app_user_zip: order.address.zip,
+		app_user_country: order.address.country,
+		products: order.items.map((item) => ({
+			id: item.productId,
+			name: item.product.name,
+			price: item.product.price,
+			quantity: item.quantity
+		}))
 	};
 
 	try {

@@ -13,22 +13,21 @@
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 
+	// Props
 	export let columns: Array<{ key: string; label: string }>;
 	export let data: any = [];
 	export let deleteActionUrl: string = '';
 	export let editActionUrl: string = '';
 	export let newActionUrl: string = '';
 	export let name: string = '';
-	export let message: any;
 	export let enhance: (form: HTMLFormElement) => void = () => {};
 
-	// Variable for search text
+	// Variables for search and pagination
 	let searchQuery: string = '';
-
-	// Pagination variables
 	let currentPage: number = 1;
 	let itemsPerPage: number = 5;
 
+	// Options for items per page
 	const optionPage = [
 		{ label: '5', value: 5 },
 		{ label: '10', value: 10 },
@@ -39,6 +38,10 @@
 	// Sorting variables
 	let sortColumn: string = '';
 	let sortDirection: string = 'asc';
+
+	// Filtered and paginated items
+	let filteredItems = [];
+	let paginatedItems: any[] = [];
 
 	// Function to sort items
 	const sortItems = (column: string) => {
@@ -58,13 +61,7 @@
 				bValue = bValue.toLowerCase();
 			}
 
-			if (aValue < bValue) {
-				return sortDirection === 'asc' ? -1 : 1;
-			}
-			if (aValue > bValue) {
-				return sortDirection === 'asc' ? 1 : -1;
-			}
-			return 0;
+			return (aValue < bValue ? -1 : 1) * (sortDirection === 'asc' ? 1 : -1);
 		});
 
 		updateFilteredAndPaginatedItems();
@@ -78,31 +75,26 @@
 			)
 		);
 
-		paginatedItems = filteredItems.slice(
-			(currentPage - 1) * itemsPerPage,
-			currentPage * itemsPerPage
-		);
+		const start = (currentPage - 1) * itemsPerPage;
+		const end = start + itemsPerPage;
+		paginatedItems = filteredItems.slice(start, end);
 	};
-
-	// Initialize filtered and paginated items
-	let filteredItems = [];
-	let paginatedItems: any[] = [];
 
 	// Initialize filtered and paginated items from initial data
 	updateFilteredAndPaginatedItems();
 
 	// Function to change page
-	function changePage(page: number) {
+	const changePage = (page: number) => {
 		currentPage = page;
 		updateFilteredAndPaginatedItems();
-	}
+	};
 
 	// Function to change items per page
-	function changeItemsPerPage(items: number) {
+	const changeItemsPerPage = (items: number) => {
 		itemsPerPage = items;
 		currentPage = 1; // Reset to first page
 		updateFilteredAndPaginatedItems();
-	}
+	};
 
 	// Function to delete an item
 	const deleteItem = (id: string) => {
@@ -111,11 +103,11 @@
 	};
 </script>
 
-<div class="rcs w-[100%]">
-	<div class="w-[100%]">
+<div class="rcs w-full">
+	<div class="w-full">
 		<div class="border p-2">
 			<h2 class="text-2xl font-bold mb-5">{name}</h2>
-			<div class="rcb mb-5 w-[100%]">
+			<div class="rcb mb-5 w-full">
 				<Input
 					type="text"
 					placeholder="Cherchez dans le tableau"
@@ -126,8 +118,8 @@
 				<div class="rcc nowrap">
 					<div class="ccc">
 						<Select.Root portal={null}>
-							<Select.Trigger class="w-[150px]">
-								<Select.Value placeholder="Items par page" />
+							<Select.Trigger class="w-36">
+								<Select.Value placeholder="Items per page" />
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Group>
@@ -162,7 +154,7 @@
 					<Table.Header>
 						<Table.Row>
 							{#each columns as column}
-								<Table.Head class="border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]">
+								<Table.Head class="border-r border-r-gray-800 pr-2">
 									<div class="rcb">
 										{column.label}
 										<button on:click={() => sortItems(column.key)}>
@@ -172,9 +164,7 @@
 								</Table.Head>
 							{/each}
 							{#if editActionUrl || deleteActionUrl}
-								<Table.Head
-									class="w-[150px] text-center border-r-[1px] border-r-[#1e293b] rounded-none pr-[5px]"
-								>
+								<Table.Head class="w-36 text-center border-r border-r-gray-800 pr-2">
 									Actions
 								</Table.Head>
 							{/if}

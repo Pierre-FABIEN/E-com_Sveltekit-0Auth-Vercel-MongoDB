@@ -1,7 +1,11 @@
 import prisma from '$requests';
 
-export const createTransactionInvalidated = async (dataTransaction, userId, orderId) => {
-	console.log(dataTransaction, 'drsgdgdxrgxdr');
+export const createTransactionInvalidated = async (
+	transactionInvalidated: any,
+	userId: string,
+	orderId: string
+) => {
+	console.log(transactionInvalidated, 'drsgdgdxrgxdr');
 	const order = await prisma.order.findUnique({
 		where: { id: orderId },
 		include: {
@@ -22,17 +26,25 @@ export const createTransactionInvalidated = async (dataTransaction, userId, orde
 	if (!order.address) {
 		throw new Error(`Order ${orderId} has no associated address`);
 	}
+
+	const createdAt = new Date(transactionInvalidated.createdAt);
+	if (isNaN(createdAt.getTime())) {
+		throw new Error(
+			`Invalid date for payment creation timestamp: ${transactionInvalidated.createdAt}`
+		);
+	}
+
 	const transactionData = {
-		stripePaymentId: dataTransaction.id,
-		amount: dataTransaction.amount_total / 100,
-		currency: dataTransaction.currency,
-		customer_details_email: dataTransaction.customer_details.email,
-		customer_details_name: dataTransaction.customer_details.name,
-		customer_details_phone: dataTransaction.customer_details.phone,
-		status: dataTransaction.payment_status,
+		stripePaymentId: transactionInvalidated.stripePaymentId,
+		amount: transactionInvalidated.amount,
+		currency: transactionInvalidated.currency,
+		customer_details_email: transactionInvalidated.customer_details_email,
+		customer_details_name: transactionInvalidated.customer_details_name,
+		customer_details_phone: transactionInvalidated.customer_details_phone,
+		status: transactionInvalidated.status,
 		orderId: orderId,
 		userId: userId,
-		createdAt: new Date(dataTransaction.created * 1000),
+		createdAt: createdAt,
 		app_user_name: order.user.name,
 		app_user_email: order.user.email,
 		app_user_recipient: order.address.recipient,
@@ -51,8 +63,11 @@ export const createTransactionInvalidated = async (dataTransaction, userId, orde
 
 	try {
 		await prisma.transaction.create({ data: transactionData });
-		console.log(`✅ Transaction ${dataTransaction.id} recorded successfully.`);
+		console.log(`✅ Transaction ${transactionInvalidated.stripePaymentId} recorded successfully.`);
 	} catch (error) {
-		console.error(`⚠️ Failed to record transaction ${dataTransaction.id}:`, error);
+		console.error(
+			`⚠️ Failed to record transaction ${transactionInvalidated.stripePaymentId}:`,
+			error
+		);
 	}
 };

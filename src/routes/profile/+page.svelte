@@ -5,7 +5,6 @@
 	import type { PageData } from './$types';
 
 	import * as Card from '$shadcn/card';
-	import { Button } from '$shadcn/button';
 
 	import { deleteAddressSchema } from '$zod/addressSchema';
 
@@ -20,7 +19,7 @@
 	});
 
 	const { enhance: deleteAddressEnhance, message: deleteAddressMessage } = deleteAddress;
-	const formattedData = formatProductData(data.userDetails?.transactions);
+	const formattedData = formatProductData(data.userDetails?.transactions ?? []);
 
 	$: if ($deleteAddressMessage) {
 		showNotification(
@@ -73,7 +72,7 @@
 			>
 
 			<div class="content-basic rcs mt-5">
-				<img src={data.session?.user.image} alt="image du compte" />
+				<img src={data.session?.user.image} alt={`Image of ${data.session?.user.name}`} />
 				<div class="content-basic-wrapper clc ml-5">
 					<h1>{data.session?.user.name}</h1>
 					<p>{data.session?.user.email}</p>
@@ -85,11 +84,10 @@
 				<Table
 					name="Adresses"
 					columns={addressColumns}
-					data={data.userDetails.addresses}
+					data={data.userDetails?.addresses}
 					deleteActionUrl="?/deleteAddress"
 					newActionUrl="/profile/address"
 					enhance={deleteAddressEnhance}
-					message={deleteAddressMessage}
 				/>
 			</div>
 

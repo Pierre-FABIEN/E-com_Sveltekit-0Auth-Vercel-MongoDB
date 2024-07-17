@@ -36,17 +36,13 @@
 		{ key: 'country', label: 'Pays' }
 	];
 
-	const orderColumns = [
-		{ key: 'updatedAt', label: 'Date de mise à jour' },
-		{ key: 'status', label: 'Statut' },
-		{ key: 'total', label: 'Total' }
-	];
-
 	const transactionColumns = [
 		{ key: 'updatedAt', label: 'Date de mise à jour' },
 		{ key: 'status', label: 'Statut' },
 		{ key: 'amount', label: 'Montant' }
 	];
+
+	console.log(data, 'data from +page.svelte');
 </script>
 
 <div class="ccc">
@@ -66,46 +62,24 @@
 			</div>
 		</Card.Header>
 		<Card.Content>
-			<div class="clc w-[100%]">
-				<h2>Adresses</h2>
-				{#if data.userDetails?.addresses && data.userDetails?.addresses.length > 0}
-					<Table
-						name="Adresses"
-						columns={addressColumns}
-						data={data.userDetails.addresses}
-						deleteActionUrl="?/deleteAddress"
-						enhance={deleteAddressEnhance}
-						message={deleteAddressMessage}
-					/>
-				{:else}
-					<p class="text-gray-600">Aucune adresse présente.</p>
-				{/if}
-
-				<Button class="mt-4">
-					<a data-sveltekit-preload-data href="/profile/address">Créer une adresse</a>
-				</Button>
+			<div class="clc w-[100%] my-5">
+				<Table
+					name="Adresses"
+					columns={addressColumns}
+					data={data.userDetails.addresses}
+					deleteActionUrl="?/deleteAddress"
+					newActionUrl="/profile/address"
+					enhance={deleteAddressEnhance}
+					message={deleteAddressMessage}
+				/>
 			</div>
 
-			<div class="clc w-[100%]">
-				{#if data.orders && data.orders.length > 0}
-					<Table
-						name="Orders"
-						columns={orderColumns}
-						data={data.orders}
-						enhance={deleteAddressEnhance}
-					/>
-				{:else}
-					<p class="text-gray-600">Aucune commande présente.</p>
-				{/if}
-			</div>
-
-			<div class="clc w-[100%]">
-				<h2>Transactions</h2>
-				{#if data.transactions && data.transactions.length > 0}
-					<Table name="Transactions" columns={transactionColumns} data={data.transactions} />
-				{:else}
-					<p class="text-gray-600">Aucune transaction présente.</p>
-				{/if}
+			<div class="clc w-[100%] my-5">
+				<Table
+					name="Transactions"
+					columns={transactionColumns}
+					data={data.userDetails?.transactions}
+				/>
 			</div>
 		</Card.Content>
 	</Card.Root>

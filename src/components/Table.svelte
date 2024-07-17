@@ -145,6 +145,7 @@
 					</div>
 					{#if newActionUrl}
 						<a
+							data-sveltekit-preload-data
 							href={newActionUrl}
 							class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
 						>
@@ -189,7 +190,7 @@
 									<TableCell class="rce">
 										{#if editActionUrl}
 											<Button variant="outline" class="m-1 p-1 text-xs">
-												<a href={`${editActionUrl}${item.id}`}>
+												<a data-sveltekit-preload-data href={`${editActionUrl}${item.id}`}>
 													<PencilIcon class="h-4 w-8" />
 												</a>
 											</Button>

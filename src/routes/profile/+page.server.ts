@@ -2,11 +2,9 @@ import { message, superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad, Actions } from './$types';
 import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import { profileSchema, type ProfileSchema } from '$zod/profileSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { updateUserData } from '$requests/user/updateUserData';
 import { getUserDetails } from '$requests/user/getUserDetails';
 import { deleteAddressSchema } from '$zod/addressSchema';
 import { deleteAddress } from '$requests/address/deleteAddress';
@@ -21,6 +19,7 @@ export const load: PageServerLoad = async (event) => {
 	const session: any = await locals.getSession();
 
 	const user = await checkOrRegister(session);
+
 	if (user && session) {
 		session.user.role = user.role;
 		session.user.id = user.id;
@@ -32,8 +31,7 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const userDetails = await getUserDetails(user.id);
-
-	const formProfil = await superValidate(zod(profileSchema));
+	console.log(userDetails, 'userDetails');
 
 	const IdeleteAddressSchema = await superValidate(zod(deleteAddressSchema));
 

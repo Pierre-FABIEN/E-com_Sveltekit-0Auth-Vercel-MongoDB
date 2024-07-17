@@ -1,4 +1,4 @@
-import prisma from "$requests";
+import prisma from '$requests';
 
 // Fonction pour récupérer toutes les informations d'un utilisateur par son ID
 export async function getUserDetails(userId: string) {
@@ -6,13 +6,7 @@ export async function getUserDetails(userId: string) {
 		where: { id: userId },
 		include: {
 			addresses: true,
-			orders: {
-				include: {
-					items: true,
-					statusHistory: true,
-					transactions: true
-				}
-			}
+			transactions: true
 		}
 	});
 }

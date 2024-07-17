@@ -15,7 +15,7 @@ model User {
   role      String
   addresses Address[]
   orders    Order[]
-  transactions Transaction[] // Relation inverse ajoutée
+  transactions Transaction[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   @@map("users")
@@ -112,9 +112,9 @@ model Transaction {
   amount                 Float
   currency               String
 
-  customer_details_email String?
-  customer_details_name  String?
-  customer_details_phone String?
+  customer_details_email String?  @default("")
+  customer_details_name  String?  @default("")
+  customer_details_phone String?  @default("")
 
   status                 String
   createdAt              DateTime @default(now())
@@ -128,7 +128,7 @@ model Transaction {
   app_user_state         String
   app_user_zip           String
   app_user_country       String
-  products               Json     // Tableau d'objets JSON pour les produits
+  products               Json     
 
   user                   User     @relation(fields: [userId], references: [id])
   @@map("transactions")

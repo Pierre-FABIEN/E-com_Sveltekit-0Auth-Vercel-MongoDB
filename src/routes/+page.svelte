@@ -1,29 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { hoverable } from '$UITools/Cursor/cursorHelpers';
 	import { t } from '$UITools/Translations/index';
-	import * as Table from '$shadcn/table';
 
 	import Box from './../components/three/Box.svelte';
 	import Slider from '$components/Slider/Slider.svelte';
-	import { fetchMockData } from '$lib/utils/mockService';
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
-	//import { users, loading, error, fetchUsers } from '$stores/Data/userStore';
 
 	let title: HTMLElement;
 	let path: string | undefined | null;
-	let focal: any[] = [];
-
-	let stripe: any;
 
 	onNavigate((navigation) => {
 		path = navigation.to?.route.id;
-	});
-
-	onMount(async () => {
-		fetchMockData;
-		//focal = await fetchUsers();
 	});
 </script>
 

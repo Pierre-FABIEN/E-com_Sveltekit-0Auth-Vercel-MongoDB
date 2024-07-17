@@ -28,16 +28,16 @@ export const actions: Actions = {
 	deleteProduct: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, zod(deleteProductSchema));
-		const productId = formData.get('productId') as string;
-		console.log('Received productId:', productId);
-		if (!productId) {
-			console.log('No productId provided');
+		const id = formData.get('id') as string;
+		console.log('Received id:', id);
+		if (!id) {
+			console.log('No id provided');
 			return fail(400, { message: 'Product ID is required' });
 		}
 		try {
-			const existingProduct = await getProductById(productId);
+			const existingProduct = await getProductById(id);
 			if (!existingProduct) {
-				console.log('Product not found:', productId);
+				console.log('Product not found:', id);
 				return fail(400, { message: 'Product not found' });
 			}
 			console.log('Product found:', existingProduct);
@@ -60,10 +60,10 @@ export const actions: Actions = {
 				}
 			}
 
-			const deletedCategories = await deleteProductCategories(productId);
+			const deletedCategories = await deleteProductCategories(id);
 			console.log('Deleted product categories:', deletedCategories);
 
-			const deletedProduct = await deleteProductById(productId);
+			const deletedProduct = await deleteProductById(id);
 			console.log('Deleted product:', deletedProduct);
 			return message(form, 'Product deleted successfully');
 		} catch (error) {

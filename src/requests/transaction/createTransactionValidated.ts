@@ -3,6 +3,24 @@ import prisma from '$requests';
 export const createTransactionValidated = async (session, userId, orderId) => {
 	console.log(`✅ Processing transaction ${session.id} for order ${orderId}`);
 
+	// Fetch order and user details
+	const order = await prisma.order.findUnique({
+		where: { id: orderId },
+		include: {
+			user: true,
+			address: true,
+			items: {
+				include: {
+					product: true
+				}
+			}
+		}
+	});
+
+	if (!order) {
+		throw new Error(`Order ${orderId} not found`);
+	}
+
 	const transactionData = {
 		stripePaymentId: session.id,
 		amount: session.amount_total / 100,
@@ -13,7 +31,21 @@ export const createTransactionValidated = async (session, userId, orderId) => {
 		status: session.payment_status,
 		orderId: orderId,
 		userId: userId,
-		createdAt: new Date(session.created * 1000)
+		createdAt: new Date(session.created * 1000),
+		app_user_name: order.user.name,
+		app_user_email: order.user.email,
+		app_user_recipient: order.address ? order.address.recipient : '',
+		app_user_street: order.address ? order.address.street : '',
+		app_user_city: order.address ? order.address.city : '',
+		app_user_state: order.address ? order.address.state : '',
+		app_user_zip: order.address ? order.address.zip : '',
+		app_user_country: order.address ? order.address.country : '',
+		products: order.items.map((item) => ({
+			id: item.productId,
+			name: item.product.name,
+			price: item.product.price,
+			quantity: item.quantity
+		}))
 	};
 
 	try {

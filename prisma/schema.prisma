@@ -90,7 +90,7 @@ model Product {
   stock        Int
   images       String[]
   categories   ProductCategory[]
-  orderItems   OrderItem[]   // Relation avec OrderItem
+  orderItems   OrderItem[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
   @@map("products")
@@ -106,25 +106,36 @@ model Category {
 }
 
 model Transaction {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  stripePaymentId String   @unique
-  orderId         String   @db.ObjectId
-  userId          String   @db.ObjectId
-  amount          Float
-  currency        String
+  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
+  stripePaymentId        String   @unique
+  orderId                String   @db.ObjectId
+  userId                 String   @db.ObjectId
+  amount                 Float
+  currency               String
 
-  customer_details_email        String?
-  customer_details_name        String?
-  customer_details_phone        String?
+  customer_details_email String?
+  customer_details_name  String?
+  customer_details_phone String?
 
-  status          String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  status                 String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now())
 
-  order           Order    @relation(fields: [orderId], references: [id])
-  user            User     @relation(fields: [userId], references: [id])
+  app_user_name          String
+  app_user_email         String
+  app_user_recipient     String
+  app_user_street        String
+  app_user_city          String
+  app_user_state         String
+  app_user_zip           String
+  app_user_country       String
+  products               Json     // Tableau d'objets JSON pour les produits
+
+  order                  Order    @relation(fields: [orderId], references: [id])
+  user                   User     @relation(fields: [userId], references: [id])
   @@map("transactions")
 }
+
 
 model ProductCategory {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId

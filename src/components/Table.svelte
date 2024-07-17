@@ -104,9 +104,11 @@
 		updateFilteredAndPaginatedItems();
 	}
 
-	$: if ($message) {
+	// Function to delete an item
+	const deleteItem = (id: string) => {
+		data = data.filter((item) => item.id !== id);
 		updateFilteredAndPaginatedItems();
-	}
+	};
 </script>
 
 <div class="rcs w-[100%]">
@@ -209,7 +211,12 @@
 													</AlertDialog.Header>
 													<AlertDialog.Footer>
 														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-														<form method="POST" action={deleteActionUrl} use:enhance>
+														<form
+															method="POST"
+															action={deleteActionUrl}
+															use:enhance
+															on:submit={() => deleteItem(item.id)}
+														>
 															<input type="hidden" name="id" value={item.id} />
 															<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
 														</form>

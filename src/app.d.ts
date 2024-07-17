@@ -17,14 +17,6 @@ declare global {
 				role: string;
 			};
 		}
-
-		type User = {
-			name: string;
-			email: string;
-			image: string;
-			addresses: Address[];
-			orders: Order[];
-		};
 	}
 
 	namespace TS {

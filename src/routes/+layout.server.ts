@@ -13,11 +13,9 @@ export const load: LayoutServerLoad = async (event) => {
 
 	const { products, categories } = await getproductsAndCategories();
 
-	//console.log('products:', products);
-	//console.log('categories:', categories);
-
 	const session = await locals.getSession();
 	const user = await checkOrRegister(session);
+
 	let pendingOrder = null;
 
 	if (user && session) {

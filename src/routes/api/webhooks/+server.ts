@@ -3,7 +3,6 @@ import Stripe from 'stripe';
 import prisma from '$requests';
 import dotenv from 'dotenv';
 import { getUserIdByOrderId } from '$requests/user/getUserIdByOrderId';
-import { createTransactionValidated } from '$requests/transaction/createTransactionValidated';
 import { createTransactionInvalidated } from '$requests/transaction/createTransactionInvalidated';
 
 dotenv.config();
@@ -72,37 +71,84 @@ async function handleCheckoutSession(session) {
 	const userId = user.userId;
 
 	try {
-		// Create the transaction in the database
-		await createTransactionValidated(session, userId, orderId);
+		// Start a transaction to ensure atomicity
+		await prisma.$transaction(async (prisma) => {
+			// Fetch order and user details
+			const order = await prisma.order.findUnique({
+				where: { id: orderId },
+				include: {
+					user: true,
+					address: true,
+					items: {
+						include: {
+							product: true
+						}
+					}
+				}
+			});
 
-		// Retrieve the order items
-		const orderItems = await prisma.orderItem.findMany({
-			where: { orderId: orderId },
-			include: { product: true }
-		});
-
-		// Update the order status to PAID
-		await prisma.order.update({
-			where: { id: orderId },
-			data: { status: 'PAID' }
-		});
-
-		// Deduct the quantities from the products in stock
-		for (const item of orderItems) {
-			const newStock = item.product.stock - item.quantity;
-			if (newStock < 0) {
-				throw new Error(`Not enough stock for product ID ${item.productId}`);
+			if (!order) {
+				throw new Error(`Order ${orderId} not found`);
 			}
 
-			await prisma.product.update({
-				where: { id: item.productId },
-				data: { stock: newStock }
-			});
-		}
+			const transactionData = {
+				stripePaymentId: session.id,
+				amount: session.amount_total / 100,
+				currency: session.currency,
+				customer_details_email: session.customer_details ? session.customer_details.email : null,
+				customer_details_name: session.customer_details ? session.customer_details.name : null,
+				customer_details_phone: session.customer_details ? session.customer_details.phone : null,
+				status: session.payment_status,
+				orderId: orderId,
+				userId: userId,
+				createdAt: new Date(session.created * 1000),
+				app_user_name: order.user.name,
+				app_user_email: order.user.email,
+				app_user_recipient: order.address ? order.address.recipient : '',
+				app_user_street: order.address ? order.address.street : '',
+				app_user_city: order.address ? order.address.city : '',
+				app_user_state: order.address ? order.address.state : '',
+				app_user_zip: order.address ? order.address.zip : '',
+				app_user_country: order.address ? order.address.country : '',
+				products: order.items.map((item) => ({
+					id: item.productId,
+					name: item.product.name,
+					price: item.product.price,
+					quantity: item.quantity
+				}))
+			};
 
-		console.log(`✅ Order ${orderId} has been marked as paid and stock has been updated.`);
+			// Create the transaction record
+			await prisma.transaction.create({ data: transactionData });
+			console.log(`✅ Transaction ${session.id} recorded successfully.`);
+
+			// Deduct the quantities from the products in stock
+			for (const item of order.items) {
+				const newStock = item.product.stock - item.quantity;
+				if (newStock < 0) {
+					throw new Error(`Not enough stock for product ID ${item.productId}`);
+				}
+
+				await prisma.product.update({
+					where: { id: item.productId },
+					data: { stock: newStock }
+				});
+			}
+
+			// Delete order items
+			await prisma.orderItem.deleteMany({
+				where: { orderId: orderId }
+			});
+			console.log(`✅ Order items for order ${orderId} deleted successfully.`);
+
+			// Delete the order
+			await prisma.order.delete({
+				where: { id: orderId }
+			});
+			console.log(`✅ Order ${orderId} deleted successfully.`);
+		});
 	} catch (error) {
-		console.error(`⚠️ Error processing order ${orderId}:`, error);
+		console.error(`⚠️ Failed to process order ${orderId}:`, error);
 	}
 }
 
@@ -142,9 +188,7 @@ async function handleChargeFailed(charge) {
 		// Log the failed payment attempt
 		await createTransactionInvalidated(dataTransaction, userId, orderId);
 
-		console.log(
-			`⚠️ Payment failed for paymentIdfthdfthdfthdfthdthfntent ${paymentIntent} has been logged.`
-		);
+		console.log(`⚠️ Payment failed for paymentIntent ${paymentIntent.id} has been logged.`);
 	} catch (error) {
 		console.error(`⚠️ Error handling payment intent failed for order ${orderId}:`, error);
 	}

@@ -86,4 +86,6 @@ revoir la sécurité sur les données
 commencer le blog
 
 Faire les base d'une facture en pdf dans les orders
+pouvoir modifier les adresses 
+
 faire le composant Table pour tout les Table

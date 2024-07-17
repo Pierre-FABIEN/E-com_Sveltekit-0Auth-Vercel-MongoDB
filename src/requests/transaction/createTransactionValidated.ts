@@ -49,9 +49,12 @@ export const createTransactionValidated = async (session, userId, orderId) => {
 	};
 
 	try {
-		await prisma.transaction.create({ data: transactionData });
-		console.log(`✅ Transaction ${session.id} recorded successfully.`);
+		// Start a transaction to ensure atomicity
+		await prisma.$transaction(async (prisma) => {
+			// Create the transaction record
+			await prisma.transaction.create({ data: transactionData });
+		});
 	} catch (error) {
-		console.error(`⚠️ Failed to record transaction ${session.id}:`, error);
+		console.error(`⚠️ Failed to process transaction ${session.id}:`, error);
 	}
 };

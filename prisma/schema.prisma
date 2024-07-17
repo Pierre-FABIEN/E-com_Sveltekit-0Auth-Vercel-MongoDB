@@ -47,7 +47,6 @@ model Order {
   userId        String            @db.ObjectId
   addressId     String?           @db.ObjectId  
   total         Float             @default(0)
-  transactions  Transaction[]
   status        OrderStatus       @default(PENDING)
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @default(now())
@@ -131,7 +130,6 @@ model Transaction {
   app_user_country       String
   products               Json     // Tableau d'objets JSON pour les produits
 
-  order                  Order    @relation(fields: [orderId], references: [id])
   user                   User     @relation(fields: [userId], references: [id])
   @@map("transactions")
 }

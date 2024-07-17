@@ -7,7 +7,7 @@ const syncCart = async () => {
 	const currentCart = get(cart);
 
 	if (currentCart.lastModified > lastSynced) {
-		console.log(currentCart, 'currentCart');
+		//console.log(currentCart, 'currentCart');
 		try {
 			const response = await fetch('/api/save-cart', {
 				method: 'POST',

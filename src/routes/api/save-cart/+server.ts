@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const POST = async ({ request }) => {
 	const cartData = await request.json();
 
-	console.log('Received cart data:', cartData);
+	//console.log('Received cart data:', cartData);
 
 	// Vérifiez que les champs nécessaires sont présents et valides
 	if (
@@ -51,7 +51,7 @@ export const POST = async ({ request }) => {
 			price: item.price
 		}));
 
-		console.log('Formatted items:', formattedItems);
+		//console.log('Formatted items:', formattedItems);
 
 		// Start a transaction
 		await prisma.$transaction(async (prisma) => {
@@ -59,7 +59,7 @@ export const POST = async ({ request }) => {
 				where: { id: cartData.id }
 			});
 
-			console.log('Existing order:', existingOrder);
+			//console.log('Existing order:', existingOrder);
 
 			if (existingOrder) {
 				// If the order exists, update it
@@ -82,7 +82,7 @@ export const POST = async ({ request }) => {
 						}
 					}
 				});
-				console.log('Order updated:', cartData.id);
+				//console.log('Order updated:', cartData.id);
 			} else {
 				// If the order does not exist, create it
 				await prisma.order.create({
@@ -98,7 +98,7 @@ export const POST = async ({ request }) => {
 						updatedAt: new Date()
 					}
 				});
-				console.log('Order created:', cartData.id);
+				//console.log('Order created:', cartData.id);
 			}
 		});
 

@@ -6,9 +6,9 @@
 
 	import * as Card from '$shadcn/card';
 	import { Button } from '$shadcn/button';
-	import * as AlertDialog from '$shadcn/alert-dialog';
 
 	import { deleteAddressSchema } from '$zod/addressSchema';
+
 	import { showNotification } from '$stores/Data/notificationStore';
 	import Table from '$components/Table.svelte';
 
@@ -70,11 +70,12 @@
 				<h2>Adresses</h2>
 				{#if data.userDetails?.addresses && data.userDetails?.addresses.length > 0}
 					<Table
+						name="Adresses"
 						columns={addressColumns}
 						data={data.userDetails.addresses}
-						hasActions={true}
 						deleteActionUrl="?/deleteAddress"
 						enhance={deleteAddressEnhance}
+						message={deleteAddressMessage}
 					/>
 				{:else}
 					<p class="text-gray-600">Aucune adresse présente.</p>
@@ -86,12 +87,11 @@
 			</div>
 
 			<div class="clc w-[100%]">
-				<h2>Orders</h2>
 				{#if data.orders && data.orders.length > 0}
 					<Table
+						name="Orders"
 						columns={orderColumns}
 						data={data.orders}
-						hasActions={false}
 						enhance={deleteAddressEnhance}
 					/>
 				{:else}
@@ -102,7 +102,7 @@
 			<div class="clc w-[100%]">
 				<h2>Transactions</h2>
 				{#if data.transactions && data.transactions.length > 0}
-					<Table columns={transactionColumns} data={data.transactions} hasActions={false} />
+					<Table name="Transactions" columns={transactionColumns} data={data.transactions} />
 				{:else}
 					<p class="text-gray-600">Aucune transaction présente.</p>
 				{/if}

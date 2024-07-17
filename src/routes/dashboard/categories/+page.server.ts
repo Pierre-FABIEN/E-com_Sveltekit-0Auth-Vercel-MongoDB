@@ -22,27 +22,27 @@ export const actions: Actions = {
 	deleteCategory: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, zod(deleteCategorySchema));
-		const categoryId = formData.get('categoryId') as string;
-		console.log('Received categoryId:', categoryId);
-		if (!categoryId) {
-			console.log('No categoryId provided');
+		const id = formData.get('id') as string;
+		console.log('Received id:', id);
+		if (!id) {
+			console.log('No id provided');
 			return fail(400, { message: 'Category ID is required' });
 		}
 		try {
 			// Vérifier si la catégorie existe
-			const existingCategory = await getCategoriesById(categoryId);
+			const existingCategory = await getCategoriesById(id);
 			if (!existingCategory) {
-				console.log('Category not found:', categoryId);
+				console.log('Category not found:', id);
 				return fail(400, { message: 'Category not found' });
 			}
 			console.log('Category found:', existingCategory);
 
 			// Supprimer les relations de catégorie associées au produit
-			const deletedProductCategories = await deleteProductCategoriesByCategoryId(categoryId);
+			const deletedProductCategories = await deleteProductCategoriesByCategoryId(id);
 			console.log('Deleted product categories:', deletedProductCategories);
 
 			// Supprimer la catégorie
-			const deletedCategory = await deleteCategoryById(categoryId);
+			const deletedCategory = await deleteCategoryById(id);
 			console.log('Deleted category:', deletedCategory);
 			return message(form, 'Category deleted successfully');
 		} catch (error) {

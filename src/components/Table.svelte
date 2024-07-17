@@ -5,17 +5,21 @@
 	import TableCell from '$shadcn/table/table-cell.svelte';
 	import { Input } from '$shadcn/input';
 	import * as Select from '$shadcn/select';
+	import { Toggle } from '$shadcn/toggle';
+	import * as AlertDialog from '$shadcn/alert-dialog';
 
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
+	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
-	import * as AlertDialog from '$shadcn/alert-dialog';
 
 	export let columns: Array<{ key: string; label: string }>;
 	export let data: any = [];
-	export let hasActions: boolean = false;
 	export let deleteActionUrl: string = '';
 	export let editActionUrl: string = '';
+	export let newActionUrl: string = '';
+	export let name: string = '';
+	export let message: any;
 	export let enhance: (form: HTMLFormElement) => void = () => {};
 
 	// Variable for search text
@@ -82,7 +86,7 @@
 
 	// Initialize filtered and paginated items
 	let filteredItems = [];
-	let paginatedItems = [];
+	let paginatedItems: any[] = [];
 
 	// Initialize filtered and paginated items from initial data
 	updateFilteredAndPaginatedItems();
@@ -99,11 +103,16 @@
 		currentPage = 1; // Reset to first page
 		updateFilteredAndPaginatedItems();
 	}
+
+	$: if ($message) {
+		updateFilteredAndPaginatedItems();
+	}
 </script>
 
 <div class="rcs w-[100%]">
 	<div class="w-[100%]">
 		<div class="border p-2">
+			<h2 class="text-2xl font-bold mb-5">{name}</h2>
 			<div class="rcb mb-5 w-[100%]">
 				<Input
 					type="text"
@@ -132,6 +141,17 @@
 							<Select.Input name="itemsPerPage" />
 						</Select.Root>
 					</div>
+					{#if newActionUrl}
+						<a
+							href={newActionUrl}
+							class="group relative inline-flex items-center space-x-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md"
+						>
+							<Toggle>
+								<span class="hidden">Créer un produit</span>
+								<PlusCircledIcon class="w-7 h-7" />
+							</Toggle>
+						</a>
+					{/if}
 				</div>
 			</div>
 			<div class="border">
@@ -167,7 +187,7 @@
 									<TableCell class="rce">
 										{#if editActionUrl}
 											<Button variant="outline" class="m-1 p-1 text-xs">
-												<a href={editActionUrl}>
+												<a href={`${editActionUrl}${item.id}`}>
 													<PencilIcon class="h-4 w-8" />
 												</a>
 											</Button>

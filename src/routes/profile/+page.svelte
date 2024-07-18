@@ -13,13 +13,13 @@
 
 	export let data: PageData;
 
-	const deleteAddress = superForm(data.IdeleteAddressSchema, {
+	const deleteAddress = superForm(data?.IdeleteAddressSchema ?? {}, {
 		validators: zodClient(deleteAddressSchema),
 		id: 'deleteAddress'
 	});
 
 	const { enhance: deleteAddressEnhance, message: deleteAddressMessage } = deleteAddress;
-	const formattedData = formatProductData(data.userDetails?.transactions ?? []);
+	const formattedData = formatProductData(data?.userDetails?.transactions ?? []);
 
 	$: if ($deleteAddressMessage) {
 		showNotification(
@@ -66,14 +66,15 @@
 		<Card.Header>
 			<Card.Title>Information sur votre profil</Card.Title>
 			<Card.Description
-				>Vous ne pouvez pas modifier les informations de votre compte google</Card.Description
+				>Vous ne pouvez pas modifier les informations de votre compte Google</Card.Description
 			>
-
 			<div class="content-basic rcs mt-5">
-				<img src={data.session?.user.image} alt={`Image of ${data.session?.user.name}`} />
+				{#if data?.session?.user?.image}
+					<img src={data.session.user.image} alt={`Image of ${data.session?.user.name}`} />
+				{/if}
 				<div class="content-basic-wrapper clc ml-5">
-					<h1>{data.session?.user.name}</h1>
-					<p>{data.session?.user.email}</p>
+					<h1>{data?.session?.user?.name}</h1>
+					<p>{data?.session?.user?.email}</p>
 				</div>
 			</div>
 		</Card.Header>
@@ -82,7 +83,7 @@
 				<Table
 					name="Adresses"
 					columns={addressColumns}
-					data={data.userDetails?.addresses}
+					data={data?.userDetails?.addresses ?? []}
 					deleteActionUrl="?/deleteAddress"
 					editActionUrl="/profile/address/"
 					newActionUrl="/profile/address"

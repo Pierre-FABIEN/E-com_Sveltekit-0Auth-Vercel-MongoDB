@@ -8,13 +8,18 @@
 
 	export let data: any;
 
-	const deleteCategory = superForm(data.IdeleteCategorySchema, {
+	const deleteCategory = superForm(data?.IdeleteCategorySchema ?? {}, {
 		validators: zodClient(deleteCategorySchema),
 		id: 'deleteCategory'
 	});
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
-	const formattedData = formatProductData(data.categories);
+
+	let formattedData = [];
+
+	if (data && data.categories) {
+		formattedData = formatProductData(data.categories);
+	}
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);

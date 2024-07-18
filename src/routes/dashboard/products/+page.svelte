@@ -9,7 +9,7 @@
 
 	console.log(data);
 
-	const deleteProduct = superForm(data.IdeleteProductSchema, {
+	const deleteProduct = superForm(data?.IdeleteProductSchema ?? {}, {
 		validators: zodClient(deleteProductSchema),
 		id: 'deleteProduct'
 	});
@@ -57,7 +57,11 @@
 	}
 
 	// Formater les données des produits
-	const formattedData = formatProductData(data.products);
+	let formattedData = [];
+
+	if (data && data.products) {
+		formattedData = formatProductData(data.products);
+	}
 </script>
 
 <div class="ccc m-5">

@@ -5,6 +5,7 @@
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { deleteUserSchema } from '$zod/userSchema';
 
 	export let data: PageData;
 
@@ -18,14 +19,14 @@
 		{ key: 'role', label: 'Role' }
 	];
 
-	// const deleteUser = superForm(data.IdeleteUserSchema, {
-	// 	validators: zodClient(deleteUserSchema),
-	// 	id: 'deleteUser'
-	// });
+	const deleteUser = superForm(data.IdeleteUserSchema, {
+		validators: zodClient(deleteUserSchema),
+		id: 'deleteUser'
+	});
 
-	// const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUser;
+	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUser;
 
-	const formattedData = formatProductData(data.users);
+	const formattedData = formatProductData(data.allUsers);
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);
@@ -50,18 +51,17 @@
 		}));
 	}
 
-	// React to delete message changes
-	// $: if ($deleteUserMessage) {
-	// 	showNotification(
-	// 		$deleteUserMessage,
-	// 		$deleteUserMessage.includes('success') ? 'success' : 'error'
-	// 	);
-	// }
+	$: if ($deleteUserMessage) {
+		showNotification(
+			$deleteUserMessage,
+			$deleteUserMessage.includes('success') ? 'success' : 'error'
+		);
+	}
 </script>
 
 <div class="ccc m-5">
 	<div class="w-[100%] mt-5">
-		<!-- <Table
+		<Table
 			name="Utilisateurs"
 			columns={userColumns}
 			data={formattedData}
@@ -69,6 +69,6 @@
 			newActionUrl="/dashboard/users/create"
 			editActionUrl="/dashboard/users/"
 			enhance={deleteUserEnhance}
-		/> -->
+		/>
 	</div>
 </div>

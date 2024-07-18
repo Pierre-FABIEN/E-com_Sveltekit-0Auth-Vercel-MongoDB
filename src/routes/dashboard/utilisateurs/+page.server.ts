@@ -1,9 +1,12 @@
 import { checkOrRegister } from '$requests/user/checkOrRegister';
 
 import { getAllUsers } from '$requests/user/getAllUsers';
+import { deleteUserSchema } from '$zod/userSchema';
+import { zod } from 'sveltekit-superforms/adapters';
 
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
 
 const allowedRoles = ['admin'];
 
@@ -22,11 +25,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, '/');
 	}
 
+	const IdeleteUserSchema = await superValidate(zod(deleteUserSchema));
+
 	const allUsers = await getAllUsers();
-	// const allProducts = await getAllProducts();
-	// const allOrders = await getAllOrders();
 
 	return {
+		IdeleteUserSchema,
 		allUsers,
 		session
 	};

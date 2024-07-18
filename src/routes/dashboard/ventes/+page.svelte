@@ -2,7 +2,12 @@
 	import Table from '$components/Table.svelte';
 
 	export let data;
-	const formattedData = formatProductData(data.transactions);
+
+	let formattedData = [];
+
+	if (data && data.transactions) {
+		formattedData = formatProductData(data.transactions);
+	}
 
 	function formatProductData(items: any[]) {
 		return items.map((item) => ({

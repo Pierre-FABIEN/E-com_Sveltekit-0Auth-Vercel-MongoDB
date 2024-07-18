@@ -58,7 +58,7 @@
 							</SignIn>
 						{/if}
 					</DropdownMenu.Label>
-					{#if $page.data.session?.user}
+					{#if $page.data.session?.user.role === 'user'}
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
 							<a data-sveltekit-preload-data href="/profile" class="w-[100%]">Profile</a>

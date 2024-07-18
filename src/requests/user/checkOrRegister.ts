@@ -2,9 +2,8 @@
 
 import prisma from '$requests';
 import { getPendingOrder } from '../orders/getPendingOrder';
-import type { Session } from 'next-auth'; // Remplacer par le type approprié si ce n'est pas NextAuth
 
-export const checkOrRegister = async (session: Session): Promise<User | null> => {
+export const checkOrRegister = async (session) => {
 	if (!session?.user?.email) {
 		return null;
 	}

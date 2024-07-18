@@ -14,6 +14,7 @@
 	});
 
 	const { enhance: deleteCategoryEnhance, message: deleteCategoryMessage } = deleteCategory;
+	const formattedData = formatProductData(data.categories);
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);
@@ -45,12 +46,10 @@
 			$deleteCategoryMessage.includes('success') ? 'success' : 'error'
 		);
 	}
-
-	const formattedData = formatProductData(data.categories);
 </script>
 
-<div class="ccc">
-	<div class="w-[80vw] mt-5">
+<div class="ccc m-5">
+	<div class="w-[100%] mt-5">
 		<Table
 			name="Catégories"
 			columns={categoryColumns}
@@ -59,7 +58,6 @@
 			newActionUrl="/dashboard/categories/create"
 			editActionUrl="/dashboard/categories/"
 			enhance={deleteCategoryEnhance}
-			message={deleteCategoryMessage}
 		/>
 	</div>
 </div>

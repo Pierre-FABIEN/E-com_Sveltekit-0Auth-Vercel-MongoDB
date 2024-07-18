@@ -84,6 +84,7 @@
 					columns={addressColumns}
 					data={data.userDetails?.addresses}
 					deleteActionUrl="?/deleteAddress"
+					editActionUrl="/profile/address/"
 					newActionUrl="/profile/address"
 					enhance={deleteAddressEnhance}
 				/>

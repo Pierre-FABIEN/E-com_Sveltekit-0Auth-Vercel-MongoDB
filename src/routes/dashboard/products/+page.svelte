@@ -60,8 +60,8 @@
 	const formattedData = formatProductData(data.products);
 </script>
 
-<div class="ccc">
-	<div class="w-[80vw] mt-5">
+<div class="ccc m-5">
+	<div class="w-[100%] mt-5">
 		<Table
 			name="Produits"
 			columns={productColumns}
@@ -70,7 +70,6 @@
 			newActionUrl="/dashboard/products/create"
 			editActionUrl="/dashboard/products/"
 			enhance={deleteProductEnhance}
-			message={deleteProductMessage}
 		/>
 	</div>
 </div>

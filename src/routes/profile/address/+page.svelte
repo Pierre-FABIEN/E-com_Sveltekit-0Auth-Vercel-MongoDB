@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createAddressSchema } from '$zod/addressSchema';
@@ -90,8 +89,14 @@
 			<h2>Suggestions:</h2>
 			<ul class="rounded border p-2">
 				{#each addressSuggestions as suggestion}
-					<li class="cursor-pointer" on:click={() => selectSuggestion(suggestion)}>
-						{suggestion.formatted}
+					<li>
+						<button
+							class="cursor-pointer"
+							on:click={() => selectSuggestion(suggestion)}
+							on:keydown={(event) => event.code === 'Enter' && selectSuggestion(suggestion)}
+						>
+							{suggestion.formatted}
+						</button>
 					</li>
 				{/each}
 			</ul>
@@ -127,7 +132,12 @@
 				<Form.Field name="city" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Ville</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createAddressData.city} />
+						<Input
+							{...attrs}
+							type="text"
+							on:input={handleInput}
+							bind:value={$createAddressData.city}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -137,7 +147,12 @@
 				<Form.Field name="state" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Région:</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createAddressData.state} />
+						<Input
+							{...attrs}
+							type="text"
+							on:input={handleInput}
+							bind:value={$createAddressData.state}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -147,7 +162,12 @@
 				<Form.Field name="zip" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Code postal</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createAddressData.zip} />
+						<Input
+							{...attrs}
+							type="text"
+							on:input={handleInput}
+							bind:value={$createAddressData.zip}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -157,7 +177,12 @@
 				<Form.Field name="country" form={createAddress}>
 					<Form.Control let:attrs>
 						<Form.Label>Pays</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createAddressData.country} />
+						<Input
+							{...attrs}
+							type="text"
+							on:input={handleInput}
+							bind:value={$createAddressData.country}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

@@ -9,8 +9,7 @@ export const getAllUsers = async () => {
 				addresses: true,
 				orders: {
 					include: {
-						address: true,
-						transactions: true
+						address: true
 					}
 				}
 			}

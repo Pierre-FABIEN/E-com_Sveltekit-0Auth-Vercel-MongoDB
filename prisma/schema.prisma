@@ -108,7 +108,7 @@ model Transaction {
   id                     String   @id @default(auto()) @map("_id") @db.ObjectId
   stripePaymentId        String   @unique
   orderId                String   @db.ObjectId
-  userId                 String   @db.ObjectId
+  userId                 String?  @db.ObjectId // Rendre cette relation facultative
   amount                 Float
   currency               String
 
@@ -130,9 +130,10 @@ model Transaction {
   app_user_country       String
   products               Json     
 
-  user                   User     @relation(fields: [userId], references: [id])
+  user                   User?    @relation(fields: [userId], references: [id]) // Rendre cette relation facultative
   @@map("transactions")
 }
+
 
 
 model ProductCategory {

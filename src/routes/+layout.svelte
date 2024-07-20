@@ -45,7 +45,7 @@
 		}
 	});
 
-	console.log(data, 'data from +page.svelte');
+	//console.log(data, 'data from +page.svelte');
 </script>
 
 <svelte:head>

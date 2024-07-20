@@ -14,8 +14,8 @@
 			Accueil
 		</a>
 		<a
-			href="/dashboard/utilisateurs"
-			class={`text-sm font-medium ${$page.url.pathname === '/dashboard/utilisateurs' ? 'text-primary' : 'text-muted-foreground'} transition-colors hover:text-primary`}
+			href="/dashboard/users"
+			class={`text-sm font-medium ${$page.url.pathname === '/dashboard/users' ? 'text-primary' : 'text-muted-foreground'} transition-colors hover:text-primary`}
 		>
 			Utilisateurs
 		</a>

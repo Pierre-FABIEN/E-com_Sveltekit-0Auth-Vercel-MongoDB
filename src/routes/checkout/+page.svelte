@@ -56,7 +56,6 @@
 			showNotification('Veuillez sélectionner une adresse', 'error');
 		}
 	}
-	$: console.log(data);
 
 	$: $createPaymentData.orderId = data.session.orders.id;
 	$: $createPaymentData.addressId = selectedAddressId;

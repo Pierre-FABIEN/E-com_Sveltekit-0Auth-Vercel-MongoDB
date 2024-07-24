@@ -10,6 +10,7 @@
 
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import PlusCircledIcon from 'svelte-radix/PlusCircled.svelte';
+	import StretchVertically from 'svelte-radix/StretchVertically.svelte';
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 
@@ -17,6 +18,7 @@
 	export let columns: Array<{ key: string; label: string }>;
 	export let data: any = [];
 	export let deleteActionUrl: string = '';
+	export let invoiceActionUrl;
 	export let editActionUrl: string = '';
 	export let newActionUrl: string = '';
 	export let name: string = '';
@@ -163,7 +165,7 @@
 									</div>
 								</Table.Head>
 							{/each}
-							{#if editActionUrl || deleteActionUrl}
+							{#if editActionUrl || deleteActionUrl || invoiceActionUrl}
 								<Table.Head class="w-36 text-center border-r border-r-gray-800 pr-2">
 									Actions
 								</Table.Head>
@@ -176,8 +178,15 @@
 								{#each columns as column}
 									<TableCell>{item[column.key]}</TableCell>
 								{/each}
-								{#if editActionUrl || deleteActionUrl}
+								{#if editActionUrl || deleteActionUrl || invoiceActionUrl}
 									<TableCell class="rce">
+										{#if invoiceActionUrl}
+											<Button variant="outline" class="m-1 p-1 text-xs">
+												<a data-sveltekit-preload-data href={`/dashboard/ventes/${item.id}`}>
+													<StretchVertically class="h-4 w-8" />
+												</a>
+											</Button>
+										{/if}
 										{#if editActionUrl}
 											<Button variant="outline" class="m-1 p-1 text-xs">
 												<a data-sveltekit-preload-data href={`${editActionUrl}${item.id}`}>

@@ -38,6 +38,6 @@
 
 <div class="ccc m-5">
 	<div class="w-[100%] mt-5">
-		<Table name="Transactions" columns={TransactionsColumn} data={formattedData} />
+		<Table name="Transactions" columns={TransactionsColumn} data={formattedData} invoiceActionUrl />
 	</div>
 </div>

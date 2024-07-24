@@ -4,17 +4,16 @@ import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import { updateUserAndAddressSchema } from '$zod/updateUserAndAddressSchema';
-import { updateUserData } from '$requests/user/updateUserData';
+import { updateUserRole } from '$requests/user/updateUserRole';
 import { getUsersById } from '$requests/user/getUsersById';
 import { getAddressesByUserId } from '$requests/address/getAddressesByUserId';
+import { updateUserAddressData } from '$requests/address/updateUserAddressData';
 
 export const load: PageServerLoad = async ({ params }) => {
 	console.log('Loading user data for ID:', params.id);
 
 	const user = await getUsersById(params.id);
 	const addresses = await getAddressesByUserId(params.id);
-
-	console.log('Loaded user data:', user, addresses);
 
 	if (!user) {
 		console.log('User not found');
@@ -47,14 +46,60 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	updateUser: async ({ request }) => {
-		console.log('updateUser action initiated.');
+	updateUserAndAddresses: async ({ request }) => {
+		console.log('updateUserAndAddresses action initiated.');
 
 		const formData = await request.formData();
 		console.log('Received form data:', formData);
 
-		const form = await superValidate(formData, zod(updateUserSchema));
-		console.log('Form validation result:', form);
+		// Extract JSON data from formData
+		const jsonData = formData.get('__superform_json');
+		if (!jsonData) {
+			return fail(400, { message: 'Invalid form data' });
+		}
+
+		// Parse the JSON data
+		let parsedData;
+
+		try {
+			parsedData = JSON.parse(jsonData.toString());
+		} catch (error) {
+			console.error('Error parsing JSON data:', error);
+			return fail(400, { message: 'Invalid JSON data' });
+		}
+
+		console.log('Parsed form data:', parsedData);
+
+		// Extract user and addresses information
+		const userId = parsedData[1];
+		const userType = parsedData[2];
+		const addressesIndexes = parsedData[3]; // This contains the indexes of addresses in the parsedData
+
+		const addresses = addressesIndexes.map((index: number) => {
+			const address = parsedData[index];
+			console.log('Address:', address);
+
+			return {
+				id: parsedData[address.id],
+				recipient: parsedData[address.recipient],
+				street: parsedData[address.street],
+				city: parsedData[address.city],
+				state: parsedData[address.state],
+				zip: parsedData[address.zip],
+				country: parsedData[address.country]
+			};
+		});
+
+		// Structuring the final data
+		const finalData = {
+			id: userId,
+			role: userType,
+			addresses
+		};
+
+		console.log('Structured data:', finalData);
+
+		const form = await superValidate(finalData, zod(updateUserAndAddressSchema));
 
 		if (!form.valid) {
 			console.log('Validation errors:', form.errors);
@@ -62,14 +107,37 @@ export const actions: Actions = {
 		}
 
 		try {
-			const userId = formData.get('userId');
+			const { id, role, addresses } = form.data;
+			console.log('Updating user and addresses with ID:', id, 'and role:', role);
+			const user = await getUsersById(id);
 
-			await updateUserData({ id: userId as string, data: form.data.name });
+			console.log('User:', user);
 
-			return message(form, 'User updated successfully');
+			// Update user data
+			const userUpdateResult = await updateUserRole(id, role);
+
+			// Update each address
+			const addressUpdateResults = await Promise.all(
+				addresses.map((address) =>
+					updateUserAddressData({
+						id: address.id,
+						recipient: address.recipient,
+						street: address.street,
+						city: address.city,
+						state: address.state,
+						zip: address.zip,
+						country: address.country
+					})
+				)
+			);
+
+			console.log('User update result:', userUpdateResult);
+			console.log('Address update results:', addressUpdateResults);
+
+			return message(form, 'User and addresses updated successfully');
 		} catch (error) {
-			console.error('Error updating user:', error);
-			return fail(500, { message: 'User update failed' });
+			console.error('Error updating user and addresses:', error);
+			return fail(500, { message: 'User and addresses update failed' });
 		}
 	}
 };

@@ -79,8 +79,12 @@ stripe listen --forward-to localhost:1000/api/webhooks
 
 rendre le produit invisible si aucun stock et faire la limite lors de la selection
 faire le admin ventes
-gestion des utilisateurs
+Comprendre le probleme avec le toast suite a une modification d'un user
 sur le dashboard montrer les dernières ventes et tout
+Faire les facture PDF
+Réaliser les stat sur la consultation
+Performances sur le server pour cache
+
 
 revoir la sécurité sur les données
 commencer le blog

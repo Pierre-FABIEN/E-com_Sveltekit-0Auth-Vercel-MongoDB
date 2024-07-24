@@ -34,8 +34,6 @@
 		console.log('Category ID on mount:', categoryId);
 	});
 
-	$: console.log('Update Category Message:', data);
-
 	$: if ($updateCategoryMessage === 'Category updated successfully') {
 		showNotification($updateCategoryMessage, 'success');
 		setTimeout(() => goto('/dashboard/categories/'), 0);

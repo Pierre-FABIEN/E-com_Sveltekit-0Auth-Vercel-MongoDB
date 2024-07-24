@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-
 // Schéma pour la mise à jour d'un utilisateur
 const updateUserSchema = z.object({
 	id: z.string(),
@@ -13,7 +12,6 @@ const updateUserSchema = z.object({
 const deleteUserSchema = z.object({
 	id: z.string()
 });
-
 
 type UpdateUser = z.infer<typeof updateUserSchema>;
 type DeleteUser = z.infer<typeof deleteUserSchema>;

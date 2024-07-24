@@ -23,7 +23,13 @@
 	const updateUserAndAddresses = superForm(data.IupdateUserAndAddressSchema, {
 		validators: zodClient(updateUserAndAddressSchema),
 		id: 'updateUserAndAddresses',
-		dataType: 'json' // Ajout de cette ligne pour gérer les données imbriquées
+		dataType: 'json',
+		onResult: (data) => {
+			if (data.result.data.form.message === 'User and addresses updated successfully') {
+				showNotification(data.result.data.form.message, 'success');
+				setTimeout(() => goto('/dashboard/users'), 0);
+			}
+		}
 	});
 
 	const { form, enhance, message } = updateUserAndAddresses;
@@ -69,12 +75,6 @@
 	}
 
 	const roleOptions = ['admin', 'user'];
-
-	$: if ($message === 'Category updated successfully') {
-		showNotification($message, 'success');
-		setTimeout(() => goto('/dashboard/categories/'), 0);
-		console.log('showNotification');
-	}
 </script>
 
 <div class="container mx-auto p-4">

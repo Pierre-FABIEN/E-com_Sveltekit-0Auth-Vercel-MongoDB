@@ -1,13 +1,7 @@
 <script lang="ts">
 	import { enter, exit } from './transition';
 	import { onNavigate } from '$app/navigation';
-	import {
-		Card,
-		CardContent,
-		CardFooter,
-		CardHeader,
-		CardTitle
-	} from '$shadcn/card/index.js';
+	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$shadcn/card/index.js';
 	import { Button } from '$shadcn/button';
 	import { addToCart, type OrderItem } from '$stores/Data/cartStore';
 
@@ -39,7 +33,7 @@
 	<meta name="description" content="shop this app" />
 </svelte:head>
 
-<div class="min-h-screen w-[100vw] absolute" in:enter={{ path }} out:exit={{ path }}>
+<div class="min-h-screen min-w-[100vw] absolute" in:enter={{ path }} out:exit={{ path }}>
 	<div class="ccs min-w-screen min-h-screen">
 		<h1 class="p-5 w-[80vw]">shop</h1>
 		<div class="rcs w-[80vw]">

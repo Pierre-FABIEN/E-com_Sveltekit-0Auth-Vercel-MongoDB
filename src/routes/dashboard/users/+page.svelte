@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { enter, exit } from './transition';
 	import type { PageData } from './$types';
 	import Table from '$components/Table.svelte';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { deleteUserSchema } from '$zod/userSchema';
+	import { onNavigate } from '$app/navigation';
 
 	export let data: PageData;
+	let path: string | undefined | null;
 
-	onMount(() => {
-		console.log(data, 'data from user');
+	onNavigate((navigation) => {
+		path = navigation.to?.route.id;
 	});
 
 	const userColumns = [
@@ -59,16 +61,18 @@
 	}
 </script>
 
-<div class="ccc m-5">
-	<div class="w-[100%] mt-5">
-		<Table
-			name="Utilisateurs"
-			columns={userColumns}
-			data={formattedData}
-			deleteActionUrl="?/deleteUser"
-			newActionUrl="/dashboard/users/create"
-			editActionUrl="/dashboard/users/"
-			enhance={deleteUserEnhance}
-		/>
+<div class="min-h-screen min-w-[100vw] absolute" in:enter={{ path }} out:exit={{ path }}>
+	<div class="ccc m-5">
+		<div class="w-[100%] mt-5">
+			<Table
+				name="Utilisateurs"
+				columns={userColumns}
+				data={formattedData}
+				deleteActionUrl="?/deleteUser"
+				newActionUrl="/dashboard/users/create"
+				editActionUrl="/dashboard/users/"
+				enhance={deleteUserEnhance}
+			/>
+		</div>
 	</div>
 </div>

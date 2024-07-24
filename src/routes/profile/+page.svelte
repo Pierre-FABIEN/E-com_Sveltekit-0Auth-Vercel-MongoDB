@@ -92,7 +92,12 @@
 			</div>
 
 			<div class="clc w-[100%] my-5">
-				<Table name="Transactions" columns={transactionColumns} data={formattedData} />
+				<Table
+					name="Transactions"
+					columns={transactionColumns}
+					data={formattedData}
+					invoiceActionUrl="profile/"
+				/>
 			</div>
 		</Card.Content>
 	</Card.Root>

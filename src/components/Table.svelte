@@ -182,7 +182,7 @@
 									<TableCell class="rce">
 										{#if invoiceActionUrl}
 											<Button variant="outline" class="m-1 p-1 text-xs">
-												<a data-sveltekit-preload-data href={`/dashboard/ventes/${item.id}`}>
+												<a data-sveltekit-preload-data href={`${invoiceActionUrl}${item.id}`}>
 													<StretchVertically class="h-4 w-8" />
 												</a>
 											</Button>

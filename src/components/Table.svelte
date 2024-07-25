@@ -180,7 +180,7 @@
 								{/each}
 								{#if editActionUrl || deleteActionUrl || invoiceActionUrl}
 									<TableCell class="rce">
-										{#if invoiceActionUrl}
+										{#if invoiceActionUrl && item.status !== 'failed'}
 											<Button variant="outline" class="m-1 p-1 text-xs">
 												<a data-sveltekit-preload-data href={`${invoiceActionUrl}${item.id}`}>
 													<StretchVertically class="h-4 w-8" />

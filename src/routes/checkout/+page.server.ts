@@ -85,8 +85,8 @@ export const actions: Actions = {
 			payment_method_types: ['card'],
 			line_items: lineItems,
 			mode: 'payment',
-			success_url: `${request.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${request.headers.get('origin')}/cancel`,
+			success_url: `${request.headers.get('origin')}/profile`,
+			cancel_url: `${request.headers.get('origin')}/profile`,
 			metadata: {
 				order_id: orderId
 			},

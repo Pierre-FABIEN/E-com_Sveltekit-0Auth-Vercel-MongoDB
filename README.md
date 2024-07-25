@@ -78,10 +78,7 @@ stripe listen --forward-to localhost:1000/api/webhooks
 669296107a754adae2043066
 
 rendre le produit invisible si aucun stock et faire la limite lors de la selection
-faire le admin ventes
-Comprendre le probleme avec le toast suite a une modification d'un user
 sur le dashboard montrer les dernières ventes et tout
-Faire les facture PDF
 Réaliser les stat sur la consultation
 Performances sur le server pour cache
 
@@ -89,7 +86,4 @@ Performances sur le server pour cache
 revoir la sécurité sur les données
 commencer le blog
 
-Faire les base d'une facture en pdf dans les orders
-pouvoir modifier les adresses 
-
-faire le composant Table pour tout les Table
+Ne pas faire les facture pour les transactions annulées

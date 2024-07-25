@@ -6,8 +6,6 @@ const prisma = new PrismaClient();
 export const POST = async ({ request }) => {
 	const cartData = await request.json();
 
-	//console.log('Received cart data:', cartData);
-
 	// Vérifiez que les champs nécessaires sont présents et valides
 	if (
 		!cartData.id ||
@@ -43,68 +41,73 @@ export const POST = async ({ request }) => {
 		}
 	}
 
-	try {
-		// Convert cart items to the expected format for Prisma
-		const formattedItems = cartData.items.map((item) => ({
-			productId: item.product.id,
-			quantity: item.quantity,
-			price: item.price
-		}));
+	const maxRetries = 3;
+	let attempts = 0;
+	let success = false;
 
-		//console.log('Formatted items:', formattedItems);
+	while (attempts < maxRetries && !success) {
+		try {
+			attempts++;
+			// Convert cart items to the expected format for Prisma
+			const formattedItems = cartData.items.map((item) => ({
+				productId: item.product.id,
+				quantity: item.quantity,
+				price: item.price
+			}));
 
-		// Start a transaction
-		await prisma.$transaction(async (prisma) => {
-			const existingOrder = await prisma.order.findUnique({
-				where: { id: cartData.id }
-			});
-
-			//console.log('Existing order:', existingOrder);
-
-			if (existingOrder) {
-				// If the order exists, update it
-				await prisma.order.update({
-					where: { id: cartData.id },
-					data: {
-						items: {
-							deleteMany: {} // Supprimez les items existants
-						},
-						total: cartData.total,
-						updatedAt: new Date()
-					}
+			// Start a transaction
+			await prisma.$transaction(async (prisma) => {
+				const existingOrder = await prisma.order.findUnique({
+					where: { id: cartData.id }
 				});
-				// Ajoutez les nouveaux items après suppression des anciens
-				await prisma.order.update({
-					where: { id: cartData.id },
-					data: {
-						items: {
-							create: formattedItems // Créez de nouveaux items
+
+				if (existingOrder) {
+					// If the order exists, update it
+					await prisma.order.update({
+						where: { id: cartData.id },
+						data: {
+							items: {
+								deleteMany: {} // Supprimez les items existants
+							},
+							total: cartData.total,
+							updatedAt: new Date()
 						}
-					}
-				});
-				//console.log('Order updated:', cartData.id);
-			} else {
-				// If the order does not exist, create it
-				await prisma.order.create({
-					data: {
-						id: cartData.id,
-						userId: cartData.userId,
-						items: {
-							create: formattedItems
-						},
-						total: cartData.total,
-						status: 'PENDING',
-						createdAt: new Date(),
-						updatedAt: new Date()
-					}
-				});
-				//console.log('Order created:', cartData.id);
+					});
+					// Ajoutez les nouveaux items après suppression des anciens
+					await prisma.order.update({
+						where: { id: cartData.id },
+						data: {
+							items: {
+								create: formattedItems // Créez de nouveaux items
+							}
+						}
+					});
+				} else {
+					// If the order does not exist, create it
+					await prisma.order.create({
+						data: {
+							id: cartData.id,
+							userId: cartData.userId,
+							items: {
+								create: formattedItems
+							},
+							total: cartData.total,
+							status: 'PENDING',
+							createdAt: new Date(),
+							updatedAt: new Date()
+						}
+					});
+				}
+			});
+			success = true;
+		} catch (error) {
+			if (attempts >= maxRetries) {
+				console.error('Failed to save cart after multiple attempts:', error);
+				return json({ error: 'Failed to save cart after multiple attempts' }, { status: 500 });
 			}
-		});
-
-		return json({ message: 'Cart saved successfully' });
-	} catch (error) {
-		console.error('Failed to save cart:', error);
-		return json({ error: 'Failed to save cart' }, { status: 500 });
+			console.warn(`Attempt ${attempts} failed. Retrying...`);
+		}
 	}
+
+	return json({ message: 'Cart saved successfully' });
 };

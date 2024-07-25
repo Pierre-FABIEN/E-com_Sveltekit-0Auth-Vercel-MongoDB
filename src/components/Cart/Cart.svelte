@@ -14,13 +14,22 @@
 	}
 
 	function changeQuantity(productId: string, quantity: number) {
-		updateCartItemQuantity(productId, quantity);
+		const product = $cart.items.find((item) => item.product.id === productId)?.product;
+		if (product && quantity <= Math.min(product.stock, 10)) {
+			updateCartItemQuantity(productId, quantity);
+		} else {
+			alert('Selected quantity exceeds available stock or the maximum limit of 10.');
+		}
 	}
 
-	let quantityOptions = Array.from({ length: 10 }, (_, i) => i + 1).map((value) => ({
-		value,
-		label: value.toString()
-	}));
+	// Function to create quantity options based on available stock and a maximum limit of 10
+	function createQuantityOptions(stock: number) {
+		const maxQuantity = Math.min(stock, 10);
+		return Array.from({ length: maxQuantity }, (_, i) => i + 1).map((value) => ({
+			value,
+			label: value.toString()
+		}));
+	}
 </script>
 
 <Popover.Root>
@@ -73,7 +82,7 @@
 											<Select.Content>
 												<Select.Group>
 													<Select.Label>Quantité</Select.Label>
-													{#each quantityOptions as option}
+													{#each createQuantityOptions(item.product.stock) as option}
 														<Select.Item
 															value={option.value}
 															on:click={() => changeQuantity(item.product.id, option.value)}
@@ -110,7 +119,7 @@
 					</div>
 					<div class="crc w-[100%]">
 						<Button>
-							<a  data-sveltekit-preload-data href="/checkout"> Checkout </a>
+							<a data-sveltekit-preload-data href="/checkout"> Checkout </a>
 						</Button>
 					</div>
 				{:else}

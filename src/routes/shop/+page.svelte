@@ -38,20 +38,22 @@
 		<h1 class="p-5 w-[80vw]">shop</h1>
 		<div class="rcs w-[80vw]">
 			{#each data.products as product}
-				<Card class="product-card w-[200px] m-5">
-					<CardHeader class="w-[100%]">
-						<img src={product.images[0]} alt={product.name} class="product-image object-cover" />
-					</CardHeader>
-					<CardContent>
-						<CardTitle class="product-name">{product.name}</CardTitle>
-						<p class="product-price">${product.price}</p>
-					</CardContent>
-					<CardFooter>
-						<Button class="add-to-cart-button" on:click={() => handleAddToCart(product)}>
-							Add to Cart
-						</Button>
-					</CardFooter>
-				</Card>
+				{#if product.stock > 20}
+					<Card class="product-card w-[200px] m-5">
+						<CardHeader class="w-[100%]">
+							<img src={product.images[0]} alt={product.name} class="product-image object-cover" />
+						</CardHeader>
+						<CardContent>
+							<CardTitle class="product-name">{product.name}</CardTitle>
+							<p class="product-price">${product.price}</p>
+						</CardContent>
+						<CardFooter>
+							<Button class="add-to-cart-button" on:click={() => handleAddToCart(product)}>
+								Add to Cart
+							</Button>
+						</CardFooter>
+					</Card>
+				{/if}
 			{/each}
 		</div>
 	</div>

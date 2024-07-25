@@ -51,6 +51,9 @@
 							<Button class="add-to-cart-button" on:click={() => handleAddToCart(product)}>
 								Add to Cart
 							</Button>
+							<a href="/shop/{product.id}">
+								<Button class="add-to-cart-button">Page</Button>
+							</a>
 						</CardFooter>
 					</Card>
 				{/if}

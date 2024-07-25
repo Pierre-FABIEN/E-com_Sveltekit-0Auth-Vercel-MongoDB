@@ -14,14 +14,24 @@
 	// Register the necessary components and scales
 	ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale);
 
-	const data = {
-		labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	export let data;
+
+	// Extract dates and amounts from transactions
+	const labels = data.transactions.map((transaction) =>
+		new Date(transaction.createdAt).toLocaleDateString()
+	);
+	const dataAmounts = data.transactions.map((transaction) => transaction.amount);
+
+	const chartData = {
+		labels,
 		datasets: [
 			{
-				label: 'My First dataset',
+				label: 'Transaction Amounts',
 				backgroundColor: 'rgba(75,192,192,0.2)',
 				borderColor: 'rgba(75,192,192,1)',
-				data: [65, 59, 80, 81, 56, 55, 40]
+				data: dataAmounts,
+				cubicInterpolationMode: 'monotone', // Smooth curves
+				tension: 0.4 // Adjust the curvature
 			}
 		]
 	};
@@ -34,10 +44,10 @@
 			},
 			title: {
 				display: true,
-				text: 'Chart.js Line Chart'
+				text: 'Transaction Amounts Over Time'
 			}
 		}
 	};
 </script>
 
-<Line {data} {options} />
+<Line data={chartData} {options} />

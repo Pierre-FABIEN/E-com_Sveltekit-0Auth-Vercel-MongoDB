@@ -79,6 +79,7 @@
     "prettier-plugin-tailwindcss": "latest",
     "quoted-printable": "latest",
     "stripe": "^16.1.0",
+    "super-sitemap": "^0.14.19",
     "svelte": "latest",
     "svelte-check": "latest",
     "svelte-radix": "^1.1.0",

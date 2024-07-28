@@ -1,8 +1,9 @@
-import { getAllTransactions } from '$requests/transaction/getAllTransactions';
+import { getAllTransactionsDashboard } from '$requests/transaction/getAllTransactionsDashboard';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
-	const transactions = await getAllTransactions();
+	const transactions = await getAllTransactionsDashboard();
+
 	return {
 		transactions
 	};

@@ -10,7 +10,16 @@
 	let title: HTMLElement;
 	let path: string | undefined | null;
 
-	onNavigate((navigation) => {
+	let coco = 1;
+	let popo = 0;
+
+	$: popo = coco * 2;
+
+	$: {
+		console.log(popo);
+	}
+
+	$: onNavigate((navigation) => {
 		path = navigation.to?.route.id;
 	});
 </script>
@@ -32,6 +41,8 @@
 
 		<Slider />
 		<Box />
+		<button on:click={() => (coco += 1)}>{coco}</button>
+		<p>{popo}</p>
 	</div>
 </div>
 

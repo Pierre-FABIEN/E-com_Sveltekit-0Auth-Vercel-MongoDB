@@ -37,6 +37,12 @@
 		>
 			Categories
 		</a>
+		<a
+			href="/dashboard/blog"
+			class={`text-sm font-medium ${$page.url.pathname === '/dashboard/blog' ? 'text-primary' : 'text-muted-foreground'} transition-colors hover:text-primary`}
+		>
+			Blog
+		</a>
 	</nav>
 </div>
 

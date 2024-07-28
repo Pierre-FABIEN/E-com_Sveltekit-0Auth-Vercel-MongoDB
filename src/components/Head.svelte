@@ -27,6 +27,9 @@
 			<li aria-current={$page.url.pathname === '/protected' ? 'page' : undefined}>
 				<a data-sveltekit-preload-data href="/protected">Protected</a>
 			</li>
+			<li aria-current={$page.url.pathname === '/blog' ? 'page' : undefined}>
+				<a data-sveltekit-preload-data href="/blog">Blog</a>
+			</li>
 		</ul>
 	</nav>
 

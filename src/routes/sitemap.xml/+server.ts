@@ -12,8 +12,6 @@ export const GET: RequestHandler = async (event) => {
 		shopKey.push(element.id);
 	});
 
-	console.log(shopKey, 'oiuhliuh');
-
 	return await sitemap.response({
 		origin: 'http://localhost:1000', // Remplacez par l'URL de votre site
 		excludePatterns: ['^/dashboard', '^/profile', '^/signin', '^/signout'],

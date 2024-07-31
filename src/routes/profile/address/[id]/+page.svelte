@@ -82,8 +82,14 @@
 			<h2>Suggestions:</h2>
 			<ul class="rounded border p-2">
 				{#each addressSuggestions as suggestion}
-					<li class="cursor-pointer" on:click={() => selectSuggestion(suggestion)}>
-						{suggestion.formatted}
+					<li>
+						<button
+							type="button"
+							class="cursor-pointer"
+							on:click={() => selectSuggestion(suggestion, index)}
+						>
+							{suggestion.formatted}
+						</button>
 					</li>
 				{/each}
 			</ul>

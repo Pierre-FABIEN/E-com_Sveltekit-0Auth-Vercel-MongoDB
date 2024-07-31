@@ -86,7 +86,7 @@
 						<button
 							type="button"
 							class="cursor-pointer"
-							on:click={() => selectSuggestion(suggestion, index)}
+							on:click={() => selectSuggestion(suggestion)}
 						>
 							{suggestion.formatted}
 						</button>

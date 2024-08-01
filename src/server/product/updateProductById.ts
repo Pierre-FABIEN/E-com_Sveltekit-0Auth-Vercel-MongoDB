@@ -1,4 +1,4 @@
-import prisma from "$requests";
+import prisma from "$server";
 
 export const updateProductById = async (productId: string, data: any) => {
 	return await prisma.product.update({

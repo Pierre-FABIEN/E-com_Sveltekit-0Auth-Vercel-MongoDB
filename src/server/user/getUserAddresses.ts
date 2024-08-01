@@ -1,4 +1,4 @@
-import prisma from "$requests";
+import prisma from "$server";
 
 // Fonction pour récupérer les adresses d'un utilisateur par son ID
 export async function getUserAddresses(userId: string) {

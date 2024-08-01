@@ -16,16 +16,24 @@ export function setFirstLoadComplete(value: boolean) {
 
 // Fonctions pour mettre à jour les états de chargement
 export function setFirstOpen(value: boolean) {
-	loadingStates.update((states) => ({ ...states, firstOpen: value }));
+	loadingStates.update((states) => {
+		if (!states) return states;
+		return { ...states, firstOpen: value };
+	});
 }
 
-// Fonctions pour mettre à jour les états de chargement
 export function setDomLoaded(value: boolean) {
-	loadingStates.update((states) => ({ ...states, domLoaded: value }));
+	loadingStates.update((states) => {
+		if (!states) return states;
+		return { ...states, domLoaded: value };
+	});
 }
 
 export function setRessourceToValide(value: boolean) {
-	loadingStates.update((states) => ({ ...states, ressourceToValide: value }));
+	loadingStates.update((states) => {
+		if (!states) return states;
+		return { ...states, ressourceToValide: value };
+	});
 }
 
 // // Logs pour le débogage

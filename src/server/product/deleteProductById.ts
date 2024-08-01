@@ -1,4 +1,4 @@
-import prisma from "$requests";
+import prisma from "$server";
 
 export async function deleteProductById(productId: string) {
 	// Supprime d'abord les OrderItems associés au produit

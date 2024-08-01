@@ -16,7 +16,7 @@ import { getPublicIdFromUrl } from '$lib/utils/getPublicIdFromUrl';
 
 export const load: PageServerLoad = async ({ params }) => {
 	try {
-		const product = await getProductById(params.productId);
+		const product = await getProductById(params.id);
 
 		if (!product) {
 			return fail(404, { message: 'Product not found' });

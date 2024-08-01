@@ -8,9 +8,9 @@ import { updateCategory } from '$server/categories/updateCategory';
 import { getCategoriesById } from '$server/categories/getCategoriesById';
 
 export const load: PageServerLoad = async ({ params }) => {
-	console.log('Loading category data for ID:', params.categoryId);
+	console.log('Loading category data for ID:', params.id);
 
-	const category = await getCategoriesById(params.categoryId);
+	const category = await getCategoriesById(params.id);
 
 	if (!category) {
 		console.log('Category not found');
@@ -46,7 +46,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			const categoryId = formData.get('categoryId');
+			const categoryId = formData.get('id');
 
 			await updateCategory({ id: categoryId as string, name: form.data.name });
 

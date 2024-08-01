@@ -14,7 +14,7 @@
 	import { goto } from '$app/navigation';
 
 	export let data;
-	let categoryId: string;
+	let id: string;
 
 	// Initialisation du formulaire superForm
 	const updateCategory = superForm(data.IupdateCategorySchema, {
@@ -30,8 +30,8 @@
 
 	onMount(() => {
 		const $page = get(page);
-		categoryId = $page.params.categoryId;
-		console.log('Category ID on mount:', categoryId);
+		id = $page.params.id;
+		console.log('Category ID on mount:', id);
 	});
 
 	$: if ($updateCategoryMessage === 'Category updated successfully') {
@@ -55,7 +55,7 @@
 					</Form.Field>
 				</div>
 			</div>
-			<input type="hidden" name="categoryId" value={categoryId} />
+			<input type="hidden" name="id" value={id} />
 			<Button type="submit">Save changes</Button>
 		</form>
 	</div>

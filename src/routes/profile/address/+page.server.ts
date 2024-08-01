@@ -1,8 +1,8 @@
 import type { Actions, PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
-import { createAddressSchema } from '$requests/address/addressSchema';
+import { createAddressSchema } from '$server/address/addressSchema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createAddress } from '$requests/address/createAddress';
+import { createAddress } from '$server/address/createAddress';
 
 export const load: PageServerLoad = async () => {
 	// Initialize superform for the createAddressSchema

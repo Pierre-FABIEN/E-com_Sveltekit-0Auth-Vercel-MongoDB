@@ -1,4 +1,4 @@
-import { getAllTransactions } from '$requests/transaction/getAllTransactions';
+import { getAllTransactions } from '$server/transaction/getAllTransactions';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {

@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 // Function to delete product categories by category ID
 export async function deleteProductCategoriesByCategoryId(categoryId: string) {

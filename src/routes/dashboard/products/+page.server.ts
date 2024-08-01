@@ -5,13 +5,13 @@ import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
 
-import { deleteProductSchema } from '$requests/product/productSchema';
-import { deleteCategorySchema } from '$requests/categories/categorySchema';
-import { getProductById } from '$requests/product/getProductById';
-import { deleteProductCategories } from '$requests/product/deleteProductCategories';
-import { deleteProductById } from '$requests/product/deleteProductById';
-import { getCategoriesById } from '$requests/categories/getCategoriesById';
-import { deleteCategoryById } from '$requests/categories/deleteCategoryById';
+import { deleteProductSchema } from '$server/product/productSchema';
+import { deleteCategorySchema } from '$server/categories/categorySchema';
+import { getProductById } from '$server/product/getProductById';
+import { deleteProductCategories } from '$server/product/deleteProductCategories';
+import { deleteProductById } from '$server/product/deleteProductById';
+import { getCategoriesById } from '$server/categories/getCategoriesById';
+import { deleteCategoryById } from '$server/categories/deleteCategoryById';
 import { getPublicIdFromUrl } from '$lib/utils/getPublicIdFromUrl';
 
 export const load: PageServerLoad = async () => {

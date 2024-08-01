@@ -1,11 +1,11 @@
 import type { LayoutServerLoad } from './$types';
 import { locales, loadTranslations, translations, defaultLocale } from '$UITools/Translations';
 
-import { checkOrRegister } from '$requests/user/checkOrRegister';
+import { checkOrRegister } from '$server/user/checkOrRegister';
 
-import { getPendingOrder } from '$requests/orders/getPendingOrder';
-import { getproductsAndCategories } from '$requests/LayoutData/getproductsAndCategories';
-import { getUserDetails } from '$requests/user/getUserDetails';
+import { getPendingOrder } from '$server/orders/getPendingOrder';
+import { getproductsAndCategories } from '$server/LayoutData/getproductsAndCategories';
+import { getUserDetails } from '$server/user/getUserDetails';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { url, cookies, request, locals } = event;

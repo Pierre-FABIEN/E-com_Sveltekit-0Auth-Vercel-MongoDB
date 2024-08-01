@@ -4,10 +4,10 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
-import { createProductSchema } from '$requests/product/productSchema';
-import { createProduct } from '$requests/product/createProduct';
-import { connectProductToCategories } from '$requests/product/connectProductToCategories';
-import { getCategoriesByIds } from '$requests/categories/getCategoriesByIds';
+import { createProductSchema } from '$server/product/productSchema';
+import { createProduct } from '$server/product/createProduct';
+import { connectProductToCategories } from '$server/product/connectProductToCategories';
+import { getCategoriesByIds } from '$server/categories/getCategoriesByIds';
 
 export const load: PageServerLoad = async () => {
 	const IcreateProductSchema = await superValidate(zod(createProductSchema));

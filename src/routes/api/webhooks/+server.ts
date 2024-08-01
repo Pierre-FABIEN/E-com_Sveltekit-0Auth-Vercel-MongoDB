@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 import Stripe from 'stripe';
-import prisma from '$requests';
+import prisma from '$server';
 import dotenv from 'dotenv';
-import { getUserIdByOrderId } from '$requests/user/getUserIdByOrderId';
-import { createTransactionInvalidated } from '$requests/transaction/createTransactionInvalidated';
+import { getUserIdByOrderId } from '$server/user/getUserIdByOrderId';
+import { createTransactionInvalidated } from '$server/transaction/createTransactionInvalidated';
 
 dotenv.config();
 

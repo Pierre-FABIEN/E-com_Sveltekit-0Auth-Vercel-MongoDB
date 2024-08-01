@@ -44,9 +44,9 @@ CVC : N'importe quel nombre à 3 chiffres
 stripe listen --forward-to localhost:1000/api/webhooks
 
 
-sur le dashboard montrer les dernières ventes et tout
 Réaliser les stat sur la consultation
 Performances sur le server pour cache
+commencer le blog et TinyMCE
+
 
 revoir la sécurité sur les données
-commencer le blog

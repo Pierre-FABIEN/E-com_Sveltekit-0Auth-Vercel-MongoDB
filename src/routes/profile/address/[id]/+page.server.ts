@@ -4,9 +4,9 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateAddressSchema } from '$requests/address/addressSchema';
-import { updateAddress } from '$requests/address/updateAddress';
-import { getAddressById } from '$requests/address/getAddressesById';
+import { updateAddressSchema } from '$server/address/addressSchema';
+import { updateAddress } from '$server/address/updateAddress';
+import { getAddressById } from '$server/address/getAddressesById';
 
 export const load: PageServerLoad = async ({ params }) => {
 	console.log('Loading address data for ID:', params.id);

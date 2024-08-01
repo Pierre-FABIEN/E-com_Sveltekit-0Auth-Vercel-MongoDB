@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { updateAddressSchema } from '$requests/address/addressSchema.js';
+	import { updateAddressSchema } from '$server/address/addressSchema.js';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';

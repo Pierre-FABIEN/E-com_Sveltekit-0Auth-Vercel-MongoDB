@@ -4,11 +4,11 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { deletePostSchema } from '$requests/posts/postSchema';
+import { deletePostSchema } from '$server/posts/postSchema';
 
-import { getPostById } from '$requests/posts/getPostById';
-import { deletePost } from '$requests/posts/deletePost';
-import { getAllPosts } from '$requests/posts/getAllPosts';
+import { getPostById } from '$server/posts/getPostById';
+import { deletePost } from '$server/posts/deletePost';
+import { getAllPosts } from '$server/posts/getAllPosts';
 
 export const load: PageServerLoad = async () => {
 	const posts = await getAllPosts();

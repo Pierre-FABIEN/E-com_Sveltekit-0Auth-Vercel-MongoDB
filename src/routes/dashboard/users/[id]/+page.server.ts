@@ -3,11 +3,11 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateUserAndAddressSchema } from '$requests/user/updateUserAndAddressSchema';
-import { updateUserRole } from '$requests/user/updateUserRole';
-import { getUsersById } from '$requests/user/getUsersById';
-import { getAddressesByUserId } from '$requests/address/getAddressesByUserId';
-import { updateUserAddressData } from '$requests/address/updateUserAddressData';
+import { updateUserAndAddressSchema } from '$server/user/updateUserAndAddressSchema';
+import { updateUserRole } from '$server/user/updateUserRole';
+import { getUsersById } from '$server/user/getUsersById';
+import { getAddressesByUserId } from '$server/address/getAddressesByUserId';
+import { updateUserAddressData } from '$server/address/updateUserAddressData';
 
 export const load: PageServerLoad = async ({ params }) => {
 	console.log('Loading user data for ID:', params.id);

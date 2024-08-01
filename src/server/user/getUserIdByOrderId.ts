@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 // Fonction pour récupérer toutes les informations d'un utilisateur par son ID
 export async function getUserIdByOrderId(orderId: string) {

@@ -1,15 +1,15 @@
 import { error, json, redirect } from '@sveltejs/kit';
-import { getUserAddresses } from '$requests/user/getUserAddresses';
+import { getUserAddresses } from '$server/user/getUserAddresses';
 import type { Actions, PageServerLoad } from './$types';
 
-import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { updateOrder } from '$requests/orders/updateOrder';
+import { checkOrRegister } from '$server/user/checkOrRegister';
+import { updateOrder } from '$server/orders/updateOrder';
 
-import { OrderSchema } from '$requests/orders/orderSchema';
+import { OrderSchema } from '$server/orders/orderSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms';
 
-import { getOrderById } from '$requests/orders/getOrderById';
+import { getOrderById } from '$server/orders/getOrderById';
 
 import Stripe from 'stripe';
 import dotenv from 'dotenv';

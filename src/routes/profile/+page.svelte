@@ -6,7 +6,7 @@
 
 	import * as Card from '$shadcn/card';
 
-	import { deleteAddressSchema } from '$requests/address/addressSchema';
+	import { deleteAddressSchema } from '$server/address/addressSchema';
 
 	import { showNotification } from '$stores/Data/notificationStore';
 	import Table from '$components/Table.svelte';

@@ -1,12 +1,12 @@
-import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { getAllUsers } from '$requests/user/getAllUsers';
-import { deleteUserSchema } from '$requests/user/userSchema';
+import { checkOrRegister } from '$server/user/checkOrRegister';
+import { getAllUsers } from '$server/user/getAllUsers';
+import { deleteUserSchema } from '$server/user/userSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
-import { deleteUser } from '$requests/user/deleteUser';
+import { deleteUser } from '$server/user/deleteUser';
 
 const allowedRoles = ['admin'];
 

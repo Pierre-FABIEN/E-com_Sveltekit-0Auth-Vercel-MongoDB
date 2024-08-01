@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 export async function deleteUser(userId: string) {
 	try {

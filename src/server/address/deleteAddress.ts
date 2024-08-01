@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 export const deleteAddress = async (id) => {
 	const deletedAddress = await prisma.address.delete({

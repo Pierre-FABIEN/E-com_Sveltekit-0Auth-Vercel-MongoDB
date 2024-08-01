@@ -4,7 +4,7 @@
 	import { Button } from '$shadcn/button';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { postSchema } from '$requests/posts/postSchema.js';
+	import { postSchema } from '$server/posts/postSchema.js';
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
 

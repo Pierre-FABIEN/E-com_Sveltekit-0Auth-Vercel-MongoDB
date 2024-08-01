@@ -2,7 +2,7 @@
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { createAddressSchema } from '$requests/address/addressSchema';
+	import { createAddressSchema } from '$server/address/addressSchema';
 
 	import * as Form from '$shadcn/form';
 	import { Button } from '$shadcn/button';

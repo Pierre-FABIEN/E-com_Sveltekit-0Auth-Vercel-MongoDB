@@ -5,7 +5,7 @@
 	import * as Sheet from '$shadcn/sheet/index.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { createCategorySchema } from '$requests/categories/categorySchema.js';
+	import { createCategorySchema } from '$server/categories/categorySchema.js';
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
 

@@ -1,6 +1,6 @@
 // src/lib/functions/checkAuth.ts
 
-import prisma from '$requests';
+import prisma from '$server';
 import { getPendingOrder } from '../orders/getPendingOrder';
 
 export const checkOrRegister = async (session) => {

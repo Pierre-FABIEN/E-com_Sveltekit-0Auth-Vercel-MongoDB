@@ -3,9 +3,9 @@ import type { Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { postSchema } from '$requests/posts/postSchema';
-import { createPost } from '$requests/posts/createPost';
-import { checkOrRegister } from '$requests/user/checkOrRegister';
+import { postSchema } from '$server/posts/postSchema';
+import { createPost } from '$server/posts/createPost';
+import { checkOrRegister } from '$server/user/checkOrRegister';
 
 // Fonction de chargement
 export const load: PageServerLoad = async ({ locals }) => {

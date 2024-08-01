@@ -1,6 +1,6 @@
 // src/lib/prisma/Request/order/getPendingOrder.ts
 
-import prisma from '$requests';
+import prisma from '$server';
 
 export const updateOrder = async (orderId, addressId) => {
 	return await prisma.order.update({

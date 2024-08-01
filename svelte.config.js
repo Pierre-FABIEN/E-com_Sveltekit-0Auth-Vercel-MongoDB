@@ -52,7 +52,7 @@ export default defineConfig({
 			$lib: 'src/lib',
 			$routes: 'src/routes',
 			$components: 'src/components',
-			$requests: 'src/requests',
+			$server: 'src/server',
 			$utils: 'src/lib/utils',
 			$stores: 'src/stores',
 			$UITools: 'src/lib/UITools',

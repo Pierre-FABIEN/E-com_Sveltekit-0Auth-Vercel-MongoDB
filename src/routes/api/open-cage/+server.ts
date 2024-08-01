@@ -1,4 +1,4 @@
-import { getSuggestions } from '$requests/OpenCage/index.js';
+import { getSuggestions } from '$server/OpenCage/index.js';
 
 export const GET = async ({ url }) => {
 	const query = url.searchParams.get('q');

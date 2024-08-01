@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 export const createTransactionValidated = async (transactionValidated, userId, orderId) => {
 	console.log(`✅ Processing transaction ${transactionValidated.id} for order ${orderId}`);

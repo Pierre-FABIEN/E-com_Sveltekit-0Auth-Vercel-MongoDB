@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 export async function getOrderById(orderId: string) {
 	return await prisma.order.findUnique({

@@ -13,7 +13,7 @@
 
 	import { showNotification } from '$stores/Data/notificationStore';
 
-	import { updateProductSchema } from '$requests/product/productSchema';
+	import { updateProductSchema } from '$server/product/productSchema';
 	import { onMount } from 'svelte';
 
 	export let data: {

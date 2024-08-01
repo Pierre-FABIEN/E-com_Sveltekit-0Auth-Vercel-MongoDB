@@ -4,10 +4,10 @@ import { fail } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { checkOrRegister } from '$requests/user/checkOrRegister';
-import { getUserDetails } from '$requests/user/getUserDetails';
-import { deleteAddressSchema } from '$requests/address/addressSchema';
-import { deleteAddress } from '$requests/address/deleteAddress';
+import { checkOrRegister } from '$server/user/checkOrRegister';
+import { getUserDetails } from '$server/user/getUserDetails';
+import { deleteAddressSchema } from '$server/address/addressSchema';
+import { deleteAddress } from '$server/address/deleteAddress';
 
 const allowedRoles = ['user', 'admin'];
 

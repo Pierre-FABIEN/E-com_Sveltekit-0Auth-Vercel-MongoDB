@@ -2,7 +2,7 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { updateUserAndAddressSchema } from '$requests/user/updateUserAndAddressSchema';
+	import { updateUserAndAddressSchema } from '$server/user/updateUserAndAddressSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { enter, exit } from './transition';
 

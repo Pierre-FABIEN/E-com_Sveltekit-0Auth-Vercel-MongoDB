@@ -1,4 +1,4 @@
-import prisma from '$requests';
+import prisma from '$server';
 
 export const addToCart = async (userId: string, productId: string, quantity: number = 1) => {
 	try {

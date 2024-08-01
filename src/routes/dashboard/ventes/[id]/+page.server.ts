@@ -1,5 +1,5 @@
-import { getOrderById } from '$requests/orders/getOrderById';
-import { getTransactionById } from '$requests/transaction/getTransactionById';
+import { getOrderById } from '$server/orders/getOrderById';
+import { getTransactionById } from '$server/transaction/getTransactionById';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {

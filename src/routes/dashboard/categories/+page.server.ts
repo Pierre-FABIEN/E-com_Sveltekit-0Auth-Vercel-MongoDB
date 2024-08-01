@@ -4,11 +4,11 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { deleteCategorySchema } from '$requests/categories/categorySchema';
+import { deleteCategorySchema } from '$server/categories/categorySchema';
 
-import { getCategoriesById } from '$requests/categories/getCategoriesById';
-import { deleteProductCategoriesByCategoryId } from '$requests/categories/deleteProductCategoriesByCategoryId';
-import { deleteCategoryById } from '$requests/categories/deleteCategoryById';
+import { getCategoriesById } from '$server/categories/getCategoriesById';
+import { deleteProductCategoriesByCategoryId } from '$server/categories/deleteProductCategoriesByCategoryId';
+import { deleteCategoryById } from '$server/categories/deleteCategoryById';
 
 export const load: PageServerLoad = async () => {
 	const IdeleteCategorySchema = await superValidate(zod(deleteCategorySchema));

@@ -4,13 +4,13 @@ import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
 
-import { updateProductSchema } from '$requests/product/productSchema';
+import { updateProductSchema } from '$server/product/productSchema';
 
-import { getCategoriesByIds } from '$requests/categories/getCategoriesByIds';
-import { updateProductById } from '$requests/product/updateProductById';
-import { deleteProductCategories } from '$requests/product/deleteProductCategories';
-import { getProductById } from '$requests/product/getProductById';
-import { connectProductToCategories } from '$requests/product/connectProductToCategories';
+import { getCategoriesByIds } from '$server/categories/getCategoriesByIds';
+import { updateProductById } from '$server/product/updateProductById';
+import { deleteProductCategories } from '$server/product/deleteProductCategories';
+import { getProductById } from '$server/product/getProductById';
+import { connectProductToCategories } from '$server/product/connectProductToCategories';
 
 import { getPublicIdFromUrl } from '$lib/utils/getPublicIdFromUrl';
 

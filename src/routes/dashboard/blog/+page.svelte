@@ -15,7 +15,6 @@
 		id: 'deletePost'
 	});
 
-	console.log(data, 'srgxsrg');
 	const { enhance: deletePostEnhance, message: deletePostMessage } = deletePost;
 
 	let formattedData: any[] = [];

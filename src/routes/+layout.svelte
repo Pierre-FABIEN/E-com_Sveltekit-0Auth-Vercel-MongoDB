@@ -16,6 +16,7 @@
 		setFirstOpen,
 		setRessourceToValide
 	} from '$stores/UX/initialLoaderStore';
+
 	import { setCart } from '$stores/Data/cartStore';
 	import { startSync } from '$stores/Data/cartSync';
 

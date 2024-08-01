@@ -6,7 +6,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 
 import { checkOrRegister } from '$requests/user/checkOrRegister';
 import { getUserDetails } from '$requests/user/getUserDetails';
-import { deleteAddressSchema } from '$zod/addressSchema';
+import { deleteAddressSchema } from '$requests/address/addressSchema';
 import { deleteAddress } from '$requests/address/deleteAddress';
 
 const allowedRoles = ['user', 'admin'];

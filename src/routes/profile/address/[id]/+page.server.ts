@@ -4,7 +4,7 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateAddressSchema } from '$zod/addressSchema';
+import { updateAddressSchema } from '$requests/address/addressSchema';
 import { updateAddress } from '$requests/address/updateAddress';
 import { getAddressById } from '$requests/address/getAddressesById';
 

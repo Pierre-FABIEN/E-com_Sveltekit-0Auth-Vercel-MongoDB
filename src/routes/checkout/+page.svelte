@@ -7,7 +7,7 @@
 
 	import { loadStripe } from '@stripe/stripe-js';
 	import { onMount } from 'svelte';
-	import { paymentSchema } from '$zod/paymentSchema.js';
+	import { OrderSchema } from '$requests/orders/orderSchema.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -18,8 +18,8 @@
 	export let data;
 	let selectedAddressId: string | null = null;
 
-	const createPayment = superForm(data.IpaymentSchema, {
-		validators: zodClient(paymentSchema),
+	const createPayment = superForm(data.IOrderSchema, {
+		validators: zodClient(OrderSchema),
 		id: 'createPayment',
 		resetForm: true
 	});

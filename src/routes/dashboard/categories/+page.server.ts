@@ -4,7 +4,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { deleteCategorySchema } from '$zod/categorySchema';
+import { deleteCategorySchema } from '$requests/categories/categorySchema';
 
 import { getCategoriesById } from '$requests/categories/getCategoriesById';
 import { deleteProductCategoriesByCategoryId } from '$requests/categories/deleteProductCategoriesByCategoryId';

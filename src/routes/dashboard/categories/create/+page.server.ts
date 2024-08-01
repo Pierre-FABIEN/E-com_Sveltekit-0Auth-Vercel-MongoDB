@@ -3,7 +3,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { createCategorySchema } from '$zod/categorySchema';
+import { createCategorySchema } from '$requests/categories/categorySchema';
 import { createCategory } from '$requests/categories/createCategory';
 
 // Fonction de chargement

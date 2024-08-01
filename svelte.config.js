@@ -51,7 +51,6 @@ export default defineConfig({
 			// this will match a file
 			$lib: 'src/lib',
 			$routes: 'src/routes',
-			$zod: 'src/zod',
 			$components: 'src/components',
 			$requests: 'src/requests',
 			$utils: 'src/lib/utils',

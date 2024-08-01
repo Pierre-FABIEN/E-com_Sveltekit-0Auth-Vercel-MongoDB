@@ -3,7 +3,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateUserAndAddressSchema } from '$zod/updateUserAndAddressSchema';
+import { updateUserAndAddressSchema } from '$requests/user/updateUserAndAddressSchema';
 import { updateUserRole } from '$requests/user/updateUserRole';
 import { getUsersById } from '$requests/user/getUsersById';
 import { getAddressesByUserId } from '$requests/address/getAddressesByUserId';

@@ -1,6 +1,6 @@
 import { checkOrRegister } from '$requests/user/checkOrRegister';
 import { getAllUsers } from '$requests/user/getAllUsers';
-import { deleteUserSchema } from '$zod/userSchema';
+import { deleteUserSchema } from '$requests/user/userSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import type { PageServerLoad, Actions } from './$types';

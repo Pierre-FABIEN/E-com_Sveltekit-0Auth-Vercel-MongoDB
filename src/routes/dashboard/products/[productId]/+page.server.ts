@@ -4,7 +4,7 @@ import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
 
-import { updateProductSchema } from '$zod/productSchema';
+import { updateProductSchema } from '$requests/product/productSchema';
 
 import { getCategoriesByIds } from '$requests/categories/getCategoriesByIds';
 import { updateProductById } from '$requests/product/updateProductById';

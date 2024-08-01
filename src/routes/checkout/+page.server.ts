@@ -5,7 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { checkOrRegister } from '$requests/user/checkOrRegister';
 import { updateOrder } from '$requests/orders/updateOrder';
 
-import { paymentSchema } from '$zod/paymentSchema';
+import { OrderSchema } from '$requests/orders/orderSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms';
 
@@ -42,9 +42,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	}
 
-	const IpaymentSchema = await superValidate(zod(paymentSchema));
+	const IOrderSchema = await superValidate(zod(OrderSchema));
 
-	return { addresses, IpaymentSchema };
+	return { addresses, IOrderSchema };
 };
 
 // Tu peux également ajouter des actions pour gérer d'autres fonctionnalités comme la modification ou la suppression d'adresses
@@ -52,7 +52,7 @@ export const actions: Actions = {
 	checkout: async ({ request }) => {
 		const formData = await request.formData();
 
-		const form = await superValidate(formData, zod(paymentSchema));
+		const form = await superValidate(formData, zod(OrderSchema));
 		const orderId = form.data.orderId;
 		const addressId = form.data.addressId;
 

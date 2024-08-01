@@ -9,7 +9,7 @@
 	import SuperDebug, { filesFieldProxy, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { createProductSchema } from '$zod/productSchema';
+	import { createProductSchema } from '$requests/product/productSchema';
 	import { Textarea } from '$shadcn/textarea';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { goto } from '$app/navigation';
@@ -38,9 +38,9 @@
 	const files = filesFieldProxy(createProduct, 'images');
 	const { values } = files;
 
-	$: $createProductData.categoryId = data.categories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
+	$: $createProductData.categoryId = data.categories
+		.filter((category: any) => category.checked)
+		.map((category: any) => category.id);
 
 	$: $createProductData.price = Number(DataPrice);
 	$: $createProductData.stock = Number(DataStock);

@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
-import { createAddressSchema } from '$zod/addressSchema';
+import { createAddressSchema } from '$requests/address/addressSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createAddress } from '$requests/address/createAddress';
 

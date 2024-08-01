@@ -13,7 +13,7 @@
 
 	import { showNotification } from '$stores/Data/notificationStore';
 
-	import { updateProductSchema } from '$zod/productSchema';
+	import { updateProductSchema } from '$requests/product/productSchema';
 	import { onMount } from 'svelte';
 
 	export let data: {
@@ -55,9 +55,9 @@
 		});
 	});
 
-	$: $updateProductData.categoryId = data.categories.filter(
-		(category: any) => category.checked
-	).map((category: any) => category.id);
+	$: $updateProductData.categoryId = data.categories
+		.filter((category: any) => category.checked)
+		.map((category: any) => category.id);
 
 	$: if ($updateProductMessage === 'Product updated successfully') {
 		$updateProductData.existingImages = data.IupdateProductSchema.data.existingImages;

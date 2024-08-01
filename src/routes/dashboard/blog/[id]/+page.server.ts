@@ -3,7 +3,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { updateCategorySchema } from '$zod/categorySchema';
+import { updateCategorySchema } from '$requests/categories/categorySchema';
 import { updateCategory } from '$requests/categories/updateCategory';
 import { getCategoriesById } from '$requests/categories/getCategoriesById';
 

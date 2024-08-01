@@ -1,8 +1,8 @@
 export const load = (async ({ data }) => {
-	const { addresses, IpaymentSchema } = data;
+	const { addresses, IOrderSchema } = data;
 
 	return {
 		addresses,
-		IpaymentSchema
+		IOrderSchema
 	};
 }) satisfies App.PageLoad;

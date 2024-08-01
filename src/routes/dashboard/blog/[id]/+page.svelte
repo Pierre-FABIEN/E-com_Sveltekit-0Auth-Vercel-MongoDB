@@ -9,7 +9,7 @@
 	import * as Sheet from '$shadcn/sheet/index.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { updateCategorySchema } from '$zod/categorySchema';
+	import { updateCategorySchema } from '$requests/categories/categorySchema.js';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { goto } from '$app/navigation';
 

@@ -16,7 +16,7 @@
 
 	let stripe;
 	export let data;
-	let selectedAddressId: string | null = null;
+	let selectedAddressId: string | undefined = undefined;
 
 	const createPayment = superForm(data.IOrderSchema, {
 		validators: zodClient(OrderSchema),
@@ -58,7 +58,9 @@
 	}
 
 	$: $createPaymentData.orderId = data.session.orders.id;
-	$: $createPaymentData.addressId = selectedAddressId;
+	$: if (selectedAddressId) {
+		$createPaymentData.addressId = selectedAddressId;
+	}
 </script>
 
 <div class="ccc">
@@ -74,7 +76,7 @@
 			<h2 class="text-2xl font-bold mb-4 mt-5">Vos adresses</h2>
 
 			<div class="clc">
-				{#if data.addresses.addresses && data.addresses.addresses.length > 0}
+				{#if data && data.addresses && data.addresses.addresses && data.addresses.addresses.length > 0}
 					{#each data.addresses.addresses as address}
 						<button
 							class="cursor-pointer border rounded p-2 m-2 min-w-[400px] rcb {selectedAddressId ===

@@ -18,7 +18,7 @@
 	export let columns: Array<{ key: string; label: string }>;
 	export let data: any = [];
 	export let deleteActionUrl: string = '';
-	export let invoiceActionUrl;
+	export let invoiceActionUrl: string = '';
 	export let editActionUrl: string = '';
 	export let newActionUrl: string = '';
 	export let name: string = '';

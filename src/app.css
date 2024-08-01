@@ -83,7 +83,6 @@
   }
 }
 
-
 .scroll-content {
   height: 100vh;
 }
@@ -96,15 +95,6 @@
 td, th {
   border-radius: 0px !important;
 }
-
-
-
-
-
-
-
-
-
 
 .rts {
   display: flex;

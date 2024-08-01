@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const POST = async ({ request }) => {
 	const cartData = await request.json();
 
-	// Vérifiez que les champs nécessaires sont présents et valides
+	// Validate cart data
 	if (
 		!cartData.id ||
 		typeof cartData.id !== 'string' ||
@@ -20,7 +20,7 @@ export const POST = async ({ request }) => {
 		return json({ error: 'Invalid cart data' }, { status: 400 });
 	}
 
-	// Assurez-vous que chaque item dans le panier a les champs nécessaires
+	// Validate each item in the cart
 	for (const item of cartData.items) {
 		if (
 			!item.product ||
@@ -48,7 +48,7 @@ export const POST = async ({ request }) => {
 	while (attempts < maxRetries && !success) {
 		try {
 			attempts++;
-			// Convert cart items to the expected format for Prisma
+			// Format the cart items for Prisma
 			const formattedItems = cartData.items.map((item) => ({
 				productId: item.product.id,
 				quantity: item.quantity,
@@ -62,28 +62,29 @@ export const POST = async ({ request }) => {
 				});
 
 				if (existingOrder) {
-					// If the order exists, update it
+					// Update the existing order
 					await prisma.order.update({
 						where: { id: cartData.id },
 						data: {
 							items: {
-								deleteMany: {} // Supprimez les items existants
+								deleteMany: {} // Delete existing items
 							},
 							total: cartData.total,
 							updatedAt: new Date()
 						}
 					});
-					// Ajoutez les nouveaux items après suppression des anciens
+
+					// Add new items after deleting the old ones
 					await prisma.order.update({
 						where: { id: cartData.id },
 						data: {
 							items: {
-								create: formattedItems // Créez de nouveaux items
+								create: formattedItems // Create new items
 							}
 						}
 					});
 				} else {
-					// If the order does not exist, create it
+					// Create a new order
 					await prisma.order.create({
 						data: {
 							id: cartData.id,
@@ -99,6 +100,7 @@ export const POST = async ({ request }) => {
 					});
 				}
 			});
+
 			success = true;
 		} catch (error) {
 			if (attempts >= maxRetries) {

@@ -215,7 +215,9 @@
 															method="POST"
 															action={deleteActionUrl}
 															use:enhance
-															on:submit={() => deleteItem(item.id)}
+															on:submit={() => {
+																deleteItem(item.id);
+															}}
 														>
 															<input type="hidden" name="id" value={item.id} />
 															<AlertDialog.Action type="submit">Continue</AlertDialog.Action>

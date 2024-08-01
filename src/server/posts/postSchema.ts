@@ -17,5 +17,5 @@ export const postSchema = z.object({
 });
 
 export const deletePostSchema = z.object({
-	id: z.string().nonempty('Post ID is required')
+	id: z.string()
 });

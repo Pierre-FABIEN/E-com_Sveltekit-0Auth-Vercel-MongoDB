@@ -1,7 +1,7 @@
 // +page.server.ts
-import type { PageServerLoad } from './posts/$types';
+import type { PageServerLoad } from './$types';
 import { type Actions } from '@sveltejs/kit';
-import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
+import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import { deletePostSchema } from '$server/posts/postSchema';
@@ -22,6 +22,8 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	deletePost: async ({ request }) => {
+		console.log('deletePost action initiated.', request);
+
 		const formData = await request.formData();
 		console.log(formData, 'form data');
 

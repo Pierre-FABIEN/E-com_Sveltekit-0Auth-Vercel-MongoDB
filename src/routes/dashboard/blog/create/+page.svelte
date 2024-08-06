@@ -8,9 +8,11 @@
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
 
-	import Editor from '$components/Editor.svelte';
+	import TinyMce from '$components/TinyMCE.svelte';
 
 	export let data;
+
+	console.log(data, 'create');
 
 	const createPost = superForm(data.IpostSchema, {
 		validators: zodClient(postSchema),
@@ -28,12 +30,10 @@
 		setTimeout(() => goto('/dashboard/blog/'), 0);
 		console.log('showNotification');
 	}
-
-	console.log(data);
 </script>
 
 <div class="ccc">
-	<div class="m-5 p-5 border w-[400px]">
+	<div class="m-5 p-5 border w-[80vw]">
 		<form method="POST" action="?/createPost" use:createPostEnhance class="space-y-4">
 			<div class="ccs mt-5">
 				<div class="w-[100%]">
@@ -46,7 +46,7 @@
 					</Form.Field>
 				</div>
 				<div class="w-[100%]">
-					<Editor />
+					<TinyMce />
 				</div>
 			</div>
 			<input type="hidden" name="authorId" value={data.user.id} />

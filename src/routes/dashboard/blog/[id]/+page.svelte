@@ -11,6 +11,8 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { updateCategorySchema } from '$server/categories/Schema/categorySchema.js';
 	import { showNotification } from '$stores/Data/notificationStore';
+	import Editor from '@tinymce/tinymce-svelte';
+	import { env } from '$env/dynamic/public';
 	import { goto } from '$app/navigation';
 
 	export let data;
@@ -30,7 +32,7 @@
 
 	onMount(() => {
 		const $page = get(page);
-		categoryId = $page.params.categoryId;
+		categoryId = $page.params.id;
 		console.log('Category ID on mount:', categoryId);
 	});
 
@@ -39,6 +41,16 @@
 		setTimeout(() => goto('/dashboard/categories/'), 0);
 		console.log('showNotification');
 	}
+
+	let init = {
+		height: 500,
+		menubar: false,
+		plugins: [
+			'advlist autolink lists link image charmap anchor searchreplace visualblocks code fullscreen insertdatetime media table preview help wordcount'
+		],
+		toolbar:
+			'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+	};
 </script>
 
 <div class="ccc">
@@ -55,6 +67,20 @@
 					</Form.Field>
 				</div>
 			</div>
+			<div class="w-[100%]">
+				<Form.Field name="content" form={createPost}>
+					<Form.Control let:attrs>
+						<Form.Label>Content</Form.Label>
+						<Editor
+							apiKey={env.PUBLIC_TINYMCE_API_KEY}
+							bind:value={$updateCategory.content}
+							{...init}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+			<input type="hidden" name="content" bind:value={$updateCategory.content} />
 			<input type="hidden" name="categoryId" value={categoryId} />
 			<Button type="submit">Save changes</Button>
 		</form>

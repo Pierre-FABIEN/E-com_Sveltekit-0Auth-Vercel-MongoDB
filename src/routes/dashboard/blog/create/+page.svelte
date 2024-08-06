@@ -37,6 +37,8 @@
 		toolbar:
 			'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
 	};
+
+	$: console.log('createPostData:', $createPostData.content);
 </script>
 
 <div class="ccc">
@@ -64,6 +66,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+			<input type="hidden" name="content" bind:value={$createPostData.content} />
 			<input type="hidden" name="authorId" value={data.user.id} />
 			<Button type="submit">Save changes</Button>
 		</form>

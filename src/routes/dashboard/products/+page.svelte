@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { deleteProductSchema } from '$server/product/productSchema';
+	import { deleteProductSchema } from '$server/product/Schema/productSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import Table from '$components/Table.svelte';
 

@@ -3,7 +3,7 @@ import type { Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { postSchema } from '$server/posts/postSchema';
+import { postSchema } from '$server/posts/Schema/postSchema';
 import { createPost } from '$server/posts/createPost';
 import { checkOrRegister } from '$server/user/checkOrRegister';
 

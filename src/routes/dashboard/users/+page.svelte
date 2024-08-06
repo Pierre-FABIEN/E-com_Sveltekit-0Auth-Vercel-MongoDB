@@ -5,7 +5,7 @@
 	import { showNotification } from '$stores/Data/notificationStore';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { deleteUserSchema } from '$server/user/userSchema';
+	import { deleteUserSchema } from '$server/user/Schema/userSchema';
 	import { onNavigate } from '$app/navigation';
 
 	export let data: PageData;

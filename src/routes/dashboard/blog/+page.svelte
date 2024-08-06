@@ -2,7 +2,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { deletePostSchema } from '$server/posts/postSchema';
+	import { deletePostSchema } from '$server/posts/Schema/postSchema';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import Table from '$components/Table.svelte';
 

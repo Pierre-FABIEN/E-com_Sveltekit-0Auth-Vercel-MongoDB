@@ -4,7 +4,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { deletePostSchema } from '$server/posts/postSchema';
+import { deletePostSchema } from '$server/posts/Schema/postSchema';
 
 import { getPostById } from '$server/posts/getPostById';
 import { deletePost } from '$server/posts/deletePost';

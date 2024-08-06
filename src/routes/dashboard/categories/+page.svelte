@@ -2,7 +2,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { deleteCategorySchema } from '$server/categories/categorySchema';
+	import { deleteCategorySchema } from '$server/categories/Schema/categorySchema';
 	import { showNotification } from '$stores/Data/notificationStore';
 	import Table from '$components/Table.svelte';
 

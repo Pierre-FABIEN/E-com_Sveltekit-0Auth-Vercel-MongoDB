@@ -5,8 +5,8 @@ import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
 
-import { deleteProductSchema } from '$server/product/productSchema';
-import { deleteCategorySchema } from '$server/categories/categorySchema';
+import { deleteProductSchema } from '$server/product/Schema/productSchema';
+import { deleteCategorySchema } from '$server/categories/Schema/categorySchema';
 import { getProductById } from '$server/product/getProductById';
 import { deleteProductCategories } from '$server/product/deleteProductCategories';
 import { deleteProductById } from '$server/product/deleteProductById';

@@ -4,7 +4,7 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate, fail, message, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import cloudinary from '$lib/Cloudinary';
-import { createProductSchema } from '$server/product/productSchema';
+import { createProductSchema } from '$server/product/Schema/productSchema';
 import { createProduct } from '$server/product/createProduct';
 import { connectProductToCategories } from '$server/product/connectProductToCategories';
 import { getCategoriesByIds } from '$server/categories/getCategoriesByIds';

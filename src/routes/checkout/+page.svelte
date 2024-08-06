@@ -7,7 +7,7 @@
 
 	import { loadStripe } from '@stripe/stripe-js';
 	import { onMount } from 'svelte';
-	import { OrderSchema } from '$server/orders/orderSchema.js';
+	import { OrderSchema } from '$server/orders/Schema/orderSchema.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 

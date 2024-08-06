@@ -5,7 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { checkOrRegister } from '$server/user/checkOrRegister';
 import { updateOrder } from '$server/orders/updateOrder';
 
-import { OrderSchema } from '$server/orders/orderSchema';
+import { OrderSchema } from '$server/orders/Schema/orderSchema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms';
 

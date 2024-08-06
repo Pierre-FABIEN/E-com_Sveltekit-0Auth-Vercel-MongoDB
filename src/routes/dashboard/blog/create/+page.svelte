@@ -7,12 +7,10 @@
 	import { postSchema } from '$server/posts/Schema/postSchema.js';
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
-
-	import TinyMce from '$components/TinyMCE.svelte';
+	import Editor from '@tinymce/tinymce-svelte';
+	import { env } from '$env/dynamic/public';
 
 	export let data;
-
-	console.log(data, 'create');
 
 	const createPost = superForm(data.IpostSchema, {
 		validators: zodClient(postSchema),
@@ -28,26 +26,43 @@
 	$: if ($createPostMessage === 'Post created successfully') {
 		showNotification($createPostMessage, 'success');
 		setTimeout(() => goto('/dashboard/blog/'), 0);
-		console.log('showNotification');
 	}
+
+	let init = {
+		height: 500,
+		menubar: false,
+		plugins: [
+			'advlist autolink lists link image charmap anchor searchreplace visualblocks code fullscreen insertdatetime media table preview help wordcount'
+		],
+		toolbar:
+			'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+	};
 </script>
 
 <div class="ccc">
 	<div class="m-5 p-5 border w-[80vw]">
 		<form method="POST" action="?/createPost" use:createPostEnhance class="space-y-4">
-			<div class="ccs mt-5">
-				<div class="w-[100%]">
-					<Form.Field name="title" form={createPost}>
-						<Form.Control let:attrs>
-							<Form.Label>Title</Form.Label>
-							<Input {...attrs} type="text" bind:value={$createPostData.title} />
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-				</div>
-				<div class="w-[100%]">
-					<TinyMce />
-				</div>
+			<div class="w-[100%]">
+				<Form.Field name="title" form={createPost}>
+					<Form.Control let:attrs>
+						<Form.Label>Title</Form.Label>
+						<Input {...attrs} type="text" bind:value={$createPostData.title} />
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+			<div class="w-[100%]">
+				<Form.Field name="content" form={createPost}>
+					<Form.Control let:attrs>
+						<Form.Label>Content</Form.Label>
+						<Editor
+							apiKey={env.PUBLIC_TINYMCE_API_KEY}
+							bind:value={$createPostData.content}
+							{...init}
+						/>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
 			</div>
 			<input type="hidden" name="authorId" value={data.user.id} />
 			<Button type="submit">Save changes</Button>

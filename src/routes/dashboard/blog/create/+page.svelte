@@ -8,6 +8,8 @@
 	import { showNotification } from '$stores/Data/notificationStore.js';
 	import { goto } from '$app/navigation';
 
+	import Editor from '$components/Editor.svelte';
+
 	export let data;
 
 	const createPost = superForm(data.IpostSchema, {
@@ -44,13 +46,7 @@
 					</Form.Field>
 				</div>
 				<div class="w-[100%]">
-					<Form.Field name="content" form={createPost}>
-						<Form.Control let:attrs>
-							<Form.Label>Content</Form.Label>
-							<Input {...attrs} type="text" bind:value={$createPostData.content} />
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
+					<Editor />
 				</div>
 			</div>
 			<input type="hidden" name="authorId" value={data.user.id} />

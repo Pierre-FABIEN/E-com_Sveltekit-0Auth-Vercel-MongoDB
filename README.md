@@ -47,6 +47,8 @@ stripe listen --forward-to localhost:1000/api/webhooks
 Réaliser les stat sur la consultation
 Performances sur le server pour cache
 commencer le blog et TinyMCE
+Mettre en place Lucia
+Mettre en place Nodemailer
 
 
 revoir la sécurité sur les données

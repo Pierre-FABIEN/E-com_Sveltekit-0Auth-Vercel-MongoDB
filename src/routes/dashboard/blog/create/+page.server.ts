@@ -6,6 +6,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { postSchema } from '$server/posts/Schema/postSchema';
 import { createPost } from '$server/posts/createPost';
 import { checkOrRegister } from '$server/user/checkOrRegister';
+import { slugify } from '$lib/utils/slugify';
 
 // Fonction de chargement
 export const load: PageServerLoad = async ({ locals }) => {
@@ -36,10 +37,13 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
+		const { title, content, authorId } = form.data;
+		const slug = slugify(title); // Créer le slug à partir du titre
+
 		try {
 			console.log('Creating new post with title:', form.data.title);
 
-			await createPost(form.data.title, form.data.content, form.data.authorId);
+			await createPost(title, content, authorId, slug);
 
 			return message(form, 'Post created successfully');
 		} catch (error) {

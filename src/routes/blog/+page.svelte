@@ -8,7 +8,7 @@
 {#if posts}
 	{#each posts as post}
 		<div class="border rounded m-5 p-5">
-			<a href="/blog/{post.id}">
+			<a href="/blog/{post.slug}">
 				<h1>{post.title}</h1>
 			</a>
 		</div>

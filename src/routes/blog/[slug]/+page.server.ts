@@ -1,13 +1,14 @@
 // Import necessary types and functions
-import { getPostById } from '$server/posts/getPostById';
 import type { PageServerLoad } from './$types';
+import { getPostBySlug } from '$server/posts/getPostBySlug';
 
 // Define the load function
 export const load = (async ({ params }) => {
-	// Extract postId from parameters
-	const postId = params.id;
+	// Extract postslug from parameters
+	const postslug = params.slug;
+
 	// Fetch the post data by ID
-	const post = await getPostById(postId);
+	const post = await getPostBySlug(postslug);
 
 	// If no post is found, return a 404 status and an error
 	if (!post) {

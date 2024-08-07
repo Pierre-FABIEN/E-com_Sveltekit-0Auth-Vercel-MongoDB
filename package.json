@@ -16,7 +16,7 @@
   ],
   "devDependencies": {
     "@playwright/test": "latest",
-    "@prisma/client": "latest",
+    "@prisma/client": "^5.18.0",
     "@rollup/plugin-terser": "latest",
     "@sveltejs/adapter-auto": "latest",
     "@sveltejs/adapter-node": "latest",
@@ -36,7 +36,7 @@
     "gsap": "latest",
     "prettier": "latest",
     "prettier-plugin-svelte": "latest",
-    "prisma": "latest",
+    "prisma": "^5.18.0",
     "sass": "latest",
     "smooth-scrollbar": "latest",
     "svelte": "latest",

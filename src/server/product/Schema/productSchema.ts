@@ -24,7 +24,8 @@ const createProductSchema = z.object({
 		.refine(
 			(files) => files.every((file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)),
 			'Only .jpg, .jpeg, .png and .webp formats are supported.'
-		)
+		),
+	slug: z.string().optional()
 });
 
 // Schema for updating a product

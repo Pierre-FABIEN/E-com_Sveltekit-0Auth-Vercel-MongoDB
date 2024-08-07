@@ -89,6 +89,7 @@ model Product {
   price        Float
   stock        Int
   images       String[]
+  slug         String       @unique
   categories   ProductCategory[]
   orderItems   OrderItem[]
   createdAt    DateTime     @default(now())

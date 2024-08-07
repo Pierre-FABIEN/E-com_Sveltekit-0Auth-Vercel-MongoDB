@@ -8,6 +8,7 @@ import { createProductSchema } from '$server/product/Schema/productSchema';
 import { createProduct } from '$server/product/createProduct';
 import { connectProductToCategories } from '$server/product/connectProductToCategories';
 import { getCategoriesByIds } from '$server/categories/getCategoriesByIds';
+import { slugify } from '$lib/utils/slugify';
 
 export const load: PageServerLoad = async () => {
 	const IcreateProductSchema = await superValidate(zod(createProductSchema));
@@ -73,13 +74,16 @@ export const actions: Actions = {
 			});
 		}
 
+		const slug = slugify(form.data.name);
+
 		try {
 			const product = await createProduct({
 				name: form.data.name,
 				description: form.data.description,
 				price: form.data.price,
 				stock: form.data.stock,
-				images: uploadedImageUrls
+				images: uploadedImageUrls,
+				slug: slug
 			});
 
 			await connectProductToCategories(product.id, existingCategoryIds);

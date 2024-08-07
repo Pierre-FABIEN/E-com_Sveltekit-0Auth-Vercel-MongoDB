@@ -38,7 +38,7 @@ export const actions: Actions = {
 		}
 
 		const { title, content, authorId } = form.data;
-		const slug = slugify(title); // Créer le slug à partir du titre
+		const slug = slugify(title);
 
 		try {
 			console.log('Creating new post with title:', form.data.title);

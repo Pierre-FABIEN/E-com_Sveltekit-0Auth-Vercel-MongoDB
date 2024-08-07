@@ -1,4 +1,4 @@
-import prisma from "$server";
+import prisma from '$server';
 
 export const createProduct = async (productData: {
 	name: string;
@@ -6,6 +6,7 @@ export const createProduct = async (productData: {
 	price: number;
 	stock: number;
 	images: string[];
+	slug: string;
 }) => {
 	return prisma.product.create({
 		data: productData

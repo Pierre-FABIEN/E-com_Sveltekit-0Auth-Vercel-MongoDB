@@ -1,10 +1,9 @@
-import { getOrderById } from '$server/orders/getOrderById';
-import { getProductById } from '$server/product/getProductById';
+import { getProductBySlug } from '$server/product/getProductBySlug';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
-	const productId = params.id;
-	const product = await getProductById(productId);
+	const productSlug = params.slug;
+	const product = await getProductBySlug(productSlug);
 
 	if (!product) {
 		return {
